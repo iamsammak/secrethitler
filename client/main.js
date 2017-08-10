@@ -2,17 +2,16 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 import './main.html';
-import './content.html';
 
-Template.index.onCreated( funciton() {
-  this.currentTab = new ReactiveVar( "books" );
+Template.index.onCreated( function() {
+  this.currentTab = new ReactiveVar( "names" );
 });
 
 Template.index.helpers({
   tab: function() {
     return Template.instance().currentTab.get();
   },
-  tabData: funciton() {
+  tabData: function() {
     let tab = Template.instance().currentTab.get();
 
     let data = {
