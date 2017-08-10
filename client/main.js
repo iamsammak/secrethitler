@@ -3,11 +3,11 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import './main.html';
 
-Template.index.onCreated( function() {
+Template.dynamictest.onCreated( function() {
   this.currentTab = new ReactiveVar( "names" );
 });
 
-Template.index.helpers({
+Template.dynamictest.helpers({
   tab: function() {
     return Template.instance().currentTab.get();
   },
@@ -54,7 +54,7 @@ Template.index.helpers({
   }
 });
 
-Template.index.events({
+Template.dynamictest.events({
   'click .nav-tabs li': function(event, template) {
     let currentTab = $(event.target).closest("li");
 
