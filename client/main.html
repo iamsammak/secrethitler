@@ -6,17 +6,9 @@
   <h1>Secret Hitler</h1>
   <h2>Testing Dynamic templates</h2>
 
-  {{> index}}
+  {{> dynamic-test}}
 </body>
 
-<template name="index">
-  <ul class="nav nav-tabs">
-    <li data-template="names" role="presentation" class="active"><a href="#">Ubiquitous</a></li>
-    <li data-template="roles" role="presentation"><a href="#">Roles</a></li>
-    <li data-template="totem" role="presentation"><a href="#">Totem Pole Position</a></li>
-  </ul>
-  {{> Template.dynamic template="content" data=tabData}}
-</template>
 
 <!-- <template name="main">
   <div class="main-content">
@@ -25,6 +17,15 @@
     {{> footer }}
   </div>
 </template> -->
+
+<template name="dynamic-test">
+  <ul class="nav nav-tabs">
+    <li data-template="names" role="presentation" class="active"><a href="#">Ubiquitous</a></li>
+    <li data-template="roles" role="presentation"><a href="#">Roles</a></li>
+    <li data-template="totem" role="presentation"><a href="#">Totem Pole Position</a></li>
+  </ul>
+  {{> Template.dynamic template="content" data=tabData}}
+</template>
 
 <!-- <body>
   <h1>Welcome to Meteor!</h1>
