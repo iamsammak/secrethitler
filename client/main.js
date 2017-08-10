@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 import './main.html';
+import './content.html';
 
 Template.index.onCreated( funciton() {
   this.currentTab = new ReactiveVar( "books" );
@@ -16,41 +17,41 @@ Template.index.helpers({
 
     let data = {
       "names": [
-        { "first-name": "Sam", "last-name": "Mak" },
-        { "first-name": "Sheldon", "last-name": "Chang" },
-        { "first-name": "Joy", "last-name": "Wu" },
-        { "first-name": "Calandra", "last-name": "Chang" },
-        { "first-name": "Melissa", "last-name": "Lau" },
-        { "first-name": "Bryan", "last-name": "Lee" },
-        { "first-name": "Andy", "last-name": "Lau" },
-        { "first-name": "Benjamin", "last-name": "Pan" },
-        { "first-name": "Brian", "last-name": "Jean" },
+        { "name": "Sam", "second": "Mak" },
+        { "name": "Sheldon", "second": "Chang" },
+        { "name": "Joy", "second": "Wu" },
+        { "name": "Calandra", "second": "Chang" },
+        { "name": "Melissa", "second": "Lau" },
+        { "name": "Bryan", "second": "Lee" },
+        { "name": "Andy", "second": "Lau" },
+        { "name": "Benjamin", "second": "Pan" },
+        { "name": "Brian", "second": "Jean" },
       ],
       "roles": [
-        { "name": "Sam", "hidden": "Facist" },
-        { "name": "Sheldon", "hidden": "Liberal" },
-        { "name": "Joy", "hidden": "Facist" },
-        { "name": "Calandra", "hidden": "Liberal" },
-        { "name": "Melissa", "hidden": "Liberal" },
-        { "name": "Bryan", "hidden": "Hitler" },
-        { "name": "Andy", "hidden": "Liberal" },
-        { "name": "Benjamin", "hidden": "Liberal" },
-        { "name": "Brian", "hidden": "Liberal" },
+        { "name": "Sam", "second": "Facist" },
+        { "name": "Sheldon", "second": "Liberal" },
+        { "name": "Joy", "second": "Facist" },
+        { "name": "Calandra", "second": "Liberal" },
+        { "name": "Melissa", "second": "Liberal" },
+        { "name": "Bryan", "second": "Hitler" },
+        { "name": "Andy", "second": "Liberal" },
+        { "name": "Benjamin", "second": "Liberal" },
+        { "name": "Brian", "second": "Liberal" },
       ],
       "totem": [
-        { "name": "Sam Mak", "position": "6" },
-        { "name": "Sheldon", "position": "9" },
-        { "name": "Joy", "position": "7" },
-        { "name": "Calandra", "position": "8" },
-        { "name": "Melissa", "position": "3" },
-        { "name": "Bryan", "position": "1" },
-        { "name": "Andy", "position": "2" },
-        { "name": "Benjamin", "position": "4" },
-        { "name": "Brian", "position": "5" },
+        { "name": "Sam Mak", "second": "6" },
+        { "name": "Sheldon", "second": "9" },
+        { "name": "Joy", "second": "7" },
+        { "name": "Calandra", "second": "8" },
+        { "name": "Melissa", "second": "3" },
+        { "name": "Bryan", "second": "1" },
+        { "name": "Andy", "second": "2" },
+        { "name": "Benjamin", "second": "4" },
+        { "name": "Brian", "second": "5" },
       ],
     };
 
-    return data[ tab ];
+    return {contentType: tab, items: data[tab]};
   }
 });
 
@@ -59,7 +60,7 @@ Template.index.events({
     let currentTab = $(event.target).closest("li");
 
     currentTab.addClass("active");
-    $(".nav-pills li").not(currentTab).removeClass("active");
+    $(".nav-tabs li").not(currentTab).removeClass("active");
 
     template.currentTab.set(currentTab.data("template"));
   }

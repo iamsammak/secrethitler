@@ -1,0 +1,9 @@
+<template name="names">
+  <h3 class="page-header">Ubiquitous Members</h3>
+
+  <ul class="list-group">
+    {{#each this}}
+    <li class="list-group-item"><strong>{{name}}</strong> : {{second}}</li>
+    {{/each}}
+  </ul>
+</template>
