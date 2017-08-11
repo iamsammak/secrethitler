@@ -16,10 +16,37 @@
 <!-- main template to be change reactively -->
 <template name="main">
   <div class="main-content">
-    {{> Template.dynamic template=view }}
+    {{> Template.dynamic template=currentview }}
+    {{> buttonmenu}}
     <hr />
     {{> footer }}
   </div>
+</template>
+
+<template name="startmenu">
+  <p style="width:75%">The year is 1932. The place is pre-WWII Germany. In Secret Hitler, players are German politicians attempting to hold a fragile Liberal government together and stem the rising tide of Fascism. Watch out though—there are secret Fascists among you, and one player is the Secret Hitler.</p>
+</template>
+
+<template name="lobby">
+  <p style="width:75%">Welcome to the Lobby</p>
+</template>
+
+<template name="seating">
+  <p style="width:75%">Here be the Seats</p>
+</template>
+
+<template name="gameover">
+  <p style="width:75%">You dead.</p>
+</template>
+
+<template name="buttonmenu">
+  <button name="newgame-button">new game</button>
+  <button name="joingame-button">join game</button>
+  <button name="startmenu-button">start menu</button>
+  <button name="lobby-button">lobby</button>
+  <button name="seating-button">seating</button>
+  <button name="gameover-button">game over</button>
+
 </template>
 
 <template name="footer">
