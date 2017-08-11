@@ -1,4 +1,6 @@
-import './content.html';
+import { Template } from 'meteor/templating';
+
+import './test-content.html';
 
 Template.content.onCreated( function() {
   let data = this.data;

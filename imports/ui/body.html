@@ -1,0 +1,23 @@
+<body>
+  {{> testing}}
+</body>
+
+<template name="testing">
+
+
+  <h2>Testing Dynamic templates</h2>
+  {{> dynamictest}}
+
+  {{> testsammak}}
+  {{> info}}
+  {{> hello}}
+</template>
+
+<template name="dynamictest">
+  <ul class="nav nav-tabs">
+    <li data-template="names" role="presentation" class="active"><a href="#">Ubiquitous</a></li>
+    <li data-template="roles" role="presentation"><a href="#">Roles</a></li>
+    <li data-template="totem" role="presentation"><a href="#">Totem Pole Position</a></li>
+  </ul>
+  {{> Template.dynamic template="content" data=tabData}}
+</template>
