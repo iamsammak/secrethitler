@@ -17,8 +17,32 @@ Template.main.helpers({
   }
 });
 
-// Template.buttonmenu.events({
-//   "click .newgame-button": function() {
-//     Session.set("view", "newgame");
-//   },
-// })
+Template.buttonmenu.events({
+  "click .newgame-button": function() {
+    Session.set("view", "newgame");
+    console.log("trying to start a new game");
+  },
+  "click .joingame-button": function() {
+    Session.set("view", "joingame");
+    console.log("attempting to join game");
+  },
+  "click .startmenu-button": function() {
+    Session.set("view", "startmenu");
+    console.log("view changed to startmenu");
+  },
+  "click .lobby-button": function() {
+    Session.set("view", "lobby");
+    console.log("view changed to lobby");
+  },
+  "click .seating-button": function() {
+    Session.set("view", "seating");
+    console.log("view changed to seating");
+  },
+  "click .gameover-button": function() {
+    Session.set("view", "gameover");
+    console.log("view changed to gameover");
+  },
+  "click .session-button": function() {
+    console.log(Session.get("view"));
+  },
+});
