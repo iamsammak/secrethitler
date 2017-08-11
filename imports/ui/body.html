@@ -17,6 +17,7 @@
 <template name="main">
   <div class="main-content">
     {{> Template.dynamic template=currentview }}
+    <br />
     {{> buttonmenu}}
     <hr />
     {{> footer }}
@@ -28,11 +29,23 @@
 </template>
 
 <template name="newgame">
-  <p style="width:75%">Before we begin the new game. Let us refresh the rules</p>
+  <form id="newgame-form">
+    <p style="width:75%">Before we begin the new game. Let us refresh the rules</p>
+    <p>
+      <input type="text" name="name" autocomplete="off" placeholder="What's your name?">
+    </p>
+    <div>
+      <button type="submit">create game</button>
+      <button type="button" class="back-btn">back to menu</button>
+    </div>
+  </form>
 </template>
 
 <template name="joingame">
   <p style="width:75%">Waiting for the access code</p>
+  <form id="joingame-form">
+
+  </form>
 </template>
 
 <template name="lobby">
