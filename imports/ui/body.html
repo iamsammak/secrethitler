@@ -1,10 +1,10 @@
 <body>
-  {{> testing}}
+  <!-- {{> testing}} -->
+  {{> main}}
 </body>
 
+<!-- testing template -->
 <template name="testing">
-
-
   <h2>Testing Dynamic templates</h2>
   {{> dynamictest}}
 
@@ -13,10 +13,18 @@
   {{> hello}}
 </template>
 
-<!-- <template name="main">
+<!-- main template to be change reactively -->
+<template name="main">
   <div class="main-content">
     {{> Template.dynamic template=view }}
     <hr />
     {{> footer }}
   </div>
-</template> -->
+</template>
+
+<template name="footer">
+  <div class="footer">
+    ubiquitous friends<br />
+    secret hitler by <a href="http://maxistentialism.com/secrethitler/" target="_blank">maxistentialism</a><br />
+  </div>
+</template>
