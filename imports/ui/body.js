@@ -60,3 +60,23 @@ Template.newgame.events({
     console.log("add subscription to room and change view to lobby");
   }
 });
+
+Template.lobby.helpers({
+  players: function() {
+    // temp
+    return ["a", "b", "c", "d", "e"];
+  },
+  room: function() {
+
+  },
+  // or use Random.hexString(6)
+  code: function createCode() {
+    let code = "";
+    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 6; i++) {
+      code += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return code;
+  },
+});

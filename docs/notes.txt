@@ -10,3 +10,8 @@ Unlike the /client and /server directories where all code is loaded automaticall
   following a specific load order, any code within the project's /imports directory is not loaded automatically.
   This means that anything placed in this directory must be loaded explicitly in the application.
   Otherwise, our application won't see it.
+
+
+2. CSS
+
+p tags have automatic spacing above and beneath
