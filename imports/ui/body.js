@@ -6,6 +6,12 @@ import './body.html';
 import './dynamic-test.js';
 import './hello-info.js';
 
+import './newgame.js';
+import './joingame.js';
+import './lobby.js';
+import './seating.js';
+import './gameover.js';
+
 Template.main.onCreated(function createViewSession() {
   Session.set("view", "startmenu");
   console.log("view set : ", Session.get("view"));
@@ -44,39 +50,5 @@ Template.buttonmenu.events({
   },
   "click .session-button": function() {
     console.log(Session.get("view"));
-  },
-});
-
-Template.newgame.events({
-  "click .back-btn": function() {
-    Session.set("view", "startmenu");
-  },
-  "submit #newgame-form": function(event) {
-    event.preventDefault();
-
-    console.log(event);
-    let name = event.target.name.value;
-    console.log("Hello", name);
-    console.log("add subscription to room and change view to lobby");
-  }
-});
-
-Template.lobby.helpers({
-  players: function() {
-    // temp
-    return ["a", "b", "c", "d", "e"];
-  },
-  room: function() {
-
-  },
-  // or use Random.hexString(6)
-  code: function createCode() {
-    let code = "";
-    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (var i = 0; i < 6; i++) {
-      code += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return code;
   },
 });

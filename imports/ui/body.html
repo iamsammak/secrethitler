@@ -28,51 +28,6 @@
   <p style="width:75%">The year is 1932. The place is pre-WWII Germany. In Secret Hitler, players are German politicians attempting to hold a fragile Liberal government together and stem the rising tide of Fascism. Watch out though—there are secret Fascists among you, and one player is the Secret Hitler.</p>
 </template>
 
-<template name="newgame">
-  <form id="newgame-form">
-    <p style="width:75%">Before we begin the new game. Let us refresh the rules</p>
-    <p>
-      <input type="text" name="name" autocomplete="off" placeholder="What's your name?">
-    </p>
-    <div>
-      <button type="submit">create game</button>
-      <button type="button" class="back-btn">back to menu</button>
-    </div>
-  </form>
-</template>
-
-<template name="joingame">
-  <p style="width:75%">Waiting for the access code</p>
-  <form id="joingame-form">
-    <p>
-      <input type="text" autocomplete="off" name="access-code" maxlength="6" placeholder="access code" /><br />
-      <input type="text" name="name" autocomplete="off" placeholder="What's your name?">
-    </p>
-    <div>
-      <button type="submit">join game</button>
-      <button type="button" class="back-btn">back to menu</button>
-    </div>
-  </form>
-</template>
-
-<template name="lobby">
-  <p style="width:75%">waiting for players...</p>
-  <p>
-    access code: <b>{{ code }}</b><br />
-    share this <a href="/{{ room.accessCode }}" target="_blank">link</a>
-  </p>
-
-  {{ players.length }} player(s) connected
-</template>
-
-<template name="seating">
-  <p style="width:75%">Here be the Seats</p>
-</template>
-
-<template name="gameover">
-  <p style="width:75%">You dead.</p>
-</template>
-
 <template name="buttonmenu">
   <button class="newgame-button">new game</button>
   <button class="joingame-button">join game</button>

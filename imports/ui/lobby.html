@@ -1,0 +1,9 @@
+<template name="lobby">
+  <p style="width:75%">waiting for players...</p>
+  <p>
+    access code: <b>{{ tempCode }}</b><br />
+    share this <a href="/{{ tempCode }}" target="_blank">link</a>
+  </p>
+
+  {{ players.length }} player(s) connected
+</template>
