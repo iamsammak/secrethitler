@@ -51,11 +51,6 @@ Tracker.autorun(function roomstate() {
   }[room.state] || null);
 });
 
-Template.main.onCreated(function createViewSession() {
-  Session.set("view", "startmenu");
-  console.log("view set : ", Session.get("view"));
-});
-
 Template.main.helpers({
   currentview: function() {
     return Session.get("view");
