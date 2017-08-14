@@ -1,8 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 
-import { Rooms } from '../api/collections.js';
-
 import './newgame.html';
 
 Template.newgame.events({
@@ -32,6 +30,7 @@ Template.newgame.events({
         Session.set("roomId", roomId);
         Session.set("playerId", playerId);
         Session.set("view", "lobby");
+        console.log("going to the lobby");
       });
     });
 

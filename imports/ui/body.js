@@ -30,7 +30,7 @@ Tracker.autorun(function roomstate() {
     console.log("no roomId or playerId...returning now");
     return;
   };
-
+debugger
   let room = Rooms.findOne(roomId);
   console.log("room", room);
   let player = Players.findOne(playerId);
@@ -41,9 +41,14 @@ Tracker.autorun(function roomstate() {
     Session.set("playerId", null);
     Session.set("view", "startmenu");
     return;
-  };
+  }
 
-
+  Session.set("view", {
+    "lobby": "lobby",
+    "seating": "seating",
+    "ongoing": "ongoing",
+    "gameover": "gameover"
+  }[room.state] || null);
 });
 
 Template.main.onCreated(function createViewSession() {
