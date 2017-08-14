@@ -1,16 +1,50 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Session } from 'meteor/session';
+import { Tracker } from 'meteor/tracker';
+
+import { Rooms, Players } from '../api/collections.js';
 
 import './body.html';
-import './dynamic-test.js';
-import './hello-info.js';
 
 import './newgame.js';
 import './joingame.js';
 import './lobby.js';
 import './seating.js';
 import './gameover.js';
+
+// testing files
+import './dynamic-test.js';
+import './hello-info.js';
+
+Tracker.autorun(function roomstate() {
+  if (!Session.get("view")) {
+    Session.set("view", "startmenu");
+  };
+  console.log("hello inside Tracker");
+
+  let roomId = Session.get("roomId");
+  let playerId = Session.get("playerId");
+
+  if (!roomId || !playerId) {
+    console.log("no roomId or playerId...returning now");
+    return;
+  };
+
+  let room = Rooms.findOne(roomId);
+  console.log("room", room);
+  let player = Players.findOne(playerId);
+  console.log("player", player);
+
+  if (!room || !player) {
+    Session.set("roomId", null);
+    Session.set("playerId", null);
+    Session.set("view", "startmenu");
+    return;
+  };
+
+
+});
 
 Template.main.onCreated(function createViewSession() {
   Session.set("view", "startmenu");

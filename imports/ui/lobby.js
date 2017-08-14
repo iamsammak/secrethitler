@@ -11,17 +11,6 @@ Template.lobby.helpers({
 
   },
   tempCode: function() {
-    return "j0v1an";
-  },
-  // or use Random.hexString(6)
-  code: function createCode() {
-    let code = "";
-    // might consider removing caps
-    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (var i = 0; i < 6; i++) {
-      code += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return code;
+    return "j3r3my";
   },
 });
