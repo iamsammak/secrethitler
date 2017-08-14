@@ -10,7 +10,7 @@
     {{# each players }}
     <li>
       {{ name }}
-      <a class="remove-button" >&times;</a>
+      <a class="remove-button" data-playerId="{{ _id }}">&times;</a>
     </li>
     {{/ each }}
   </ul>

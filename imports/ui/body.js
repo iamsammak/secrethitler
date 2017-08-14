@@ -104,16 +104,13 @@ Template.loadroom.events({
       ["101", "Sam"],
       ["102", "Jeremy"],
       ["103", "Roger"],
-      ["104", "Jeremy"]
+      ["104", "Jovian"]
     ];
     testPlayers.forEach(function(player) {
-      let count = 0;
-      Players.update(
+      Players.upsert(
         { _id: player[0]},
         { name: player[1], roomId: currentRoomId }
       );
-      count += 1;
-      console.log(count);
     });
   },
 })

@@ -12,10 +12,10 @@ Template.lobby.helpers({
     if (!room) {
       return null;
     }
-
+debugger
     return Players.find({ roomId: roomId }).fetch().map(
       function(player) {
-        debugger
+        console.log(player);
         // set player.current to be player._id if player._id is equal to playerId
         player.current = player._id == playerId;
         return player;
@@ -39,5 +39,10 @@ Template.lobby.helpers({
   },
   ready: function(players) {
     console.log("Ready?");
+    let attributes = {};
+    if (players.length < 5) {
+      attributes.disabled = false;
+    }
+    return attributes;
   },
 });
