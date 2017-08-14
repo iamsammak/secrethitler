@@ -2,7 +2,7 @@
   <p style="width:75%">patience is a virtue...<br />let us remember this as we await the arrival of other players</p>
   <p>
     access code: <b>{{ room.accessCode }}</b><br />
-    share this <a href="/{{ tempCode }}" target="_blank">link</a>
+    share this <a href="/{{ room.accessCode }}" target="_blank">link</a>
   </p>
 
   {{ players.length }} player(s) connected
@@ -10,7 +10,7 @@
     {{# each players }}
     <li>
       {{ name }}
-      <a class="remove-button" data-playerId="{{ _id }}">&times;</a>
+      <a class="remove-button" data-playerid="{{ _id }}">&times;</a>
     </li>
     {{/ each }}
   </ul>

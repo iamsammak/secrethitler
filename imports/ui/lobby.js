@@ -49,7 +49,9 @@ debugger
 
 Template.lobby.events({
   "click .remove-button": function(event) {
-    let playerId = $(event.currentTarget).data("playerId");
+    console.log("click remove");
+
+    let playerId = $(event.currentTarget).data("playerid");
     Meteor.call("leavegame", { playerId: playerId });
   },
 });

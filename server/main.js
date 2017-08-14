@@ -50,6 +50,8 @@ Meteor.methods({
     return [roomId, playerId, accessCode];
   },
   "leavegame" ({ playerId }) {
-    Players.remove(playerId);
+    console.log("removing", playerId);
+    debugger;
+    Players.remove({ _id: `${playerId}`});
   },
 })
