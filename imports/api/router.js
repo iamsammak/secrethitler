@@ -6,7 +6,7 @@ Router.route("/", function() {
   this.render("main");
   console.log("Hello from router");
   Session.set("view", "startmenu");
-  // view session was created with main.onCreated() in body.js
+  // this is to replicate setting the view on main template creation
 });
 
 Router.route("/:accessCode", function() {
