@@ -46,3 +46,10 @@ debugger
     return attributes;
   },
 });
+
+Template.lobby.events({
+  "click .remove-button": function(event) {
+    let playerId = $(event.currentTarget).data("playerId");
+    Meteor.call("leavegame", { playerId: playerId });
+  },
+});
