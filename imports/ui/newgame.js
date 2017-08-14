@@ -17,8 +17,7 @@ Template.newgame.events({
       return false;
     }
 
-    console.log("Hello", name);
-    debugger
+    console.log(`Hello ${name}, welcome to the Game`);
     Meteor.call("newgame", {name: name}, (err, res) => {
       if (err) {
         console.error(err);

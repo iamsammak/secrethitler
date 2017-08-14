@@ -35,10 +35,16 @@ debugger
     let playerId = Session.get("playerId");
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
+    // testing
+    window.room = room;
+
     return playerId === room.owner;
   },
   ready: function(players) {
+    // testing
     console.log("Ready?");
+    window.players = players;
+
     let attributes = {};
     if (players.length < 5) {
       attributes.disabled = false;
@@ -54,4 +60,20 @@ Template.lobby.events({
     let playerId = $(event.currentTarget).data("playerid");
     Meteor.call("leavegame", { playerId: playerId });
   },
+  "click .start-button": function() {
+    let roomId = Session.get("roomId");
+    console.log("uncomment out start game Meteor.call");
+    // Meteor.call("startgame", { roomId: roomId });
+  },
+  "click .quit-button": function() {
+    let playerId = Session.get("playerId");
+    Meteor.call("leavegame", { playerId: playerId }, (err) => {
+      if (err) {
+        console.error(err);
+      }
+      Session.set("roomId", null);
+      Session.set("playerId", null);
+      Session.set("view", "startmenu");
+    });
+  }
 });

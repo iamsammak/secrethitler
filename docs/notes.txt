@@ -15,3 +15,8 @@ Unlike the /client and /server directories where all code is loaded automaticall
 2. CSS
 
 p tags have automatic spacing above and beneath
+
+3. Debugging in server side Meteor.js
+  terminal: "meteor debug"
+  open browser "http://localhost:8080/?port=5858"
+  or whatever port the terminal prompts you to

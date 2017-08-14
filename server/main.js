@@ -51,7 +51,6 @@ Meteor.methods({
   },
   "leavegame" ({ playerId }) {
     console.log("removing", playerId);
-    debugger;
     Players.remove({ _id: `${playerId}`});
   },
 })
