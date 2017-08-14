@@ -1,9 +1,23 @@
 <template name="lobby">
-  <p style="width:75%">waiting for players...</p>
+  <p style="width:75%">patience is a virtue...<br />let us remember this as we await the arrival of other players</p>
   <p>
-    access code: <b>{{ tempCode }}</b><br />
+    access code: <b>{{ room.accessCode }}</b><br />
     share this <a href="/{{ tempCode }}" target="_blank">link</a>
   </p>
 
   {{ players.length }} player(s) connected
+  <ul class="playerlist">
+    {{# each players }}
+    <li>
+      {{ name }}
+      <a class="remove-btn" >&times;</a>
+    </li>
+    {{/ each }}
+  </ul>
+  <p>
+    {{# if owner }}
+    <button class="start-button" {{ ready players }}>start</button>
+    {{/ if }}
+    <button class="quit-button">quit</button>
+  </p>
 </template>
