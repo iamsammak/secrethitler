@@ -53,4 +53,22 @@ Meteor.methods({
     console.log("removing", playerId);
     Players.remove({ _id: `${playerId}`});
   },
+  "joingame" ({ name, roomId }) {
+    let room = Rooms.findOne(roomId);
+    name = name.trim();
+    if (!room) {
+      return;
+    }
+    if (room.state !== "lobby") {
+      return;
+    }
+    if (Players.find({ roomId: roomId, name: name}).count() > 0) {
+      return;
+    }
+    let playerId = Players.insert({
+      roomId: roomId,
+      name: name
+    });
+    return [roomId, playerId];
+  },
 })
