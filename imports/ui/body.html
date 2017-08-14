@@ -19,6 +19,7 @@
     {{> Template.dynamic template=currentview }}
     <br />
     {{> buttonmenu}}
+    {{> loadroom}}
     <hr />
     {{> footer }}
   </div>
@@ -36,6 +37,10 @@
   <button class="seating-button">seating</button>
   <button class="gameover-button">game over</button>
   <button class="session-button">Log Session View</button>
+</template>
+
+<template name="loadroom">
+  <button type="submit" class="loadroom-button">Populate</button>
 </template>
 
 <template name="footer">

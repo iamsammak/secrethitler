@@ -91,3 +91,29 @@ Template.buttonmenu.events({
     console.log(Session.get("view"));
   },
 });
+
+Template.loadroom.events({
+  // rewrite this to send updates to the db to rewrite test players
+  // find current roomId, then update test players into current Room
+  // populate room
+  "click .loadroom-button": function(event) {
+    event.preventDefault();
+
+    let currentRoomId = Session.get("roomId");
+    let testPlayers = [
+      ["101", "Sam"],
+      ["102", "Jeremy"],
+      ["103", "Roger"],
+      ["104", "Jeremy"]
+    ];
+    testPlayers.forEach(function(player) {
+      let count = 0;
+      Players.update(
+        { _id: player[0]},
+        { name: player[1], roomId: currentRoomId }
+      );
+      count += 1;
+      console.log(count);
+    });
+  },
+})
