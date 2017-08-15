@@ -210,7 +210,9 @@ Meteor.methods({
           // if the draw stack > 3, add the remaining to policy choices then shuffle discard back into draw stack
           if (drawpile.length < 3) {
             let remaining = drawpile.length;
-            policychoices.push(drawpile.splice(0, remaining))
+            for (let i = 0; i > remaining; i++) {
+              policychoices.push(drawpile.splice(0, 1))
+            }
             drawpile = drawpile.concat(room.discardpile);
             update.discardpile = [];
             _.shuffle(drawpile);
