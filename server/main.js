@@ -158,6 +158,121 @@ Meteor.methods({
       $set: update
     });
   },
+  "pickchancellor" ({ playerId }) {
+    let player = Players.findOne(playerId);
+    if (!player) {
+      return;
+    }
+    let room = Rooms.findOne(player.roomId);
+    if (room.currentChancellor > -1) {
+      return;
+    } else if (player.index == room.currentPresident) {
+      return;
+    } else if (_.contains(room.ruledout, player._id)) {
+      return;
+    } else {
+      Rooms.update(player.roomId, {
+        $set: { currentChancellor: player.index }
+      });
+    }
+  },
+  "vote" ({ playerId, vote }) {
+    let player = Players.findOne(playerId);
+    let room = Rooms.findOne(player.roomId);
+    let update = { votes: room.votes };
 
+    update.votes[playerId] = vote;
+
+    if (_.size(update.votes) == _.size(room.players)) {
+      update.voted = true;
+      update.voteresult = _.countBy(_.values(update.votes), (value) => {
+        return value ? "true" : "false";
+      }).true > (_.size(room.players) / 2) ? 1 : -1;
+
+      if (update.voteresult == 1) {
+        update.electiontracker = 0;
+
+        if (room.fascist >= 3 && room.players[room.currentChancellor].role == "hitler") {
+          update.state = "gameover";
+          update.winner = "fascists";
+          update.reason = "hitler has been elected!";
+          update.players = room.players;
+          for (let i = 0; i < room.players.length; i += 1) {
+            update.players[i].side = Players.findOne(room.players[i].playerId).role;
+          }
+        } else {
+          let drawpile = room.drawpile; //already shuffled
+          // might need to change this shuffle option, if we include special "seeing powers"
+          // if the draw stack > 3, add the remaining to policy choices then shuffle discard back into draw stack
+          if (drawpile.length < 3) {
+            let remaining = drawpile.length;
+            update.policychoices.push(drawpile.splice(0, remaining))
+            drawpile = drawpile.concat(room.discardpile);
+            update.discardpile = [];
+            _.shuffle(drawpile);
+
+            while (update.policychoices.length < 3) {
+              update.policychoices.push(drawpile.splice(0, 1));
+            }
+          } else {
+            update.policychoices = drawpile.splice(0, 3);
+          }
+
+          update.drawpile = drawpile;
+        }
+      } else { //meaning vote failed
+        update.electiontracker = room.electiontracker + 1;
+        // pass top policy if electrion tracker is at 3
+        if (update.electiontracker == 3) {
+          let drawpile = room.drawpile;
+
+          if (drawpile.length == 0 ) {
+            drawpile = drawpile.concat(room.discardpile);
+            update.discardpile = [];
+          }
+
+          let topCard = drawpile.splice(0, 1)
+          if (topCard == "liberal") {
+            update.liberal = room.liberal + 1;
+          } else if (topCard == "fascist") {
+            update.fascist = room.fascist + 1;
+          }
+
+          update.trackerfull = `a ${topCard} policy has been enacted!`
+          update.electiontracker = 0;
+          update.drawpile = drawpile;
+        }
+      }
+    }
+
+    Rooms.update(player.roomId, {
+      $set: update
+    });
+  },
+  "failcontinue" ({ playerId }) {
+    let player = Players.findOne(playerId);
+    if (!player) {
+      return
+    }
+    let room = Rooms.findOne(player.roomId);
+    let update = { votes: room.votes };
+    delete update.votes[playerId];
+
+    if (_.size(update.votes) == 0) {
+      update.trackerfull = "";
+      update.round = room.round + 1;
+      update.voted = false;
+      update.votes = {};
+      update.votesresult = 0;
+      update.ruledout = [
+        room.players[room.currentPresident].playerId,
+        room.player[room.currentChancellor].playerId];
+      update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+      update.currentChancellor = -1;
+    }
+
+    Rooms.update(player.roomId, { $set: update });
+  },
+  
 
 });
