@@ -12,7 +12,7 @@ Template.lobby.helpers({
     if (!room) {
       return null;
     }
-debugger
+
     return Players.find({ roomId: roomId }).fetch().map(
       function(player) {
         console.log(player);

@@ -126,13 +126,14 @@ Meteor.methods({
       name: player.name,
       role: player.role
     });
+    // to be $set later into Rooms collection
     let update = {
       players: room.players
     };
     // add to update once everyone is in the room
     if (Players.find({ roomId: room._id }).count() == room.players.length) {
       update.state = "game";
-      update.tracker = 0;
+      update.electiontracker = 0;
       update.trackerfull = "";
       update.drawpile = _.shuffle(Utils.drawPolicyDeck);
       update.discardpile = [];
@@ -142,6 +143,7 @@ Meteor.methods({
       update.voted = false;
       update.votes = {};
       update.voteresult = 0;
+      // saving by index
       update.currentPresident = Math.floor(Math.random() * room.players.length);
       update.currentChancellor = -1;
       update.ruledout = [];
