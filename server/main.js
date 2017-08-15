@@ -135,7 +135,7 @@ Meteor.methods({
       update.state = "game";
       update.electiontracker = 0;
       update.trackerfull = "";
-      update.drawpile = _.shuffle(Utils.drawPolicyDeck);
+      update.drawpile = _.shuffle(Utils.drawPolicyDeck());
       update.discardpile = [];
       update.policychoices = [];
       update.round = 1;
@@ -194,6 +194,7 @@ Meteor.methods({
       if (update.voteresult == "pass") {
         update.electiontracker = 0;
         let drawpile = room.drawpile; //already shuffled
+        console.log("drawpile", drawpile);
         let policychoices = room.policychoices; //blank right now, []
         // might need to change this shuffle option, if we include special "seeing powers"
 
@@ -216,9 +217,11 @@ Meteor.methods({
 
             while (policychoices.length < 3) {
               policychoices.push(drawpile.splice(0, 1));
+              console.log("insert single", drawpile.splice(0, 1));
             }
           } else {
             policychoices = drawpile.splice(0, 3);
+            console.log("policychoices", policychoices);
           }
 
           update.drawpile = drawpile;
