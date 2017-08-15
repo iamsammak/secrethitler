@@ -58,5 +58,48 @@
     <p><button class="fail-continue-button">continue</button></p>
     {{/ unless }}
   {{/ if }}
+  {{# if votepassed }}
+    {{# if equals room.policychoices.length 3 }}
+      <p>the vote passed!</p>
+    {{/ if }}
 
+    {{# if president }}
+      {{# if equals room.policychoices.length 3 }}
+      <p>choose a policy to discard</p>
+      <p>
+        {{# each policy in room.policychoices }}
+          <button class="pick-{{ policy }}">{{ policy }}</button>
+        {{/ each }}
+      </p>
+      {{ else }}
+        <p>waiting for the chancellor...</p>
+      {{/ if }}
+    {{ else }}
+      {{# if chancellor }}
+        {{# if equals room.policychoices.length 2 }}
+          <p>choose a policy to discard</p>
+          <p>
+            {{# each policy in room.policychoices }}
+              <button class="pick-{{ policy }}">{{ policy }}</button>
+            {{/ each }}
+          </p>
+        {{/ if }}
+      {{ else }}
+        {{# if equals room.policychoices.length 3 }}
+          <p>waiting for the president...</p>
+        {{ else }}
+          <p>waiting for the chancellor...</p>
+        {{/ if }}
+      {{/ if }}
+    {{/ if }}
+
+  {{/ if }}
+  <ul class="ring circle-container-{{ players.length }}">
+      {{# each players }}
+        <li data-playerid={{ playerId }}>
+          <span class={{ playercircle playerId }}>{{ name }}</span>
+        </li>
+      {{/ each }}
+  </ul>
+      
 </template>

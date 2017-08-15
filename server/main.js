@@ -137,7 +137,7 @@ Meteor.methods({
       update.trackerfull = "";
       update.drawpile = _.shuffle(Utils.drawPolicyDeck);
       update.discardpile = [];
-      update.choices = [];
+      update.policychoices = [];
       update.round = 1;
       update.started = new Date().getTime();
       update.voted = false;
