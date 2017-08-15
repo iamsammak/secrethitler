@@ -76,7 +76,39 @@ Meteor.methods({
     let players = Players.find({ roomId: roomId }).fetch();
     let fascists = [];
     let liberals = [];
-    
+    let roles = _.shuffle(Utils.drawRoleCards(players.length));
+    console.log(roles);
+    players.forEach(function(player, idx) {
+      Players.update(player._id, {
+        $set: { role: roles[idx] }
+      });
 
-  }
-})
+      if (roles[idx] == "fascist" || roles[idx] == "hitler") {
+        fascists.push({
+          name: player.name,
+          playerId: player._id,
+          hitler: roles[idx] == "hitler"
+        });
+      } else {
+        liberals.push({
+          name: player.name,
+          playerId: player._id
+        });
+      }
+    });
+    console.log("fascists:", fascists);
+    console.log("liberals", liberals);
+    Rooms.update(roomId, {
+      $set: {
+        state: "seating",
+        players: [],
+        fascist: fascists,
+        liberal: liberals,
+        size: players.length
+      }
+    });
+  },
+
+
+
+});

@@ -1,3 +1,32 @@
 <template name="seating">
   <p style="width:75%">Here be the Seats</p>
+
+  <h2>you're <b>{{ role }}</b>!</h2>
+
+  <p>
+    <button id="ready-button" {{ isready }}>ready</button>
+  </p>
+  <p>sit in a circle. pick someone to start, and hit "ready" in order, <b>clockwise</b>.</p>
+
+  {{# if teammates }}
+    <p>
+      these are your fellow fascists:
+      <ul class="playerlist">
+        {{# each teammates }}
+        <li class="{{# if equals playerId player._id }}current{{/ if }}">
+          {{ name }}
+          {{# if hitler }}
+            (hitler)
+          {{/ if }}
+        </li>
+        {{/ each }}
+      </ul>
+    </p>
+  {{/ if }}
+
+  <ul class="circle-container-{{ players.length }}">
+    {{# each players }}
+      <li><span>{{ name }}</span></li>
+    {{/ each }}
+  </ul>
 </template>

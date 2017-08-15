@@ -51,6 +51,6 @@ Template.joingame.rendered = function() {
   let accessCode = Session.get("accessCode");
   if (accessCode) {
     console.log("join game rendered. Access Code: ", accessCode);
-    $("input[name=accessCode]").val(accessCode);
+    $("input[name=accesscode]").val(accessCode);
   }
 };
