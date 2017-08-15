@@ -263,7 +263,7 @@ Meteor.methods({
       update.round = room.round + 1;
       update.voted = false;
       update.votes = {};
-      update.votesresult = 0;
+      update.voteresult = 0;
       update.ruledout = [
         room.players[room.currentPresident].playerId,
         room.player[room.currentChancellor].playerId];
@@ -273,6 +273,63 @@ Meteor.methods({
 
     Rooms.update(player.roomId, { $set: update });
   },
-  
+  "discard" ({ playerId, card }) {
+    let player = Players.findOne(playerId);
+    if (!player) {
+      return;
+    }
+
+    let room = Rooms.findOne(player.roomId);
+    if (!(card == "liberal" || card == "fascist")) {
+      return;
+    }
+
+    if ((room.policychoices.length == 3 && room.players[room.currentPresident].playerId !== playerId) || (room.policychoices.length == 2 && room.players[room.currentChancellor].playerId != playerId)) {
+      return;
+    }
+
+    let index = room.policychoices.indexOf(card);
+    room.policychoices.splice(index, 1);
+    let update = {
+      policychoices: room.policychoices,
+      discardpile: room.discardpile.concat([card])
+    };
+
+    if (room.policychoices.length == 1) {
+      console.log(room.policychoices);
+      if (room.policychoices[0] == "liberal") {
+        update.liberal = room.liberal + 1;
+      } else if (room.policychoices[0] == "fascist") {
+        update.fascist = room.fascist + 1;
+      }
+
+      update.round = room.round + 1;
+      update.policychoices = [];
+      update.voted = false;
+      update.votes = {};
+      update.voteresult = 0;
+      update.ruledout = [
+        room.players[room.currentPresident].playerId,
+        room.players[room.currentChancellor].playerId];
+      update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+      update.currentChancellor = -1;
+
+      if (update.liberal == 5 || update.fascist == 6) {
+        update.state = "gameover";
+        if (update.liberal == 5) {
+          update.winner = "liberals";
+          update.reason = "liberals have passed 5 policies!";
+        } else if (update.fascist == 6) {
+          update.winner = "fascists";
+          update.reason = "fascists have passed 6 policies!";
+        }
+        update.players = room.players;
+        for (let i = 0; i < room.players.length; i += 1) {
+          update.players[i].side = Players.findOne(room.players[i].playerId).role;
+        }
+      }
+    }
+    Rooms.update(player.roomId, { $set: update });
+  }
 
 });
