@@ -49,6 +49,8 @@ Tracker.autorun(function roomstate() {
     "ongoing": "ongoing",
     "gameover": "gameover"
   }[room.state] || null);
+  // after room.state is defined for the first time. aka new game server side
+  // you cant used button menu to navigate away. you stuck
 });
 
 Template.main.helpers({

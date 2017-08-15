@@ -63,7 +63,7 @@ Template.lobby.events({
   "click .start-button": function() {
     let roomId = Session.get("roomId");
     console.log("uncomment out start game Meteor.call");
-    // Meteor.call("startgame", { roomId: roomId });
+    Meteor.call("startgame", { roomId: roomId });
   },
   "click .quit-button": function() {
     let playerId = Session.get("playerId");

@@ -60,6 +60,7 @@ Meteor.methods({
       return;
     }
     if (room.state !== "lobby") {
+      console.log("main.js server line 63");
       return;
     }
     if (Players.find({ roomId: roomId, name: name}).count() > 0) {
@@ -71,4 +72,11 @@ Meteor.methods({
     });
     return [roomId, playerId];
   },
+  "startgame" ({ roomId }) {
+    let players = Players.find({ roomId: roomId }).fetch();
+    let fascists = [];
+    let liberals = [];
+    
+
+  }
 })
