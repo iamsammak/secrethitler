@@ -62,14 +62,14 @@ Template.game.helpers({
     return _.size(room.players) - _.size(room.votes);
   },
   votepassed: function() {
-      var rid = Session.get("rid");
-      var room = Rooms.findOne(rid);
-      return room.voteresult == 1;
+      var roomId = Session.get("roomId");
+      var room = Rooms.findOne(roomId);
+      return room.voteresult == "pass";
   },
   votefailed: function() {
-      var rid = Session.get("rid");
-      var room = Rooms.findOne(rid);
-      return room.voteresult == -1;
+      var roomId = Session.get("roomId");
+      var room = Rooms.findOne(roomId);
+      return room.voteresult == "fail";
   },
   peopleOrperson: function(num) {
     if (num > 1) {

@@ -20,3 +20,26 @@ p tags have automatic spacing above and beneath
   terminal: "meteor debug"
   open browser "http://localhost:8080/?port=5858"
   or whatever port the terminal prompts you to
+
+
+
+
+
+Things to do
+  - add in the special Presidential abilities
+  - add in veto power
+
+
+
+Bugs
+
+1. current is after initial chancellor vote - vote failed
+ - electiontracker displays
+ - but there is no visual change or movement of the president placard
+Solved
+ - couldn't read property in votefailed/votepassed. Spelling error of roomId
+
+2. Cannot read property 'playerId' of undefined.
+Which means the undefined is room.players[room.currentChancellor].playerId
+First time checking for chancellor in which the default has currentChancellor = -1
+room.players[-1] <--- would equal undefined

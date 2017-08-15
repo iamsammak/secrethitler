@@ -142,7 +142,7 @@ Meteor.methods({
       update.started = new Date().getTime();
       update.voted = false;
       update.votes = {};
-      update.voteresult = 0;
+      update.voteresult = "";
       // saving by index
       update.currentPresident = Math.floor(Math.random() * room.players.length);
       update.currentChancellor = -1;
@@ -185,11 +185,13 @@ Meteor.methods({
 
     if (_.size(update.votes) == _.size(room.players)) {
       update.voted = true;
+      // TODO current testing
+      debugger
       update.voteresult = _.countBy(_.values(update.votes), (value) => {
         return value ? "true" : "false";
-      }).true > (_.size(room.players) / 2) ? 1 : -1;
+      }).true > (_.size(room.players) / 2) ? "pass" : "fail";
 
-      if (update.voteresult == 1) {
+      if (update.voteresult == "pass") {
         update.electiontracker = 0;
 
         if (room.fascist >= 3 && room.players[room.currentChancellor].role == "hitler") {
@@ -263,10 +265,10 @@ Meteor.methods({
       update.round = room.round + 1;
       update.voted = false;
       update.votes = {};
-      update.voteresult = 0;
+      update.voteresult = "";
       update.ruledout = [
         room.players[room.currentPresident].playerId,
-        room.player[room.currentChancellor].playerId];
+        room.players[room.currentChancellor].playerId];
       update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
       update.currentChancellor = -1;
     }
@@ -307,7 +309,7 @@ Meteor.methods({
       update.policychoices = [];
       update.voted = false;
       update.votes = {};
-      update.voteresult = 0;
+      update.voteresult = "";
       update.ruledout = [
         room.players[room.currentPresident].playerId,
         room.players[room.currentChancellor].playerId];

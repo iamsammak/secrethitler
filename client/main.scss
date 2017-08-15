@@ -19,6 +19,32 @@ hr {
   margin: 2em auto;
 }
 
+b {
+  font-weight: 400;
+}
+
+button {
+	font-size: 1em;
+	background-color: white;
+	border: 1px solid #999;
+	padding: 10px 18px;
+	outline: none;
+	margin: 5px;
+	cursor: pointer;
+  &:disabled {
+    border: 1px solid #ccc;
+    cursor: default;
+  }
+  &:hover {
+    border: 1px solid #33c3f0;
+  }
+  .close {
+    background-color: red;
+    border: none;
+    color: #fff;
+  }
+}
+
 .playerlist {
   list-style-type: none;
   display: block;
@@ -42,4 +68,95 @@ hr {
       color: #FF4A40;
     }
   }
+}
+
+input[type=text] {
+	font-size: 1em;
+	margin: 5px;
+	padding: 10px 18px;
+	border: 1px solid #999;
+	outline: none;
+  &:focus {
+    border: 1px solid #33c3f0;
+  }
+}
+
+div.footer {
+  font-size: 0.75em;
+}
+
+#ready-btn {
+	background-color: #090;
+	color: #fff;
+	border: 1px solid #fff;
+	cursor: pointer;
+
+	&:disabled {
+		background-color: #9c9;
+		cursor: default;
+	}
+}
+
+.policy-count td {
+	padding: 0 9px;
+	margin: 0;
+}
+
+@mixin on-circle($item-count, $circle-size, $item-size) {
+	position: relative;
+	width:  $circle-size;
+	height: $circle-size;
+	border-radius: 50%;
+	padding: 0;
+	list-style: none;
+
+	> * {
+		display: block;
+		position: absolute;
+		top:  50%;
+		left: 50%;
+		margin: -($item-size / 2);
+		width:  $item-size;
+		height: $item-size;
+
+		$angle: (360 / $item-count);
+		$rot: 0;
+
+		@for $i from 1 through $item-count {
+			&:nth-of-type(#{$i}) {
+				transform: rotate($rot * 1deg) translate($circle-size / 2) rotate($rot * -1deg);
+			}
+			$rot: $rot + $angle;
+		}
+	}
+}
+
+@for $i from 1 through 10 {
+	ul.circle-container-#{$i} {
+		@include on-circle($item-count: $i, $circle-size: 12em, $item-size: 4em);
+		margin: 4em auto;
+		border: solid 5px #ccc;
+
+		span {
+			background-color: #fff;
+			display: block;
+			width: 80%;
+			padding-top: 25%;
+			padding-bottom: 25%;
+			border-radius: 50%;
+			border: solid 5px #ccc;
+			transition: all .1s ease-out;
+			cursor: pointer;
+
+			&.president {
+				border-color: #2187FF;
+			}
+			&.chancellor-candidate {
+				border-color: lighten(#1B9078, 50%);
+			}
+			&.chancellor {
+				border-color: #1B9078;
+			}
+		}
+	}
 }

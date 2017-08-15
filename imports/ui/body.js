@@ -33,8 +33,10 @@ Tracker.autorun(function roomstate() {
   };
 
   let room = Rooms.findOne(roomId);
-  console.log("room", room);
   let player = Players.findOne(playerId);
+  // testing
+  console.log("room", room);
+  window.room = room
   console.log("player", player);
 
   if (!room || !player) {

@@ -35,15 +35,12 @@ Template.lobby.helpers({
     let playerId = Session.get("playerId");
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
-    // testing
-    window.room = room;
 
     return playerId === room.owner;
   },
   ready: function(players) {
     // testing
     console.log("Ready?");
-    window.players = players;
 
     let attributes = {};
     if (players.length < 5) {
