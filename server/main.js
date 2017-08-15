@@ -193,6 +193,9 @@ Meteor.methods({
 
       if (update.voteresult == "pass") {
         update.electiontracker = 0;
+        let drawpile = room.drawpile; //already shuffled
+        let policychoices = room.policychoices; //blank right now, []
+        // might need to change this shuffle option, if we include special "seeing powers"
 
         if (room.fascist >= 3 && room.players[room.currentChancellor].role == "hitler") {
           update.state = "gameover";
@@ -203,24 +206,23 @@ Meteor.methods({
             update.players[i].side = Players.findOne(room.players[i].playerId).role;
           }
         } else {
-          let drawpile = room.drawpile; //already shuffled
-          // might need to change this shuffle option, if we include special "seeing powers"
           // if the draw stack > 3, add the remaining to policy choices then shuffle discard back into draw stack
           if (drawpile.length < 3) {
             let remaining = drawpile.length;
-            update.policychoices.push(drawpile.splice(0, remaining))
+            policychoices.push(drawpile.splice(0, remaining))
             drawpile = drawpile.concat(room.discardpile);
             update.discardpile = [];
             _.shuffle(drawpile);
 
-            while (update.policychoices.length < 3) {
-              update.policychoices.push(drawpile.splice(0, 1));
+            while (policychoices.length < 3) {
+              policychoices.push(drawpile.splice(0, 1));
             }
           } else {
-            update.policychoices = drawpile.splice(0, 3);
+            policychoices = drawpile.splice(0, 3);
           }
 
           update.drawpile = drawpile;
+          update.policychoices = policychoices;
         }
       } else { //meaning vote failed
         update.electiontracker = room.electiontracker + 1;

@@ -43,3 +43,9 @@ Solved
 Which means the undefined is room.players[room.currentChancellor].playerId
 First time checking for chancellor in which the default has currentChancellor = -1
 room.players[-1] <--- would equal undefined
+Solved
+ - another typo - main.js 271 players missing an 's'
+
+3. Error invoking Method 'vote' (after three yes in a game of 3)
+  update.policychoices wasn't defined in that scope
+  need to pull from room.policychoices first then reupdate
