@@ -47,6 +47,7 @@ Template.seating.helpers({
   players: function() {
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
+    console.log("current in the room", room.players);
     return room.players;
   },
   teammates: function() {

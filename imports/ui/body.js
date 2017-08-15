@@ -11,6 +11,7 @@ import './newgame.js';
 import './joingame.js';
 import './lobby.js';
 import './seating.js';
+import './game.js';
 import './gameover.js';
 
 // testing files
@@ -46,7 +47,7 @@ Tracker.autorun(function roomstate() {
   Session.set("view", {
     "lobby": "lobby",
     "seating": "seating",
-    "ongoing": "ongoing",
+    "game": "game",
     "gameover": "gameover"
   }[room.state] || null);
   // after room.state is defined for the first time. aka new game server side
@@ -79,6 +80,10 @@ Template.buttonmenu.events({
   "click .seating-button": function() {
     Session.set("view", "seating");
     console.log("view changed to seating");
+  },
+  "click .game-button": function() {
+    Session.set("view", "game");
+    console.log("view changed to game view");
   },
   "click .gameover-button": function() {
     Session.set("view", "gameover");

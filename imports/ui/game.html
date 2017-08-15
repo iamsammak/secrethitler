@@ -1,0 +1,49 @@
+<template name="game">
+  <h2>round <b>{{ round }}</b></h2>
+  <p>
+    <small>policy count</small>
+    <br />
+    <table class="policy-count">
+      <tr>
+        <td>
+          <span style="font-size:2.0em;">{{ room.liberal }}</span>/5
+        </td>
+        <td>
+          <span style="font-size:2.0em;">{{ room.fascist }}</span>/6
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <small>liberal</small>
+        </td>
+        <td>
+          <small>fascist</small>
+        </td>
+      </tr>
+    </table>
+    failed elections: {{ room.tracker }}
+  </p>
+  {{# if president }}
+    <p>
+      <b style="color: #2187FF;">you are the president!</b><br />
+      {{# if picking }}
+        <span style="color: #1B9078;">choose your chancellor:</span>
+      {{/ if }}
+    </p>
+  {{ else }}
+    {{# if picking }}
+      <p>waiting for the president...</p>
+    {{/ if }}
+  {{/ if }}
+  {{# if chancellor }}
+    <p>
+      <b style="color: #1B9078;">you are the chancellor!</b><br />
+    </p>
+  {{/ if }}
+  {{# if voting }}
+    <p>
+
+    </p>
+  {{/ if }}
+
+</template>

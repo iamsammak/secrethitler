@@ -108,7 +108,54 @@ Meteor.methods({
       }
     });
   },
+  "ready" ({ playerId }) {
+    let player = Players.findOne(playerId);
+    let room = Rooms.findOne(player.roomId);
+    if (room.players.filter(function(player) {
+      return player.playerId == playerId;
+    }).length > 0) {
+      return;
+    }
 
+    // to track position later
+    let index = room.players.length;
+
+    // insert into room
+    room.players.push({
+      playerId: player._id,
+      name: player.name,
+      role: player.role
+    });
+    let update = {
+      players: room.players
+    };
+    // add to update once everyone is in the room
+    if (Players.find({ roomId: room._id }).count() == room.players.length) {
+      update.state = "game";
+      update.tracker = 0;
+      update.trackerfull = "";
+      update.drawpile = _.shuffle(Utils.drawPolicyDeck);
+      update.discardpile = [];
+      update.choices = [];
+      update.round = 1;
+      update.started = new Date().getTime();
+      update.voted = false;
+      update.votes = {};
+      update.voteresult = 0;
+      update.currentPresident = Math.floor(Math.random() * room.players.length);
+      update.currentChancellor = -1;
+      update.ruledout = [];
+      update.liberal = 0;
+      update.fascist = 0;
+    }
+
+    Players.update(playerId, {
+      $set: { index: index }
+    })
+    Rooms.update(player.roomId, {
+      $set: update
+    });
+  },
 
 
 });
