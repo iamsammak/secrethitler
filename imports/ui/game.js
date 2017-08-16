@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { Rooms, Players } from '../api/collections.js';
+import { PRESIDENTIALPOWERS } from './utils.js';
 
 import './game.html';
 
@@ -90,6 +91,15 @@ Template.game.helpers({
       return "chancellor";
     }
   },
+  powers: function(numOfPlayers) {
+    if (numOfPlayers < 5) {
+      return { PRESIDENTIALPOWERS[1], PRESIDENTIALPOWERS[2], PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[5] };
+    } else if (numOfPlayers < 7) { // 5 and 6
+      return { PRESIDENTIALPOWERS[1], PRESIDENTIALPOWERS[2] };
+    } else { // 7, 8, 9 and 10
+      return { PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[2] };
+    }
+  }
 })
 
 Template.game.events({

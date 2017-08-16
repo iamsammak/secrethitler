@@ -339,6 +339,10 @@ Meteor.methods({
       }
     }
     Rooms.update(player.roomId, { $set: update });
-  }
-
+  },
+  "playagain" ({ roomId }) {
+    Rooms.update(roomId, {
+      $set: { state: "lobby"}
+    });
+  },
 });

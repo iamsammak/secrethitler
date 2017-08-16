@@ -33,7 +33,7 @@ class Utils {
     };
     return roleCards[n];
   }
-
-}
+  
+};
 
 export default Utils;

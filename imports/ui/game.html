@@ -102,4 +102,11 @@
       {{/ each }}
   </ul>
 
+  <!-- make this a dropdown menu -->
+  <div class="presidential-powers dropdown-menu">
+    {{# each powers players.length }}
+      <li>{{ name }}</li>
+      <p>{{ description }}</p>
+    {{/ each }}
+  </div>
 </template>

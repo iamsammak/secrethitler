@@ -62,6 +62,17 @@ Template.main.helpers({
   }
 });
 
+Template.startmenu.events({
+  "click .newgame-button": function() {
+    Session.set("view", "newgame");
+    console.log("new game");
+  },
+  "click .joingame-button": function() {
+    Session.set("view", "joingame");
+    console.log("join game");
+  },
+})
+
 Template.buttonmenu.events({
   "click .newgame-button": function() {
     Session.set("view", "newgame");
@@ -88,7 +99,13 @@ Template.buttonmenu.events({
     console.log("view changed to game view");
   },
   "click .gameover-button": function() {
-    Session.set("view", "gameover");
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    if (!room) {
+      Session.set("view", "gameover");
+    } else {
+      Rooms.update(roomId, { state: "gameover"} );
+    }
     console.log("view changed to gameover");
   },
   "click .session-button": function() {
