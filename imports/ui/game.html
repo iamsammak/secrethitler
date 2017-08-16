@@ -81,7 +81,9 @@
       </p>
       <!-- when chancellor is picking policy aka policychoices.length = 2 -->
       {{ else }}
-        <p>waiting for the chancellor...</p>
+        {{# unless executiveaction }}
+          <p>waiting for the chancellor...</p>
+        {{/ unless }}
       {{/ if }}
   <!-- what table sees during policy picking -->
     {{ else }}
@@ -100,24 +102,31 @@
         {{# if equals room.policychoices.length 3 }}
           <p>waiting for the president...</p>
         {{ else }}
-          <p>waiting for the chancellor...</p>
+          {{# unless executiveaction }}
+            <p>waiting for the chancellor...</p>
+          {{/ unless }}
         {{/ if }}
       {{/ if }}
     {{/ if }}
-<!-- discard server side, moves the room forward to next round -->
-    {{# if executiveaction }}
-      {{# if equals room.peek.length 3 }}
-        <p>Here are the next three Policies</p>
-        <p>
-          {{# each policy in room.peek }}
-            <button>{{ policy }}</button>
-          {{/ each }}
-        </p>
-        <p><button class="peek-continue-button">continue</button></p>
-      {{/ if }}
-    {{/ if }}
-
   {{/ if }}
+
+  <!-- discard server side, moves the room forward to next round -->
+  {{# if executiveaction }}
+    {{# if president }}
+        {{# if equals room.peek.length 3 }}
+          <p>Here are the next three Policies</p>
+          <p>
+            {{# each policy in room.peek }}
+              <button>{{ policy }}</button>
+            {{/ each }}
+          </p>
+          <p><button class="peek-continue-button">continue</button></p>
+        {{/ if }}
+    {{ else }}
+      <p>waiting for executive action...</p>
+    {{/ if }}
+  {{/ if }}
+
   <ul class="ring circle-container-{{ players.length }}">
       {{# each players }}
         <li data-playerid={{ playerId }}>

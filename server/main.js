@@ -303,7 +303,8 @@ Meteor.methods({
     console.log("discard", card);
     let update = {
       policychoices: room.policychoices,
-      discardpile: room.discardpile.concat([card])
+      discardpile: room.discardpile.concat([card]),
+      executiveaction: "inactive"
     };
 
     if (room.policychoices.length == 1) {
@@ -339,6 +340,7 @@ Meteor.methods({
           let peek = room.drawpile.slice(0, 3);
           update.peek = peek;
           update.executiveaction = "active";
+          Rooms.update(player.roomId, { $set: { executiveaction: "active" } });
         }
       }
       if (update.fascist == 4) {
@@ -353,19 +355,21 @@ Meteor.methods({
       }
 
   // reset the room, move round forward and move president placard
-      update.round = room.round + 1;
-      update.electiontracker = 0;
-      update.policychoices = [];
-      update.voted = false;
-      update.votes = {};
-      update.voteresult = "";
 
       // below might be commented out if logic moved inside executive action
-      update.ruledout = [
-        room.players[room.currentPresident].playerId,
-        room.players[room.currentChancellor].playerId];
-      update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
-      update.currentChancellor = -1 //TODO, this is the round resetter
+      if (update.executiveaction == "inactive") {
+        update.round = room.round + 1;
+        update.electiontracker = 0;
+        update.policychoices = [];
+        update.voted = false;
+        update.votes = {};
+        update.voteresult = "";
+        update.ruledout = [
+          room.players[room.currentPresident].playerId,
+          room.players[room.currentChancellor].playerId];
+        update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+        update.currentChancellor = -1 //TODO, this is the round resetter
+      }
 
     // end of game
       if (update.liberal == 5 || update.fascist == 6) {
@@ -399,6 +403,12 @@ Meteor.methods({
 
     let update = { peek: room.peek };
 
+    update.round = room.round + 1;
+    update.electiontracker = 0;
+    update.policychoices = [];
+    update.voted = false;
+    update.votes = {};
+    update.voteresult = "";
     update.peek = [];
     update.executiveaction = "inactive";
     update.ruledout = [
@@ -406,6 +416,8 @@ Meteor.methods({
       room.players[room.currentChancellor].playerId];
     update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
     update.currentChancellor = -1;
+
+    console.log("peek continue");
 
     Rooms.update(player.roomId, { $set: update });
   },

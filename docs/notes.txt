@@ -60,3 +60,7 @@ Solved
 3. Error invoking Method 'vote' (after three yes in a game of 3)
   update.policychoices wasn't defined in that scope
   need to pull from room.policychoices first then reupdate
+
+
+4. Double clicking policy cards...seem to update one instance of the room to register more than once
+    which can cause premature gameover

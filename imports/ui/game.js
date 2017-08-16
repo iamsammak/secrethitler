@@ -111,7 +111,7 @@ Template.game.helpers({
     let playerId = Session.get("playerId");
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
-    return true; //temp
+    return room.executiveaction == "active";
   },
 })
 
@@ -174,6 +174,7 @@ Template.game.events({
   },
   "click .peek-continue-button": function() {
     let playerId = Session.get("playerId");
-    Meteor.call("failcontinue", { playerId: playerId });
+    console.log("click peek continue");
+    Meteor.call("peekcontinue", { playerId: playerId });
   },
 })
