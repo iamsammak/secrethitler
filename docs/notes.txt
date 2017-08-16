@@ -16,6 +16,9 @@ Unlike the /client and /server directories where all code is loaded automaticall
 
 p tags have automatic spacing above and beneath
 
+remember order matters
+what comes last will take precedence
+
 3. Debugging in server side Meteor.js
   terminal: "meteor debug"
   open browser "http://localhost:8080/?port=5858"

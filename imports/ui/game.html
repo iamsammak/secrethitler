@@ -103,10 +103,11 @@
   </ul>
 
   <!-- make this a dropdown menu -->
-  <div class="presidential-powers dropdown-menu">
-    {{# each powers players.length }}
-      <li>{{ name }}</li>
-      <p>{{ description }}</p>
+  <button class="powers-button">Presidential Powers</button>
+  <div class="presidential-powers" id="dropdown-menu">
+    {{# each powers }}
+      <li class ="power-name" data-powerid={{ id }}>{{ name }}</li>
+      <p class="power-description" id="power-description-{{ id }}">{{ description }}</p>
     {{/ each }}
   </div>
 </template>

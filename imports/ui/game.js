@@ -91,13 +91,16 @@ Template.game.helpers({
       return "chancellor";
     }
   },
-  powers: function(numOfPlayers) {
+  powers: function() {
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    let numOfPlayers = room.players.length;
     if (numOfPlayers < 5) {
-      return { PRESIDENTIALPOWERS[1], PRESIDENTIALPOWERS[2], PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[5] };
+      return [ PRESIDENTIALPOWERS[1], PRESIDENTIALPOWERS[2], PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[5] ];
     } else if (numOfPlayers < 7) { // 5 and 6
-      return { PRESIDENTIALPOWERS[1], PRESIDENTIALPOWERS[2] };
+      return [ PRESIDENTIALPOWERS[1], PRESIDENTIALPOWERS[2] ];
     } else { // 7, 8, 9 and 10
-      return { PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[2] };
+      return [ PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[2] ];
     }
   }
 })
@@ -151,4 +154,12 @@ Template.game.events({
       }
     }
   },
+  "click .powers-button": function() {
+    document.getElementById("dropdown-menu").classList.toggle("show");
+  },
+  "click .power-name": function() {
+    let powerId = $(event.target).data("powerid");
+    console.log(`click ${powerId}`);
+    document.getElementById(`power-description-${powerId}`).classList.toggle("show");
+  }
 })
