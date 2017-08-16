@@ -334,9 +334,8 @@ Meteor.methods({
         if (party >= 7) {
           console.log("call special election");
 
-        } else if (party >= 3) { // change back to 5
+        } else if (party >= 5) { // change back to 5
           console.log("policy peek");
-          // slice from the two of the drawpile, this way the actual drawpile isn't manipulated
           let peek = room.drawpile.slice(0, 3);
           update.peek = peek;
           update.executiveaction = "active";
