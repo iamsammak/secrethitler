@@ -33,12 +33,16 @@ Template.game.helpers({
     let playerId = Session.get("playerId");
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
+    if (room.currentChancellor == -1) {
+      console.log("president choosing next chancellor");
+      // return;
+    }
     return room.players[room.currentChancellor].playerId == playerId;
   },
   picking: function() {
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
-    return room.currentChancellor == -1;
+    return room.currentChancellor == -1 && room.executiveaction == "inactive";
   },
   voting: function() {
     let playerId = Session.get("playerId");
@@ -102,7 +106,13 @@ Template.game.helpers({
     } else { // 7, 8, 9 and 10
       return [ PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[2] ];
     }
-  }
+  },
+  executiveaction: function() {
+    let playerId = Session.get("playerId");
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    return true; //temp
+  },
 })
 
 Template.game.events({
@@ -161,5 +171,9 @@ Template.game.events({
     let powerId = $(event.target).data("powerid");
     console.log(`click ${powerId}`);
     document.getElementById(`power-description-${powerId}`).classList.toggle("show");
-  }
+  },
+  "click .peek-continue-button": function() {
+    let playerId = Session.get("playerId");
+    Meteor.call("failcontinue", { playerId: playerId });
+  },
 })

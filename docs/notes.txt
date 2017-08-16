@@ -30,7 +30,15 @@ what comes last will take precedence
 
 Things to do
   - add in the special Presidential abilities
+    policy Peek
+    Execution
+    legislative Loyalty
+    call special election
   - add in veto power
+
+  - play again logic, reset
+
+  - add revealing what people voted "yes or no"
 
 
 

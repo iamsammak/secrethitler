@@ -149,6 +149,8 @@ Meteor.methods({
       update.ruledout = [];
       update.liberal = 0;
       update.fascist = 0;
+      update.executiveaction = "inactive";
+      update.peek = [];
     }
 
     Players.update(playerId, {
@@ -185,8 +187,6 @@ Meteor.methods({
 
     if (_.size(update.votes) == _.size(room.players)) {
       update.voted = true;
-      // TODO current testing
-      debugger
       update.voteresult = _.countBy(_.values(update.votes), (value) => {
         return value ? "true" : "false";
       }).true > (_.size(room.players) / 2) ? "pass" : "fail";
@@ -261,7 +261,7 @@ Meteor.methods({
   "failcontinue" ({ playerId }) {
     let player = Players.findOne(playerId);
     if (!player) {
-      return
+      return;
     }
     let room = Rooms.findOne(player.roomId);
     let update = { votes: room.votes };
@@ -290,6 +290,7 @@ Meteor.methods({
 
     let room = Rooms.findOne(player.roomId);
     if (!(card == "liberal" || card == "fascist")) {
+      console.log("where did you find this card?");
       return;
     }
 
@@ -299,6 +300,7 @@ Meteor.methods({
 
     let index = room.policychoices.indexOf(card);
     room.policychoices.splice(index, 1);
+    console.log("discard", card);
     let update = {
       policychoices: room.policychoices,
       discardpile: room.discardpile.concat([card])
@@ -312,17 +314,60 @@ Meteor.methods({
         update.fascist = room.fascist + 1;
       }
 
+      // TODO might need to make a new key for executive action
+      // also might need to reconfirm the update reset below in the executive action parts
+
+    // add executive action here
+      let party = room.players.length;
+      if (update.fascist == 1) {
+        if (party >= 9) {
+          console.log("investigative loyalty");
+        }
+      }
+      if (update.fascist == 2) {
+        if (party >= 7) {
+          console.log("investigative loyalty");
+        }
+      }
+      if (update.fascist == 3) {
+        if (party >= 7) {
+          console.log("call special election");
+
+        } else if (party >= 3) { // change back to 5
+          console.log("policy peek");
+          // slice from the two of the drawpile, this way the actual drawpile isn't manipulated
+          let peek = room.drawpile.slice(0, 3);
+          update.peek = peek;
+          update.executiveaction = "active";
+        }
+      }
+      if (update.fascist == 4) {
+        if (party >= 5) {
+          console.log("execution");
+        }
+      }
+      if (update.fascist == 5) {
+        if (party >= 5) {
+          console.log("execution and veto unlocked");
+        }
+      }
+
+  // reset the room, move round forward and move president placard
       update.round = room.round + 1;
+      update.electiontracker = 0;
       update.policychoices = [];
       update.voted = false;
       update.votes = {};
       update.voteresult = "";
+
+      // below might be commented out if logic moved inside executive action
       update.ruledout = [
         room.players[room.currentPresident].playerId,
         room.players[room.currentChancellor].playerId];
       update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
-      update.currentChancellor = -1;
+      update.currentChancellor = -1 //TODO, this is the round resetter
 
+    // end of game
       if (update.liberal == 5 || update.fascist == 6) {
         update.state = "gameover";
         if (update.liberal == 5) {
@@ -338,6 +383,30 @@ Meteor.methods({
         }
       }
     }
+
+    Rooms.update(player.roomId, { $set: update });
+  },
+  "peekcontinue" ({ playerId }) {
+    let player = Players.findOne(playerId);
+    if (!player) {
+      return;
+    }
+    let room = Rooms.findOne(player.roomId);
+
+    if (room.players[room.currentPresident].playerId != playerId) {
+      return;
+    }
+
+    let update = { peek: room.peek };
+
+    update.peek = [];
+    update.executiveaction = "inactive";
+    update.ruledout = [
+      room.players[room.currentPresident].playerId,
+      room.players[room.currentChancellor].playerId];
+    update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+    update.currentChancellor = -1;
+
     Rooms.update(player.roomId, { $set: update });
   },
   "playagain" ({ roomId }) {

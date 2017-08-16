@@ -23,6 +23,8 @@
     </table>
     failed elections: {{ room.electiontracker }}
   </p>
+
+<!-- chancellor-candidate picking view -->
   {{# if president }}
     <p>
       <b style="color: #2187FF;">you are the president!</b><br />
@@ -35,11 +37,13 @@
       <p>waiting for the president...</p>
     {{/ if }}
   {{/ if }}
+
   {{# if chancellor }}
     <p>
       <b style="color: #1B9078;">you are the chancellor!</b><br />
     </p>
   {{/ if }}
+
   {{# if voting }}
     <p>
       voting...waiting for {{ votesleft }} {{ peopleOrperson votesleft }}<br />
@@ -49,6 +53,7 @@
       {{/ if }}
     </p>
   {{/ if }}
+
   {{# if votefailed }}
     <p>
       the vote failed...<br />
@@ -58,23 +63,29 @@
       <p><button class="fail-continue-button">continue</button></p>
     {{/ unless }}
   {{/ if }}
+
+<!-- Policy picking view / what everyone sees -->
   {{# if votepassed }}
     {{# if equals room.policychoices.length 3 }}
       <p>the vote passed!</p>
     {{/ if }}
-
+    <!-- president view -->
     {{# if president }}
       {{# if equals room.policychoices.length 3 }}
+      <!-- when president is policy picking -->
       <p>choose a policy to discard</p>
       <p>
         {{# each policy in room.policychoices }}
           <button class="pick-{{ policy }}">{{ policy }}</button>
         {{/ each }}
       </p>
+      <!-- when chancellor is picking policy aka policychoices.length = 2 -->
       {{ else }}
         <p>waiting for the chancellor...</p>
       {{/ if }}
+  <!-- what table sees during policy picking -->
     {{ else }}
+    <!-- chancellor view -->
       {{# if chancellor }}
         {{# if equals room.policychoices.length 2 }}
           <p>choose a policy to discard</p>
@@ -84,12 +95,25 @@
             {{/ each }}
           </p>
         {{/ if }}
+    <!-- everyone else's view -->
       {{ else }}
         {{# if equals room.policychoices.length 3 }}
           <p>waiting for the president...</p>
         {{ else }}
           <p>waiting for the chancellor...</p>
         {{/ if }}
+      {{/ if }}
+    {{/ if }}
+<!-- discard server side, moves the room forward to next round -->
+    {{# if executiveaction }}
+      {{# if equals room.peek.length 3 }}
+        <p>Here are the next three Policies</p>
+        <p>
+          {{# each policy in room.peek }}
+            <button>{{ policy }}</button>
+          {{/ each }}
+        </p>
+        <p><button class="peek-continue-button">continue</button></p>
       {{/ if }}
     {{/ if }}
 
