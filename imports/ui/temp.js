@@ -1,3 +1,5 @@
+//TODO TO BE DELETED
+
 "continue" ({ playerId, type }) {
   let player = Players.findOne(playerId);
   if (!player) {

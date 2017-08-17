@@ -96,6 +96,8 @@ Template.game.helpers({
     let room = Rooms.findOne(roomId);
     if (room.players[room.currentPresident].playerId == playerId) {
       return "president";
+    } else if (room.players[room.currentPresident].playerId == currentPlayerId && room.specialelection) {
+      return "president-candidate"
     } else if (room.players[room.currentPresident].playerId == currentPlayerId && room.currentChancellor == -1 && !_.contains(room.ruledout, playerId)) {
       return "chancellor-candidate";
     } else if (room.currentChancellor > -1 && room.players[room.currentChancellor].playerId == playerId) {
@@ -159,14 +161,22 @@ Template.game.events({
     });
   },
   "click ul.ring > li": function(event) {
+    debugger
     let playerId = $(event.currentTarget).data("playerid");
     let currentPlayerId = Session.get("playerId");
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
     if (room.players[room.currentPresident].playerId == currentPlayerId) {
-      if (room.currentChancellor == -1) {
+      if (room.currentChancellor == -1 && !room.specialelection) {
         Meteor.call("pickchancellor", {
           playerId: playerId
+        });
+      }
+      if (room.specialelection) {
+        let nextPresident = Players.findOne(playerId);
+        Meteor.call("specialelection", {
+          nextPresident: nextPresident,
+          currentPlayerId: currentPlayerId
         });
       }
     }

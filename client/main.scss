@@ -151,6 +151,9 @@ div.footer {
 			&.president {
 				border-color: #2187FF;
 			}
+      &.president-candidate {
+        border-color: lighten(#2187FF, 25%);
+      }
 			&.chancellor-candidate {
 				border-color: lighten(#1B9078, 50%);
 			}

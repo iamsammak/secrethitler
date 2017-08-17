@@ -155,6 +155,8 @@ Meteor.methods({
       update.suspects = [];
       update.reveal = false;
       update.suspected = [];
+      update.specialelection = false;
+      update.resetspecialelection = [];
     }
 
     Players.update(playerId, {
@@ -319,16 +321,15 @@ Meteor.methods({
         }
       }
       if (update.fascist == 3) {
-        if (party >= 7) { // change back to 7
+        if (party >= 3) { // change back to 7
           console.log("call special election");
-          // create a temp room state that captures current room state
-          // execute special election
-          // then return room state to before temp
 
-          // I could make everyone a presidential-candidate
+          // I could make everyone a presidential-candidate (in playercircle)
+          update.specialelection = true;
+          update.executiveaction = "active";
 
 
-        } else if (party >= 3) { // change back to 5
+        } else if (party >= 5) { // change back to 5
           console.log("policy peek");
           let peek = room.drawpile.slice(0, 3);
           update.peek = peek;
@@ -345,7 +346,6 @@ Meteor.methods({
           console.log("execution and veto unlocked");
         }
       }
-
       // reset the room, move round forward and move president placard
       if (update.executiveaction == "inactive") {
         update.round = room.round + 1;
@@ -359,6 +359,13 @@ Meteor.methods({
           room.players[room.currentChancellor].playerId];
         update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
         update.currentChancellor = -1
+        // reset president to correct order after special election (this logic needs to also be inside "continue")
+      }
+
+      if (room.resetspecialelection.length != 0) {
+        console.log("inside reset special election, discard");
+        update.currentPresident = (room.resetspecialelection[0] + 1) % _.size(room.players);
+        update.resetspecialelection = [];
       }
 
     // end of game
@@ -426,12 +433,42 @@ Meteor.methods({
       update.ruledout = [
         room.players[room.currentPresident].playerId,
         room.players[room.currentChancellor].playerId];
-      update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+      // moved to currentPresident below for special election logic
       update.currentChancellor = -1;
       update.executiveaction = "inactive";
+      if (room.resetspecialelection.length != 0) {
+        update.currentPresident = (room.resetspecialelection[0] + 1) % _.size(room.players);
+        update.resetspecialelection = [];
+      } else {
+        update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+      }
     }
 
+
     Rooms.update(player.roomId, { $set: update });
+  },
+  "specialelection" ({ nextPresident, currentPlayerId }) {
+    let currentPlayer = Players.findOne(currentPlayerId);
+    let room = Rooms.findOne(currentPlayer.roomId);
+    // create a temp room state that captures current room state
+    // execute special election
+    // then return room state to before temp
+
+    let update = { currentPresident: nextPresident.index };
+    update.round = room.round + 1;
+    update.policychoices = [];
+    update.voted = false;
+    update.votes = {};
+    update.voteresult = "";
+    update.ruledout = [
+      room.players[room.currentPresident].playerId,
+      room.players[room.currentChancellor].playerId];
+    update.currentChancellor = -1
+    update.executiveaction = "inactive";
+    update.specialelection = false;
+    update.resetspecialelection = [ room.currentPresident ];
+
+    Rooms.update(room._id, { $set: update });
   },
   "playagain" ({ roomId }) {
     Rooms.update(roomId, {
