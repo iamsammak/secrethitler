@@ -251,7 +251,8 @@ Meteor.methods({
             update.fascist = room.fascist + 1;
           }
 
-          update.trackerfull = `a ${topCard} policy has been enacted!`
+          update.trackerfull = `a ${topCard} policy has been enacted!`;
+          FlashMessages.sendWarning(`a ${topCard} policy has been enacted!`);
           update.electiontracker = 0;
           update.drawpile = drawpile;
         }
@@ -261,30 +262,6 @@ Meteor.methods({
     Rooms.update(player.roomId, {
       $set: update
     });
-  },
-  "failcontinue" ({ playerId }) {
-    let player = Players.findOne(playerId);
-    if (!player) {
-      return;
-    }
-    let room = Rooms.findOne(player.roomId);
-    let update = { votes: room.votes };
-    delete update.votes[playerId];
-
-    if (_.size(update.votes) == 0) {
-      update.trackerfull = "";
-      update.round = room.round + 1;
-      update.voted = false;
-      update.votes = {};
-      update.voteresult = "";
-      update.ruledout = [
-        room.players[room.currentPresident].playerId,
-        room.players[room.currentChancellor].playerId];
-      update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
-      update.currentChancellor = -1;
-    }
-
-    Rooms.update(player.roomId, { $set: update });
   },
   "discard" ({ playerId, card }) {
     let player = Players.findOne(playerId);
@@ -342,16 +319,20 @@ Meteor.methods({
         }
       }
       if (update.fascist == 3) {
-        if (party >= 3) { // change back to 7
+        if (party >= 7) { // change back to 7
           console.log("call special election");
+          // create a temp room state that captures current room state
+          // execute special election
+          // then return room state to before temp
+
+          // I could make everyone a presidential-candidate
+
 
         } else if (party >= 3) { // change back to 5
           console.log("policy peek");
           let peek = room.drawpile.slice(0, 3);
           update.peek = peek;
           update.executiveaction = "active";
-          // I believe it works without the following line
-          // Rooms.update(player.roomId, { $set: { executiveaction: "active" } });
         }
       }
       if (update.fascist == 4) {
@@ -365,9 +346,7 @@ Meteor.methods({
         }
       }
 
-  // reset the room, move round forward and move president placard
-
-      // below might be commented out if logic moved inside executive action
+      // reset the room, move round forward and move president placard
       if (update.executiveaction == "inactive") {
         update.round = room.round + 1;
         update.electiontracker = 0;
@@ -401,37 +380,6 @@ Meteor.methods({
 
     Rooms.update(player.roomId, { $set: update });
   },
-  "peekcontinue" ({ playerId }) {
-    let player = Players.findOne(playerId);
-    if (!player) {
-      return;
-    }
-    let room = Rooms.findOne(player.roomId);
-
-    if (room.players[room.currentPresident].playerId != playerId) {
-      return;
-    }
-
-    let update = { peek: room.peek };
-
-    update.round = room.round + 1;
-    update.electiontracker = 0;
-    update.policychoices = [];
-    update.voted = false;
-    update.votes = {};
-    update.voteresult = "";
-    update.peek = [];
-    update.executiveaction = "inactive";
-    update.ruledout = [
-      room.players[room.currentPresident].playerId,
-      room.players[room.currentChancellor].playerId];
-    update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
-    update.currentChancellor = -1;
-
-    console.log("peek continue");
-
-    Rooms.update(player.roomId, { $set: update });
-  },
   "investigate" ({ suspectId }) {
     let suspect = Players.findOne(suspectId);
     let  update = {};
@@ -441,38 +389,47 @@ Meteor.methods({
 
     Rooms.update(suspect.roomId, { $set: update });
   },
-  "investigatecontinue" ({ playerId }) {
+  "continue" ({ playerId, type }) {
     let player = Players.findOne(playerId);
     if (!player) {
       return;
     }
     let room = Rooms.findOne(player.roomId);
-
-    if (room.players[room.currentPresident].playerId != playerId) {
-      return;
-    }
-
     let update = {};
 
-    update.round = room.round + 1;
-    update.electiontracker = 0;
-    update.policychoices = [];
-    update.voted = false;
-    update.votes = {};
-    update.voteresult = "";
-    update.ruledout = [
-      room.players[room.currentPresident].playerId,
-      room.players[room.currentChancellor].playerId];
-    update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
-    update.currentChancellor = -1;
-    update.peek = [];
-    update.executiveaction = "inactive";
-    update.investigate = false;
-    update.reveal = false;
-    update.suspects = [];
-    update.suspected = [];
+    if (type == "fail") {
+      console.log("fail continue");
+      update.votes = room.votes
+      delete update.votes[playerId];
+    } else {
+      if (room.players[room.currentPresident].playerId != playerId) {
+        return;
+      }
+    }
 
-    console.log("investigate continue");
+    if (type == "peek") {
+      console.log("peek continue");
+      update.peek = [];
+      update.policychoices = [];
+    } else if (type == "investigate") {
+      update.investigate = false;
+      update.reveal = false;
+      update.suspects = [];
+      update.suspected = [];
+    }
+
+    if ((type == "peek" || type == "investigate") || (_.size(update.votes) == 0)) {
+      update.round = room.round + 1;
+      update.voted = false;
+      update.votes = {};
+      update.voteresult = "";
+      update.ruledout = [
+        room.players[room.currentPresident].playerId,
+        room.players[room.currentChancellor].playerId];
+      update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+      update.currentChancellor = -1;
+      update.executiveaction = "inactive";
+    }
 
     Rooms.update(player.roomId, { $set: update });
   },

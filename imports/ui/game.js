@@ -132,9 +132,9 @@ Template.game.events({
   },
   "click .fail-continue-button": function() {
     let playerId = Session.get("playerId");
-    Meteor.call("failcontinue", {
+    Meteor.call("continue", {
       playerId: playerId,
-      vote: false
+      type: "fail"
     });
   },
   "click .novote-button": function() {
@@ -182,7 +182,7 @@ Template.game.events({
   "click .peek-continue-button": function() {
     let playerId = Session.get("playerId");
     console.log("click peek continue");
-    Meteor.call("peekcontinue", { playerId: playerId });
+    Meteor.call("continue", { playerId: playerId, type: "peek" });
   },
   "click .suspect": function() {
     let suspectId = $(event.target).data("suspectid");
@@ -192,6 +192,6 @@ Template.game.events({
   "click .investigate-continue-button": function() {
     let playerId = Session.get("playerId");
     console.log("click investigate continue");
-    Meteor.call("investigatecontinue", { playerId: playerId });
+    Meteor.call("continue", { playerId: playerId, type: "investigate" });
   },
 })

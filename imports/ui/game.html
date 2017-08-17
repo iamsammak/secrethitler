@@ -1,5 +1,6 @@
 <template name="game">
   <h2>round <b>{{ round }}</b></h2>
+  {{> flashMessages }}
   <p>
     <small>policy count</small>
     <br />
@@ -116,6 +117,7 @@
 
     <!-- Investigate Loyalty -->
     {{# if room.investigate }}
+      <p>Who do you want to investigate</p>
       {{# each suspect in room.suspects}}
         <button class="suspect" data-suspectid="{{ suspect.playerId }}">
           {{ suspect.name }}

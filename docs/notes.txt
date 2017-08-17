@@ -40,6 +40,8 @@ Things to do
 
   - add revealing what people voted "yes or no"
 
+  - write the logic to pass over any executive action if the fascist policy was enacted via election tracker
+    don't need to because the fascist policy count will increase outside the "discard" method
 
 
 Bugs
