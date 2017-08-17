@@ -113,6 +113,26 @@
   <!-- discard server side, moves the room forward to next round -->
   {{# if executiveaction }}
     {{# if president }}
+
+    <!-- Investigate Loyalty -->
+    {{# if room.investigate }}
+      {{# each suspect in room.suspects}}
+        <button class="suspect" data-suspectid="{{ suspect.playerId }}">
+          {{ suspect.name }}
+        </button>
+      {{/ each }}
+    {{/ if  }}
+    {{# if room.reveal }}
+        <ul class="playerlist">
+          {{# each suspect in room.suspected }}
+            <li>{{ suspect.name }}({{ partymembership suspect }})</li>
+          {{/ each }}
+        </ul>
+      <p><button class="investigate-continue-button">continue</button></p>
+    {{/ if }}
+    <!-- End of Investigate Loyalty -->
+
+    <!-- Policy Peek -->
         {{# if equals room.peek.length 3 }}
           <p>Here are the next three Policies</p>
           <p>
@@ -122,6 +142,7 @@
           </p>
           <p><button class="peek-continue-button">continue</button></p>
         {{/ if }}
+    <!-- End of policy peek -->
     {{ else }}
       <p>waiting for executive action...</p>
     {{/ if }}

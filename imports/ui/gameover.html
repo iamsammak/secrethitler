@@ -2,13 +2,13 @@
   <h2>game over!</h2>
   <p>
     winning team: <b>{{ room.winner }}</b><br />
-    {{ reason }}
+    {{ room.reason }}
   </p>
   <ul class="playerlist">
     {{# each players }}
       <li class="{{# if current }}current{{/ if }}">
         {{ name }}
-        ({{ side }})
+        ({{ role }})
       </li>
     {{/ each }}
   </ul>

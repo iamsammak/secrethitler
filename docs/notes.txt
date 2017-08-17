@@ -64,3 +64,4 @@ Solved
 
 4. Double clicking policy cards...seem to update one instance of the room to register more than once
     which can cause premature gameover
+Solved - JK not a double click - but Hitler became chancellor after 3 fascists policies

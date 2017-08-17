@@ -83,6 +83,13 @@ Template.game.helpers({
       return "person";
     }
   },
+  partymembership: function(player) {
+    if (player.role == "liberal") {
+      return "liberal";
+    } else {
+      return "fascist";
+    }
+  },
   playercircle: function(playerId) {
     currentPlayerId = Session.get("playerId");
     let roomId = Session.get("roomId");
@@ -176,5 +183,15 @@ Template.game.events({
     let playerId = Session.get("playerId");
     console.log("click peek continue");
     Meteor.call("peekcontinue", { playerId: playerId });
+  },
+  "click .suspect": function() {
+    let suspectId = $(event.target).data("suspectid");
+    console.log(`suspect ${suspectId}`);
+    Meteor.call("investigate", { suspectId: suspectId });
+  },
+  "click .investigate-continue-button": function() {
+    let playerId = Session.get("playerId");
+    console.log("click investigate continue");
+    Meteor.call("investigatecontinue", { playerId: playerId });
   },
 })

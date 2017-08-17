@@ -130,7 +130,7 @@ Meteor.methods({
     let update = {
       players: room.players
     };
-    // add to update once everyone is in the room
+    // add to update once everyone is in the room TODO first update
     if (Players.find({ roomId: room._id }).count() == room.players.length) {
       update.state = "game";
       update.electiontracker = 0;
@@ -151,6 +151,10 @@ Meteor.methods({
       update.fascist = 0;
       update.executiveaction = "inactive";
       update.peek = [];
+      update.investigate = false;
+      update.suspects = [];
+      update.reveal = false;
+      update.suspected = [];
     }
 
     Players.update(playerId, {
@@ -321,25 +325,40 @@ Meteor.methods({
     // add executive action here
       let party = room.players.length;
       if (update.fascist == 1) {
-        if (party >= 9) {
-          console.log("investigative loyalty");
+        if (party >= 3) { // change back to 9
+          console.log("investigate loyalty");
+          update.executiveaction = "active";
+          update.investigate = true;
+
+          let currPresId = room.players[room.currentPresident].playerId;
+
+          // create an array of players except president
+          let suspects = _.map(room.players, function(player) {
+            if (player.playerId != currPresId) {
+              return player;
+            }
+            return; // why is there a null
+          });
+
+          update.suspects = suspects;
         }
       }
       if (update.fascist == 2) {
-        if (party >= 7) {
-          console.log("investigative loyalty");
+        if (party >= 3) { // cajnge back to 7
+          console.log("investigate loyalty");
         }
       }
       if (update.fascist == 3) {
         if (party >= 7) {
           console.log("call special election");
 
-        } else if (party >= 5) { // change back to 5
+        } else if (party >= 3) { // change back to 5
           console.log("policy peek");
           let peek = room.drawpile.slice(0, 3);
           update.peek = peek;
           update.executiveaction = "active";
-          Rooms.update(player.roomId, { $set: { executiveaction: "active" } });
+          // I believe it works without the following line
+          // Rooms.update(player.roomId, { $set: { executiveaction: "active" } });
         }
       }
       if (update.fascist == 4) {
@@ -367,7 +386,7 @@ Meteor.methods({
           room.players[room.currentPresident].playerId,
           room.players[room.currentChancellor].playerId];
         update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
-        update.currentChancellor = -1 //TODO, this is the round resetter
+        update.currentChancellor = -1
       }
 
     // end of game
@@ -417,6 +436,50 @@ Meteor.methods({
     update.currentChancellor = -1;
 
     console.log("peek continue");
+
+    Rooms.update(player.roomId, { $set: update });
+  },
+  "investigate" ({ suspectId }) {
+    let suspect = Players.findOne(suspectId);
+    let  update = {};
+    update.investigate = false;
+    update.reveal = true;
+    update.suspected = [ suspect ];
+
+    Rooms.update(suspect.roomId, { $set: update });
+  },
+  "investigatecontinue" ({ playerId }) {
+    let player = Players.findOne(playerId);
+    if (!player) {
+      return;
+    }
+    let room = Rooms.findOne(player.roomId);
+
+    if (room.players[room.currentPresident].playerId != playerId) {
+      return;
+    }
+
+    let update = {};
+
+    update.round = room.round + 1;
+    update.electiontracker = 0;
+    update.policychoices = [];
+    update.voted = false;
+    update.votes = {};
+    update.voteresult = "";
+    update.ruledout = [
+      room.players[room.currentPresident].playerId,
+      room.players[room.currentChancellor].playerId];
+    update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+    update.currentChancellor = -1;
+    update.peek = [];
+    update.executiveaction = "inactive";
+    update.investigate = false;
+    update.reveal = false;
+    update.suspects = [];
+    update.suspected = [];
+
+    console.log("investigate continue");
 
     Rooms.update(player.roomId, { $set: update });
   },
