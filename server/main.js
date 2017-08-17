@@ -324,8 +324,9 @@ Meteor.methods({
 
     // add executive action here
       let party = room.players.length;
-      if (update.fascist == 1) {
-        if (party >= 3) { // change back to 9
+      if (update.fascist == 1 || update.fascist == 2) {
+        // if (party >= 9 || (party >= 7 && update.fascist == 2)) {
+        if (party >= 3) { // replace this line with the above line when done testing
           console.log("investigate loyalty");
           update.executiveaction = "active";
           update.investigate = true;
@@ -333,23 +334,15 @@ Meteor.methods({
           let currPresId = room.players[room.currentPresident].playerId;
 
           // create an array of players except president
-          let suspects = _.map(room.players, function(player) {
-            if (player.playerId != currPresId) {
-              return player;
-            }
-            return; // why is there a null
+          let suspects = _.filter(room.players, function(player) {
+            return player.playerId != currPresId;
           });
 
           update.suspects = suspects;
         }
       }
-      if (update.fascist == 2) {
-        if (party >= 3) { // cajnge back to 7
-          console.log("investigate loyalty");
-        }
-      }
       if (update.fascist == 3) {
-        if (party >= 7) {
+        if (party >= 3) { // change back to 7
           console.log("call special election");
 
         } else if (party >= 3) { // change back to 5
@@ -362,12 +355,12 @@ Meteor.methods({
         }
       }
       if (update.fascist == 4) {
-        if (party >= 5) {
+        if (party >= 3) { // change back to 5
           console.log("execution");
         }
       }
       if (update.fascist == 5) {
-        if (party >= 5) {
+        if (party >= 3) { // change back to 5
           console.log("execution and veto unlocked");
         }
       }
