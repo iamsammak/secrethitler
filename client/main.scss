@@ -45,6 +45,10 @@ button {
   }
 }
 
+table {
+  padding-bottom: 1em;
+}
+
 .playerlist {
   list-style-type: none;
   display: block;
@@ -102,6 +106,7 @@ div.footer {
 	margin: 0;
 }
 
+// https://css-tricks.com/snippets/sass/placing-items-circle/
 @mixin on-circle($item-count, $circle-size, $item-size) {
 	position: relative;
 	width:  $circle-size;
