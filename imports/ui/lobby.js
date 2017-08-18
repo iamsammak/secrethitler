@@ -27,10 +27,6 @@ Template.lobby.helpers({
       return Rooms.findOne(roomId);
     }
   },
-  // to be removed later
-  tempCode: function() {
-    return "j3r3my";
-  },
   owner: function() {
     let playerId = Session.get("playerId");
     let roomId = Session.get("roomId");
@@ -39,12 +35,12 @@ Template.lobby.helpers({
     return playerId === room.owner;
   },
   ready: function(players) {
-    // testing
-    console.log("Ready?");
 
     let attributes = {};
-    if (players.length < 5) {
-      attributes.disabled = false;
+    if (players.length < 2) { //TODO change back to players.length < 5
+      attributes["disabled"] = true;
+    } else {
+      attributes["disabled"] = false;
     }
     return attributes;
   },

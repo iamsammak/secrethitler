@@ -51,6 +51,12 @@ Things to do
   - write the logic to pass over any executive action if the fascist policy was enacted via election tracker
     don't need to because the fascist policy count will increase outside the "discard" method
 
+    If there are only five players left in the
+    game, only the last elected Chancellor is
+    ineligible to be Chancellor Candidate; the
+    last President may be nominated.
+
+
 
 If I were to Dry up this code.
 Definitely break game.js and game.html into small components
@@ -81,3 +87,9 @@ Solved
 4. Double clicking policy cards...seem to update one instance of the room to register more than once
     which can cause premature gameover
 Solved - JK not a double click - but Hitler became chancellor after 3 fascists policies
+
+
+5. There is a bug in which after passing a liberal policy.
+  Then the execution doesn't happen the next time a fascist policy is passed
+Solved - I guess there was no bug. Or glitch only happened once when server coded didn't save thus didn't refresh
+  this bug put on the back burner

@@ -160,7 +160,13 @@ Meteor.methods({
       update.vetobutton = { president: false, chancellor: false };
       update.askchancellor = false;
       update.askpresident = false;
-      update.vetoresult = { president: "", chancellor: "" }
+      update.vetoresult = { president: "", chancellor: "" };
+      update.alive = room.players.length;
+      update.dead = [];
+      update.deathtags = [];
+      update.deadindex = [];
+      update.assassination = false;
+      update.playerdied = false;
     }
 
     Players.update(playerId, {
@@ -181,6 +187,8 @@ Meteor.methods({
     } else if (player.index == room.currentPresident) {
       return;
     } else if (_.contains(room.ruledout, player._id)) {
+      return;
+    } else if (_.contains(room.deadindex, player._id)) {
       return;
     } else {
       Rooms.update(player.roomId, {
@@ -206,18 +214,14 @@ Meteor.methods({
         let drawpile = room.drawpile; //already shuffled
         console.log("drawpile", drawpile);
         let policychoices = room.policychoices; //blank right now, []
-        // might need to change this shuffle option, if we include special "seeing powers"
 
         if (room.fascist >= 3 && room.players[room.currentChancellor].role == "hitler") {
           update.state = "gameover";
           update.winner = "fascists";
           update.reason = "hitler has been elected!";
           update.players = room.players;
-          for (let i = 0; i < room.players.length; i += 1) {
-            update.players[i].side = Players.findOne(room.players[i].playerId).role;
-          }
         } else {
-          // if the draw stack < 3, add the remaining to policy choices then shuffle discard back into draw stack
+          // logic - draw stack is less than 3
           if (drawpile.length < 3) {
             let remaining = drawpile.length;
             for (let i = 0; i < remaining; i++) {
@@ -258,15 +262,17 @@ Meteor.methods({
           }
 
           update.trackerfull = `a ${topCard} policy has been enacted!`;
-          FlashMessages.sendWarning(`a ${topCard} policy has been enacted!`);
+          // FlashMessages.sendWarning(`a ${topCard} policy has been enacted!`);
           update.electiontracker = 0;
           update.drawpile = drawpile;
         }
       }
     }
 
-    if (room.fascist > 0) { //TODO change back == 5
+    if (room.fascist == 5) { //TODO change back == 5
       update.vetobutton = { president: true, chancellor: true };
+    } else {
+      update.vetobutton = { president: false, chancellor: false };
     }
 
     Rooms.update(player.roomId, {
@@ -306,9 +312,6 @@ Meteor.methods({
         update.fascist = room.fascist + 1;
       }
 
-      // TODO might need to make a new key for executive action
-      // also might need to reconfirm the update reset below in the executive action parts
-
     // add executive action here
       let party = room.players.length;
       // if (update.fascist == 1 || update.fascist == 2) {
@@ -344,20 +347,23 @@ Meteor.methods({
       //     update.executiveaction = "active";
       //   }
       // }
-      // if (update.fascist == 4) {
-      //   if (party >= 3) { // change back to 5
-      //     console.log("execution");
-      //   }
-      // }
-      if (update.fascist > 0) { // change back to update.fascist == 5
+      if (update.fascist == 1 || update.fascist == 2 || update.fascist == 3) { // change back to == 4
         if (party >= 3) { // change back to 5
-          console.log("execution and veto unlocked");
 
-          // veto - not an executive special power so executiveaction still inactive
-          update.vetobutton = { president: true, chancellor: true };
-          update.vetoresult = { president: "", chancellor: "" };
+          update.executiveaction = "active";
+          update.assassination = true;
+          console.log("execution", update);
         }
       }
+      // if (update.fascist == 5) { // change back to update.fascist == 5
+      //   if (party >= 5) { // change back to 5
+      //     console.log("execution and veto unlocked");
+      //
+      //     // veto - not an executive special power so executiveaction still inactive
+      //     update.vetobutton = { president: true, chancellor: true };
+      //     update.vetoresult = { president: "", chancellor: "" };
+      //   }
+      // }
       // reset the room, move round forward and move president placard
       if (update.executiveaction == "inactive") {
         update.round = room.round + 1;
@@ -366,11 +372,24 @@ Meteor.methods({
         update.voted = false;
         update.votes = {};
         update.voteresult = "";
-        update.ruledout = [
-          room.players[room.currentPresident].playerId,
-          room.players[room.currentChancellor].playerId];
         update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
         update.currentChancellor = -1
+        if (room.alive <= 3) {
+          update.ruledout = [
+            room.players[room.currentChancellor].playerId ];
+        } else {
+          update.ruledout = [
+            room.players[room.currentPresident].playerId,
+            room.players[room.currentChancellor].playerId ];
+        }
+        // TODO insert skip dead people as president
+        if (room.deadindex.length != 0) {
+          update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+          while (_.contains(room.deadindex, update.currentPresident)) {
+            console.log(update.currentPresident);
+            update.currentPresident = (update.currentPresident + 1) % _.size(room.players);
+          }
+        }
       }
 
       if (room.resetspecialelection.length != 0) {
@@ -434,24 +453,41 @@ Meteor.methods({
       update.reveal = false;
       update.suspects = [];
       update.suspected = [];
+    } else if (type == "execution") {
+      update.assassination = false;
+      update.playerdied = false;
     }
 
-    if ((type == "peek" || type == "investigate") || (_.size(update.votes) == 0)) {
+    if ((type == "peek" || type == "investigate" || type == "execution") || (_.size(update.votes) == 0)) {
       update.round = room.round + 1;
       update.voted = false;
       update.votes = {};
       update.voteresult = "";
-      update.ruledout = [
-        room.players[room.currentPresident].playerId,
-        room.players[room.currentChancellor].playerId];
-      // moved to currentPresident below for special election logic
       update.currentChancellor = -1;
       update.executiveaction = "inactive";
+
+      if (room.alive <= 3) {
+        update.ruledout = [
+          room.players[room.currentChancellor].playerId ];
+      } else {
+        update.ruledout = [
+          room.players[room.currentPresident].playerId,
+          room.players[room.currentChancellor].playerId ];
+      }
+
       if (room.resetspecialelection.length != 0) {
         update.currentPresident = (room.resetspecialelection[0] + 1) % _.size(room.players);
         update.resetspecialelection = [];
       } else {
-        update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+        if (room.deadindex.length != 0) {
+          update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+          while (_.contains(room.deadindex, update.currentPresident)) {
+            console.log(update.currentPresident);
+            update.currentPresident = (update.currentPresident + 1) % _.size(room.players);
+          }
+        } else {
+          update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+        }
       }
     }
 
@@ -461,9 +497,6 @@ Meteor.methods({
   "specialelection" ({ nextPresident, currentPlayerId }) {
     let currentPlayer = Players.findOne(currentPlayerId);
     let room = Rooms.findOne(currentPlayer.roomId);
-    // create a temp room state that captures current room state
-    // execute special election
-    // then return room state to before temp
 
     let update = { currentPresident: nextPresident.index };
     update.round = room.round + 1;
@@ -565,7 +598,7 @@ Meteor.methods({
 
       update.trackerfull = `a ${topCard} policy has been enacted!`;
       // TODO get this flashmessage to work
-      FlashMessages.sendWarning(`a ${topCard} policy has been enacted!`);
+      // FlashMessages.sendWarning(`a ${topCard} policy has been enacted!`);
       update.electiontracker = 0;
       update.drawpile = drawpile;
     }
@@ -575,8 +608,6 @@ Meteor.methods({
   "chancellor-veto-continue" ({ roomId }) {
     let room = Rooms.findOne(roomId);
     let update = {};
-    // discard policychoices into discardpile
-    // reset room state and vote states
     update.discardpile = room.discardpile.concat(room.policychoices);
     update.vetobutton = { president: true, chancellor: true };
     update.vetoresult = { president: "", chancellor: "" };
@@ -585,12 +616,18 @@ Meteor.methods({
     update.voted = false;
     update.votes = {};
     update.voteresult = "";
-    update.ruledout = [
-      room.players[room.currentPresident].playerId,
-      room.players[room.currentChancellor].playerId];
     update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
     update.currentChancellor = -1
     update.electiontracker = room.electiontracker + 1;
+
+    if (room.alive <= 3) {
+      update.ruledout = [
+        room.players[room.currentChancellor].playerId ];
+    } else {
+      update.ruledout = [
+        room.players[room.currentPresident].playerId,
+        room.players[room.currentChancellor].playerId ];
+    }
 
     if (update.electiontracker == 3) {
       let drawpile = room.drawpile;
@@ -613,6 +650,41 @@ Meteor.methods({
       update.electiontracker = 0;
       update.drawpile = drawpile;
     }
+
+    Rooms.update(roomId, { $set: update });
+  },
+  "assassination" ({ deceased }) {
+    let roomId = deceased.roomId;
+    let room = Rooms.findOne(roomId);
+    let update = {};
+
+    let dead = room.dead;
+    dead.unshift(deceased);
+    update.dead = dead;
+
+    let deathtags =  room.deathtags;
+    deathtags.unshift(deceased._id)
+    update.deathtags = deathtags;
+
+    let deadindex =  room.deadindex;
+    deadindex.unshift(deceased.index)
+    update.deadindex = deadindex;
+
+    update.playerdied = true;
+    update.assassination = false;
+
+    if (deceased.role == "hitler") {
+      update.state = "gameover";
+      update.winner = "liberals";
+      update.reason = "hitler has been assassinated!";
+      update.players = room.players;
+    }
+
+    // I need to correct the votecount to not count dead people
+    // and not consider dead people in the chancellor voting process
+    // Also add if the game party == 3, when choosing chancellor you can ignore ruled out
+
+    console.log("assassinating", update);
 
     Rooms.update(roomId, { $set: update });
   },

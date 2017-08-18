@@ -36,7 +36,7 @@ button {
     cursor: default;
   }
   &:hover {
-    border: 1px solid #33c3f0;
+    border: 1px solid #FFA000;
   }
   .close {
     background-color: red;
@@ -62,7 +62,7 @@ table {
     text-align: left;
   }
   .current {
-    border-left: 4px #0c0 solid;
+    border-left: 4px #00DB11 solid;
   }
   .remove-button {
     display: inline-block;
@@ -81,7 +81,7 @@ input[type=text] {
 	border: 1px solid #999;
 	outline: none;
   &:focus {
-    border: 1px solid #33c3f0;
+    border: 1px solid #FFA000;
   }
 }
 
@@ -89,14 +89,21 @@ div.footer {
   font-size: 0.75em;
 }
 
-#ready-btn {
-	background-color: #090;
+.start-button {
+  &:disabled {
+    background-color: #BEC4C0;
+    cursor: default;
+  }
+}
+
+#ready-button {
+	background-color: #00B50E;
 	color: #fff;
 	border: 1px solid #fff;
 	cursor: pointer;
 
 	&:disabled {
-		background-color: #9c9;
+		background-color: #99CC99;
 		cursor: default;
 	}
 }
@@ -160,11 +167,17 @@ div.footer {
         border-color: lighten(#2187FF, 25%);
       }
 			&.chancellor-candidate {
-				border-color: lighten(#1B9078, 50%);
+				border-color: lighten(#45906A, 35%);
 			}
 			&.chancellor {
-				border-color: #1B9078;
+				border-color: #45906A;
 			}
+      &.on-the-chopping-board {
+        border-color: lighten(#90201B, 45%);
+      }
+      &.dead {
+        border-color: #90201B;
+      }
 		}
 	}
 }

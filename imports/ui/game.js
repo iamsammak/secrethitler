@@ -91,13 +91,17 @@ Template.game.helpers({
     }
   },
   playercircle: function(playerId) {
-    currentPlayerId = Session.get("playerId");
+    let currentPlayerId = Session.get("playerId");
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
     if (room.players[room.currentPresident].playerId == playerId) {
       return "president";
+    } else if (_.contains(room.deathtags, playerId)) {
+      return "dead";
     } else if (room.players[room.currentPresident].playerId == currentPlayerId && room.specialelection) {
-      return "president-candidate"
+      return "president-candidate";
+    } else if (room.players[room.currentPresident].playerId == currentPlayerId && room.assassination) {
+      return "on-the-chopping-board";
     } else if (room.players[room.currentPresident].playerId == currentPlayerId && room.currentChancellor == -1 && !_.contains(room.ruledout, playerId)) {
       return "chancellor-candidate";
     } else if (room.currentChancellor > -1 && room.players[room.currentChancellor].playerId == playerId) {
@@ -155,6 +159,25 @@ Template.game.helpers({
     }
     return room.vetoresult[official] == "fail";
   },
+  dead: function() {
+    let playerId = Session.get("playerId");
+    let player = Players.findOne(playerId)
+    let roomId = Session.get("roomId")
+    let room = Rooms.findOne(roomId);
+    return _.contains(room.deathtags, playerId);
+  },
+  newlydeceased: function() {
+    let playerId = Session.get("playerId");
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    return room.dead[0]._id == playerId;
+  },
+  gravestonename: function() {
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    let name = room.dead[0].name;
+    return name;
+  }
 })
 
 Template.game.events({
@@ -198,6 +221,7 @@ Template.game.events({
     let currentPlayerId = Session.get("playerId");
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
+
     if (room.players[room.currentPresident].playerId == currentPlayerId) {
       if (room.currentChancellor == -1 && !room.specialelection) {
         Meteor.call("pickchancellor", {
@@ -210,6 +234,11 @@ Template.game.events({
           nextPresident: nextPresident,
           currentPlayerId: currentPlayerId
         });
+      }
+      if (room.assassination) {
+        let deceased = Players.findOne(playerId);
+        debugger
+        Meteor.call("assassination", { deceased: deceased });
       }
     }
   },
@@ -274,7 +303,9 @@ Template.game.events({
       roomId: roomId
     });
   },
+  "click .execution-continue-button": function() {
+    let playerId = Session.get("playerId");
+    console.log("Someone assassinated. But the Game continues");
+    Meteor.call("continue", { playerId: playerId, type: "execution" });
+  },
 })
-
-// read the rules  
-// to see if a failed veto counts as a +1 to the election tracker

@@ -109,7 +109,7 @@ Template.buttonmenu.events({
     console.log("view changed to gameover");
   },
   "click .session-button": function() {
-    console.log(Session.get("view"));
+    console.log(Session.keys);
   },
 });
 

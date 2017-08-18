@@ -1,0 +1,82 @@
+{
+	"_id" : "iBHGTaJuE2DAQ5d89",
+	"accessCode" : "09de1d",
+	"started" : 1503047330701,
+	"state" : "game",
+	"owner" : "j5bjG58YMsSZq482F",
+	"players" : [
+		{
+			"playerId" : "j5bjG58YMsSZq482F",
+			"name" : "sam",
+			"role" : "liberal"
+		},
+		{
+			"playerId" : "bqkmNWsQogfDiPm4p",
+			"name" : "jeremy",
+			"role" : "liberal"
+		},
+		{
+			"playerId" : "bMrJm6DFqCHPxEQXw",
+			"name" : "jovian",
+			"role" : "hitler"
+		}
+	],
+	"fascist" : 1,
+	"liberal" : 1,
+	"size" : 3,
+	"electiontracker" : 0,
+	"trackerfull" : "",
+	"drawpile" : [
+		"liberal",
+		"fascist",
+		"fascist",
+		"fascist",
+		"fascist",
+		"liberal",
+		"fascist",
+		"liberal"
+	],
+	"discardpile" : [
+		"fascist",
+		"fascist",
+		"fascist",
+		"fascist"
+	],
+	"policychoices" : [
+		"liberal",
+		"fascist",
+		"liberal"
+	],
+	"round" : 3,
+	"voted" : true,
+	"votes" : {
+		"j5bjG58YMsSZq482F" : true,
+		"bqkmNWsQogfDiPm4p" : true,
+		"bMrJm6DFqCHPxEQXw" : true
+	},
+	"voteresult" : "pass",
+	"currentPresident" : 0,
+	"currentChancellor" : 1,
+	"ruledout" : [
+		"bMrJm6DFqCHPxEQXw",
+		"j5bjG58YMsSZq482F"
+	],
+	"executiveaction" : "inactive",
+	"peek" : [ ],
+	"investigate" : false,
+	"suspects" : [ ],
+	"reveal" : false,
+	"suspected" : [ ],
+	"specialelection" : false,
+	"resetspecialelection" : [ ],
+	"vetobutton" : {
+		"president" : true,
+		"chancellor" : true
+	},
+	"askchancellor" : false,
+	"askpresident" : false,
+	"vetoresult" : {
+		"president" : "",
+		"chancellor" : ""
+	}
+}

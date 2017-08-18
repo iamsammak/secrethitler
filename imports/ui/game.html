@@ -28,6 +28,14 @@
     failed elections: {{ room.electiontracker }}
   </p>
 
+<!-- Dead or Alive -->
+  {{# if dead }}
+    <p>
+      <b style="color: #90201B;">you are dead.</b><br />
+      <span>Dead men tell no tales. Shh...</span>
+    </p>
+  {{/ if }}
+
 <!-- chancellor-candidate picking view -->
   {{# if president }}
     <p>
@@ -177,9 +185,15 @@
   {{# if executiveaction }}
     {{# if president }}
 
+    <!-- Execution -->
+    {{# if room.assassination }}
+      <p>Execution. Who do you want to execute?</p>
+    {{/ if }}
+    <!-- End of execution -->
+
     <!-- Call Special Election -->
       {{# if room.specialelection }}
-        <p>Choose the next President</p>
+        <p>Special Election. Choose the next President.</p>
       {{/ if }}
     <!-- End of Special Election -->
 
@@ -215,9 +229,50 @@
     <!-- End of policy peek -->
 
     {{ else }}
-      <!-- add chancellor view here during veto power -->
-      <p>waiting for executive action...</p>
+      <!-- everyone else's view while President is using Presidential Power -->
+      {{# if room.assassination }}
+        <p>
+          <b>Execution.</b><br />
+          <span>President choosing who to execute...</span>
+        </p>
+      {{/ if }}
+      {{# if room.specialelection }}
+        <p>
+          <b>Call Special Election.</b><br />
+          <span>President choosing the next President...</span>
+        </p>
+      {{/ if }}
+      {{# if room.investigate }}
+        <p>
+          <b>Investigate Loyalty.</b><br />
+          <span>President is investigating someone's party membership...</span>
+        </p>
+      {{/ if }}
+      {{# if equals room.peek.length 3 }}
+        <p>
+          <b>Policy Peek.</b><br />
+          <span>President is examining the top three policy cards...</span>
+        </p>
+      {{/ if }}
     {{/ if }}
+
+    <!-- Death Announcement -->
+    {{# if room.playerdied }}
+      {{# if president }}
+        <p>You've chosen to execute {{ gravestonename }}</p>
+        <p><button class="execution-continue-button">continue</button></p>
+      {{ else }}
+        {{# if newlydeceased }}
+        <p>You died. Sorry.</p>
+        {{ else }}
+        <p>
+          {{ gravestonename }} has been executed.<br />
+        </p>
+        {{/ if }}
+      {{/ if }}
+    {{/ if }}
+    <!-- End of death announcement -->
+
   {{/ if }}
   <!-- End of Executive action view -->
 
@@ -234,7 +289,7 @@
   <div class="presidential-powers" id="dropdown-menu">
     {{# each powers }}
       <li class ="power-name" data-powerid={{ id }}>{{ name }}</li>
-      <p class="power-description" id="power-description-{{ id }}">{{ description }}</p>
+      <p style="width:85%" class="power-description" id="power-description-{{ id }}">{{ description }}</p>
     {{/ each }}
   </div>
 </template>

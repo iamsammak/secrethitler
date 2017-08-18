@@ -28,3 +28,5 @@ Template.gameover.events({
 // should reset the game as new, bring all players back into the lobby
 // view should be right before "owner" presses start
 // which will allow the addition or departure of players
+
+// Did you add the logic, that executive powers don't active if card is flipped via election tracker
