@@ -157,6 +157,10 @@ Meteor.methods({
       update.suspected = [];
       update.specialelection = false;
       update.resetspecialelection = [];
+      update.vetobutton = { president: false, chancellor: false };
+      update.askchancellor = false;
+      update.askpresident = false;
+      update.vetoresult = { president: "", chancellor: "" }
     }
 
     Players.update(playerId, {
@@ -213,10 +217,10 @@ Meteor.methods({
             update.players[i].side = Players.findOne(room.players[i].playerId).role;
           }
         } else {
-          // if the draw stack > 3, add the remaining to policy choices then shuffle discard back into draw stack
+          // if the draw stack < 3, add the remaining to policy choices then shuffle discard back into draw stack
           if (drawpile.length < 3) {
             let remaining = drawpile.length;
-            for (let i = 0; i > remaining; i++) {
+            for (let i = 0; i < remaining; i++) {
               policychoices.push(drawpile.splice(0, 1))
             }
             drawpile = drawpile.concat(room.discardpile);
@@ -261,6 +265,10 @@ Meteor.methods({
       }
     }
 
+    if (room.fascist > 0) { //TODO change back == 5
+      update.vetobutton = { president: true, chancellor: true };
+    }
+
     Rooms.update(player.roomId, {
       $set: update
     });
@@ -303,47 +311,51 @@ Meteor.methods({
 
     // add executive action here
       let party = room.players.length;
-      if (update.fascist == 1 || update.fascist == 2) {
-        // if (party >= 9 || (party >= 7 && update.fascist == 2)) {
-        if (party >= 3) { // replace this line with the above line when done testing
-          console.log("investigate loyalty");
-          update.executiveaction = "active";
-          update.investigate = true;
-
-          let currPresId = room.players[room.currentPresident].playerId;
-
-          // create an array of players except president
-          let suspects = _.filter(room.players, function(player) {
-            return player.playerId != currPresId;
-          });
-
-          update.suspects = suspects;
-        }
-      }
-      if (update.fascist == 3) {
-        if (party >= 3) { // change back to 7
-          console.log("call special election");
-
-          // I could make everyone a presidential-candidate (in playercircle)
-          update.specialelection = true;
-          update.executiveaction = "active";
-
-
-        } else if (party >= 5) { // change back to 5
-          console.log("policy peek");
-          let peek = room.drawpile.slice(0, 3);
-          update.peek = peek;
-          update.executiveaction = "active";
-        }
-      }
-      if (update.fascist == 4) {
-        if (party >= 3) { // change back to 5
-          console.log("execution");
-        }
-      }
-      if (update.fascist == 5) {
+      // if (update.fascist == 1 || update.fascist == 2) {
+      //   // if (party >= 9 || (party >= 7 && update.fascist == 2)) {
+      //   if (party >= 3) { // replace this line with the above line when done testing
+      //     console.log("investigate loyalty");
+      //     update.executiveaction = "active";
+      //     update.investigate = true;
+      //
+      //     let currPresId = room.players[room.currentPresident].playerId;
+      //
+      //     // create an array of players except president
+      //     let suspects = _.filter(room.players, function(player) {
+      //       return player.playerId != currPresId;
+      //     });
+      //
+      //     update.suspects = suspects;
+      //   }
+      // }
+      // if (update.fascist == 3) {
+      //   if (party >= 3) { // change back to 7
+      //     console.log("call special election");
+      //
+      //     // I could make everyone a presidential-candidate (in playercircle)
+      //     update.specialelection = true;
+      //     update.executiveaction = "active";
+      //
+      //
+      //   } else if (party >= 5) { // change back to 5
+      //     console.log("policy peek");
+      //     let peek = room.drawpile.slice(0, 3);
+      //     update.peek = peek;
+      //     update.executiveaction = "active";
+      //   }
+      // }
+      // if (update.fascist == 4) {
+      //   if (party >= 3) { // change back to 5
+      //     console.log("execution");
+      //   }
+      // }
+      if (update.fascist > 0) { // change back to update.fascist == 5
         if (party >= 3) { // change back to 5
           console.log("execution and veto unlocked");
+
+          // veto - not an executive special power so executiveaction still inactive
+          update.vetobutton = { president: true, chancellor: true };
+          update.vetoresult = { president: "", chancellor: "" };
         }
       }
       // reset the room, move round forward and move president placard
@@ -359,7 +371,6 @@ Meteor.methods({
           room.players[room.currentChancellor].playerId];
         update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
         update.currentChancellor = -1
-        // reset president to correct order after special election (this logic needs to also be inside "continue")
       }
 
       if (room.resetspecialelection.length != 0) {
@@ -469,6 +480,141 @@ Meteor.methods({
     update.resetspecialelection = [ room.currentPresident ];
 
     Rooms.update(room._id, { $set: update });
+  },
+  "veto" ({ playerId, official }) {
+    let player = Players.findOne(playerId);
+    let room = Rooms.findOne(player.roomId);
+    let update = {
+      vetobutton: room.vetobutton
+    };
+
+    if (official == "president") {
+      update.askchancellor = true;
+    } else if (official == "chancellor") {
+      update.askpresident = true;
+    }
+    // toggle off the official's veto button
+    update.vetobutton[official] = false;
+
+    console.log("veto", update);
+    Rooms.update(player.roomId, { $set: update });
+  },
+  "veto-vote" ({ playerId, official, vote }) {
+    let player = Players.findOne(playerId);
+    let room = Rooms.findOne(player.roomId);
+    let update = {
+      vetoresult: room.vetoresult
+    };
+
+    if (vote) {
+      update.vetoresult[official] = "pass";
+    } else {
+      update.vetoresult[official] = "fail";
+    }
+
+    update.askpresident = false;
+    update.askchancellor = false;
+
+    console.log("veto-vote", update);
+    Rooms.update(player.roomId, { $set: update });
+  },
+  "president-veto-continue" ({ roomId }) {
+    let room = Rooms.findOne(roomId);
+    let update = {};
+
+    let drawpile = room.drawpile;
+    let discardpile = room.discardpile.concat(room.policychoices);
+    let policychoices = [];
+
+    if (drawpile.length < 3) {
+      let remaining = drawpile.length;
+      for (let i = 0; i < remaining; i++) {
+        policychoices.push(drawpile.splice(0, 1))
+      }
+      drawpile = drawpile.concat(discardpile);
+      discardpile = [];
+      _.shuffle(drawpile);
+
+      while (policychoices.length < 3) {
+        policychoices.push(drawpile.splice(0, 1));
+        console.log("insert single", drawpile.splice(0, 1));
+      }
+    } else {
+      policychoices = drawpile.splice(0, 3);
+      console.log("policychoices", policychoices);
+    }
+
+    update.drawpile = drawpile;
+    update.discardpile = discardpile;
+    update.policychoices = policychoices;
+    update.vetoresult = { president: "", chancellor: "" };
+    update.electiontracker = room.electiontracker + 1;
+
+    if (update.electiontracker == 3) {
+      if (drawpile.length == 0 ) {
+        drawpile = drawpile.concat(update.discardpile);
+        update.discardpile = [];
+      }
+
+      let topCard = drawpile.splice(0, 1)
+      if (topCard == "liberal") {
+        update.liberal = room.liberal + 1;
+      } else if (topCard == "fascist") {
+        update.fascist = room.fascist + 1;
+      }
+
+      update.trackerfull = `a ${topCard} policy has been enacted!`;
+      // TODO get this flashmessage to work
+      FlashMessages.sendWarning(`a ${topCard} policy has been enacted!`);
+      update.electiontracker = 0;
+      update.drawpile = drawpile;
+    }
+
+    Rooms.update(roomId, { $set: update });
+  },
+  "chancellor-veto-continue" ({ roomId }) {
+    let room = Rooms.findOne(roomId);
+    let update = {};
+    // discard policychoices into discardpile
+    // reset room state and vote states
+    update.discardpile = room.discardpile.concat(room.policychoices);
+    update.vetobutton = { president: true, chancellor: true };
+    update.vetoresult = { president: "", chancellor: "" };
+    update.round = room.round + 1;
+    update.policychoices = [];
+    update.voted = false;
+    update.votes = {};
+    update.voteresult = "";
+    update.ruledout = [
+      room.players[room.currentPresident].playerId,
+      room.players[room.currentChancellor].playerId];
+    update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+    update.currentChancellor = -1
+    update.electiontracker = room.electiontracker + 1;
+
+    if (update.electiontracker == 3) {
+      let drawpile = room.drawpile;
+
+      if (drawpile.length == 0 ) {
+        drawpile = drawpile.concat(update.discardpile);
+        update.discardpile = [];
+      }
+
+      let topCard = drawpile.splice(0, 1)
+      if (topCard == "liberal") {
+        update.liberal = room.liberal + 1;
+      } else if (topCard == "fascist") {
+        update.fascist = room.fascist + 1;
+      }
+
+      update.trackerfull = `a ${topCard} policy has been enacted!`;
+      // TODO get this flashmessage to work
+      FlashMessages.sendWarning(`a ${topCard} policy has been enacted!`);
+      update.electiontracker = 0;
+      update.drawpile = drawpile;
+    }
+
+    Rooms.update(roomId, { $set: update });
   },
   "playagain" ({ roomId }) {
     Rooms.update(roomId, {

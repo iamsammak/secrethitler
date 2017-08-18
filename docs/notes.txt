@@ -1,5 +1,13 @@
 Things I learned about Meteor.js
 
+Goal is two ship this product out in 2 weeks
+  - document the process
+  - take pictures of the written work, wireframes
+  - schemes and room states
+
+  - actual/reality timeline
+  - how long it took to finish each feature
+
 1. Hot code loading
 
 Seems a lot less initial setup, you can get right to coding what you actually want
@@ -43,6 +51,12 @@ Things to do
   - write the logic to pass over any executive action if the fascist policy was enacted via election tracker
     don't need to because the fascist policy count will increase outside the "discard" method
 
+
+If I were to Dry up this code.
+Definitely break game.js and game.html into small components
+Then take main.js and dry up the code but utilize the utils.js in server directory more
+  create Utils.functions that will do certain tasks that are used more than once (i.e. drawing policies from drawpile)
+  make "check function" that runs after every Meteor.method...in which all the vote, election tracker, reset logic can live here
 
 Bugs
 

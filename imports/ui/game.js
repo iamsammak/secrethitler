@@ -109,18 +109,51 @@ Template.game.helpers({
     let room = Rooms.findOne(roomId);
     let numOfPlayers = room.players.length;
     if (numOfPlayers < 5) {
-      return [ PRESIDENTIALPOWERS[1], PRESIDENTIALPOWERS[2], PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[5] ];
+      return [ PRESIDENTIALPOWERS[1], PRESIDENTIALPOWERS[2], PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[5], PRESIDENTIALPOWERS[6] ];
     } else if (numOfPlayers < 7) { // 5 and 6
-      return [ PRESIDENTIALPOWERS[1], PRESIDENTIALPOWERS[2] ];
+      return [ PRESIDENTIALPOWERS[1], PRESIDENTIALPOWERS[2], PRESIDENTIALPOWERS[6] ];
     } else { // 7, 8, 9 and 10
-      return [ PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[2] ];
+      return [ PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[2], PRESIDENTIALPOWERS[6] ];
     }
   },
   executiveaction: function() {
-    let playerId = Session.get("playerId");
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
     return room.executiveaction == "active";
+  },
+  presidentvetobutton: function() {
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    return room.vetobutton.president;
+  },
+  chancellorvetobutton: function() {
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    return room.vetobutton.chancellor;
+  },
+  vetopassed: function(officialId) {
+    debugger
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    let official = "";
+    if (officialId == 1) {
+      official = "president";
+    } else if (officialId == 2) {
+      official = "chancellor";
+    }
+    return room.vetoresult[official] == "pass";
+  },
+  vetofailed: function(officialId) {
+    debugger
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    let official = "";
+    if (officialId == 1) {
+      official = "president";
+    } else if (officialId == 2) {
+      official = "chancellor";
+    }
+    return room.vetoresult[official] == "fail";
   },
 })
 
@@ -161,7 +194,6 @@ Template.game.events({
     });
   },
   "click ul.ring > li": function(event) {
-    debugger
     let playerId = $(event.currentTarget).data("playerid");
     let currentPlayerId = Session.get("playerId");
     let roomId = Session.get("roomId");
@@ -204,4 +236,45 @@ Template.game.events({
     console.log("click investigate continue");
     Meteor.call("continue", { playerId: playerId, type: "investigate" });
   },
+  "click .veto-button": function() {
+    debugger
+    let playerId = Session.get("playerId");
+    let official = $(event.target).data("veto");
+    Meteor.call("veto", { playerId: playerId, official: official });
+  },
+  "click .yes-veto": function() {
+    let playerId = Session.get("playerId");
+    let official = $(event.target).data("veto");
+    Meteor.call("veto-vote", {
+      playerId: playerId,
+      official: official,
+      vote: true
+    });
+  },
+  "click .no-veto": function() {
+    let playerId = Session.get("playerId");
+    let official = $(event.target).data("veto");
+    Meteor.call("veto-vote", {
+      playerId: playerId,
+      official: official,
+      vote: false
+    });
+  },
+  "click .president-veto-continue": function() {
+    let roomId = Session.get("roomId");
+    Meteor.call("president-veto-continue", {
+      roomId: roomId
+    });
+    console.log("president veto approved!");
+  },
+  "click .chancellor-veto-continue": function() {
+    let roomId = Session.get("roomId");
+    console.log("chancellor veto approved!");
+    Meteor.call("chancellor-veto-continue", {
+      roomId: roomId
+    });
+  },
 })
+
+// read the rules  
+// to see if a failed veto counts as a +1 to the election tracker
