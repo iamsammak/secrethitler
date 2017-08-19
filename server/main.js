@@ -22,7 +22,7 @@ Meteor.publish("players", function(roomId) {
 
 Meteor.methods({
   "newgame"({name}) {
-    let accessCode = Utils.createCode("temp");
+    let accessCode = Random.hexString(6);
     name = name.trim();
     console.log(name);
 
