@@ -1,4 +1,9 @@
 <template name="game">
+  <div class="hidden-role-container">
+    <div class="toggle-role">show/hide</div>
+    <h2 id="hidden-role" class=" hidden-role show">you're <b>{{ role }}</b>!</h2>
+  </div>
+  <hr>
   <h2>round <b>{{ round }}</b></h2>
   {{> flashMessages }}
   {{# if equals room.fascist 5 }}

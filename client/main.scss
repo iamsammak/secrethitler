@@ -37,6 +37,10 @@ hr {
   margin: 2em auto;
 }
 
+.top-line {
+  // margin: 1em 0 0 0;
+}
+
 b {
   font-weight: 400;
 }
@@ -132,6 +136,36 @@ div.footer {
 	}
 }
 
+.hidden-role-container {
+  position: relative;
+  // width: 90%;
+  // border-top: 1px solid #ccc;
+  // border-bottom: 1px solid #ccc;
+  // min-height: 14px;
+  // margin-bottom: 2rem;
+}
+
+.toggle-role {
+  position: absolute;
+  top: -25px;
+  right: 10px;
+  padding: 2px 10px;
+  line-height: 1em;
+  height: 23px;
+  border: none;
+  font-size: 10px;
+  text-transform: none;
+  color: #999;
+  &:hover {
+    border: none;
+  }
+}
+
+.hidden-role {
+  display: none;
+  margin: 0;
+}
+
 .policy-count td {
 	padding: 0 9px;
 	margin: 0;
@@ -153,10 +187,11 @@ div.footer {
 .power-description {
   display: none;
 }
-
+// show must be lower in the css file to have presendence
 .show {
   display: block;
 }
+
 
 // https://css-tricks.com/snippets/sass/placing-items-circle/
 @mixin on-circle($item-count, $circle-size, $item-size) {

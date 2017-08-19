@@ -23,6 +23,11 @@ Template.game.helpers({
     let room = Rooms.findOne(roomId);
     return room.players;
   },
+  role: function() {
+    let playerId = Session.get("playerId");
+    let player = Players.findOne(playerId);
+    return player.role;
+  },
   president: function() {
     let playerId = Session.get("playerId");
     let roomId = Session.get("roomId");
@@ -179,6 +184,10 @@ Template.game.helpers({
 })
 
 Template.game.events({
+  "click .toggle-role": function() {
+    document.getElementById("hidden-role").classList.toggle("show");
+    console.log("toggle role");
+  },
   "click .yesvote-button": function() {
     let playerId = Session.get("playerId");
     Meteor.call("vote", {
