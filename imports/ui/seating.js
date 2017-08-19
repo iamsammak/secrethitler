@@ -56,7 +56,7 @@ Template.seating.helpers({
     let room = Rooms.findOne(roomId);
     if (player.role == "liberal") {
       return false;
-    } else if (player.role == "hitler" && (room.size >= 5 && room.size <= 10)) {
+    } else if (player.role == "hitler" && (room.size >= 7 && room.size <= 10)) {
       return false;
     } else {
       return room.fascist;
