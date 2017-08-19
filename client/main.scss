@@ -12,8 +12,17 @@ body {
   text-align: -webkit-center;
 }
 
+.orange {
+  &:hover {
+    color: #FFA000;
+  }
+}
+
 .link {
   color: #999999;
+  &:hover {
+    color: #FFA000;
+  }
 }
 
 h1 {

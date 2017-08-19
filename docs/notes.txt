@@ -119,6 +119,8 @@ election tracker jumped to 2
 then fascist policy was enacted
 and tracker went to 0
 
+The bug could have to do with mobile device...
+
 
 
 Further stretch goals
