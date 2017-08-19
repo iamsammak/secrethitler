@@ -136,7 +136,6 @@ Template.game.helpers({
     return room.vetobutton.chancellor;
   },
   vetopassed: function(officialId) {
-    debugger
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
     let official = "";
@@ -148,7 +147,6 @@ Template.game.helpers({
     return room.vetoresult[official] == "pass";
   },
   vetofailed: function(officialId) {
-    debugger
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
     let official = "";
@@ -237,7 +235,6 @@ Template.game.events({
       }
       if (room.assassination) {
         let deceased = Players.findOne(playerId);
-        debugger
         Meteor.call("assassination", { deceased: deceased });
       }
     }
@@ -266,7 +263,6 @@ Template.game.events({
     Meteor.call("continue", { playerId: playerId, type: "investigate" });
   },
   "click .veto-button": function() {
-    debugger
     let playerId = Session.get("playerId");
     let official = $(event.target).data("veto");
     Meteor.call("veto", { playerId: playerId, official: official });
