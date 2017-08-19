@@ -299,12 +299,12 @@ Meteor.methods({
 
     let index = room.policychoices.indexOf(card);
     room.policychoices.splice(index, 1);
-    console.log("discard", card);
     let update = {
       policychoices: room.policychoices,
       discardpile: room.discardpile.concat([card]),
       executiveaction: "inactive"
     };
+    console.log("discard", update);
 
     if (room.policychoices.length == 1) {
       console.log(room.policychoices);
@@ -651,7 +651,7 @@ Meteor.methods({
 
       update.trackerfull = `a ${topCard} policy has been enacted!`;
       // TODO get this flashmessage to work
-      FlashMessages.sendWarning(`a ${topCard} policy has been enacted!`);
+      // FlashMessages.sendWarning(`a ${topCard} policy has been enacted!`);
       update.electiontracker = 0;
       update.drawpile = drawpile;
     }
