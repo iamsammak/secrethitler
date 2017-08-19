@@ -94,3 +94,26 @@ Solved - JK not a double click - but Hitler became chancellor after 3 fascists p
   Then the execution doesn't happen the next time a fascist policy is passed
 Solved - I guess there was no bug. Or glitch only happened once when server coded didn't save thus didn't refresh
   this bug put on the back burner
+
+
+After deploying to heroku
+
+6. extra policy card
+// bugs to fix. election tracker didn't move
+// after an investigative loyalty
+// so we failed twice and the election tracker hit 2 then reset to 0
+// and a policy was enacted
+// somewhere in my code. election tracker is being added twice on two seperate occasions
+or maybe policychoices is being added to policy count, fascist or liberal
+
+roger - mobile was first president
+round one picked sam the next person to be chancellor
+vote was passed - fascist policy enacted
+sam picked christine which is two persons away as chancellor
+vote was failed
+election tracker went to 1
+jeremy picked christine
+vote was failed
+election tracker jumped to 2
+then fascist policy was enacted
+and tracker went to 0

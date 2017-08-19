@@ -133,6 +133,8 @@ Meteor.methods({
     // add to update once everyone is in the room TODO first update
     if (Players.find({ roomId: room._id }).count() == room.players.length) {
       update.state = "game";
+      update.winner = "";
+      update.reason = "";
       update.electiontracker = 0;
       update.trackerfull = "";
       update.drawpile = _.shuffle(Utils.drawPolicyDeck());
@@ -315,8 +317,8 @@ Meteor.methods({
     // add executive action here
       let party = room.players.length;
       if (update.fascist == 1 || update.fascist == 2) {
-        // if (party >= 9 || (party >= 7 && update.fascist == 2)) {
-        if (party >= 3) { // replace this line with the above line when done testing
+        if (party >= 9 || (party >= 7 && update.fascist == 2)) {
+        // if (party >= 3) { // replace this line with the above line when done testing
           console.log("investigate loyalty");
           update.executiveaction = "active";
           update.investigate = true;
