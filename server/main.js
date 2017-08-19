@@ -475,6 +475,10 @@ Meteor.methods({
           room.players[room.currentChancellor].playerId ];
       }
 
+      if (type == "fail") {
+        update.ruledout = room.ruledout;
+      }
+
       if (room.resetspecialelection.length != 0) {
         update.currentPresident = (room.resetspecialelection[0] + 1) % _.size(room.players);
         update.resetspecialelection = [];
@@ -681,8 +685,9 @@ Meteor.methods({
       update.players = room.players;
     }
 
-    // I need to correct the votecount to not count dead people
-    // and not consider dead people in the chancellor voting process
+    // Correct the logic for. If the executive branch vote failed.
+    // That means the presidential candidate and chancellor-candidate are still eligible
+    // if vote fails there should be no update to ruledout
 
     console.log("assassinating", update);
 
