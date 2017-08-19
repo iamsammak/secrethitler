@@ -203,11 +203,11 @@ Meteor.methods({
 
     update.votes[playerId] = vote;
 
-    if (_.size(update.votes) == _.size(room.players)) {
+    if (_.size(update.votes) == room.alive) {
       update.voted = true;
       update.voteresult = _.countBy(_.values(update.votes), (value) => {
         return value ? "true" : "false";
-      }).true > (_.size(room.players) / 2) ? "pass" : "fail";
+      }).true > (room.alive / 2) ? "pass" : "fail";
 
       if (update.voteresult == "pass") {
         update.electiontracker = 0;
@@ -671,6 +671,7 @@ Meteor.methods({
     update.deadindex = deadindex;
 
     update.playerdied = true;
+    update.alive = room.alive - 1;
     update.assassination = false;
 
     if (deceased.role == "hitler") {
@@ -682,7 +683,6 @@ Meteor.methods({
 
     // I need to correct the votecount to not count dead people
     // and not consider dead people in the chancellor voting process
-    // Also add if the game party == 3, when choosing chancellor you can ignore ruled out
 
     console.log("assassinating", update);
 

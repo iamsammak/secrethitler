@@ -54,7 +54,7 @@ Template.game.helpers({
     let playerId = Session.get("playerId");
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
-    return !(playerId in room.votes);
+    return (!(playerId in room.votes));
   },
   votecount: function() {
     let roomId = Session.get("roomId");
@@ -64,7 +64,7 @@ Template.game.helpers({
   votesleft: function() {
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
-    return _.size(room.players) - _.size(room.votes);
+    return room.alive - _.size(room.votes);
   },
   votepassed: function() {
       var roomId = Session.get("roomId");

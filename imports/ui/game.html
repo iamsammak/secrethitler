@@ -59,10 +59,12 @@
   {{# if voting }}
     <p>
       voting...waiting for {{ votesleft }} {{ peopleOrperson votesleft }}<br />
-      {{# if haventvoted }}
-        <button class="yesvote-button">yes</button>
-        <button class="novote-button">no</button>
-      {{/ if }}
+      {{# unless dead }}
+        {{# if haventvoted }}
+          <button class="yesvote-button">yes</button>
+          <button class="novote-button">no</button>
+        {{/ if }}
+      {{/ unless }}
     </p>
   {{/ if }}
 
@@ -71,9 +73,11 @@
       the vote failed...<br />
       waiting on {{ votecount }} {{ peopleOrperson votecount }}
     </p>
-    {{# unless haventvoted }}
-      <p><button class="fail-continue-button">continue</button></p>
-    {{/ unless }}
+    {{# unless dead }}
+      {{# unless haventvoted }}
+        <p><button class="fail-continue-button">continue</button></p>
+      {{/ unless }}
+    {{/ unless}}
   {{/ if }}
 
 <!-- Policy picking view / what everyone sees -->

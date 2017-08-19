@@ -55,6 +55,7 @@ Things to do
     game, only the last elected Chancellor is
     ineligible to be Chancellor Candidate; the
     last President may be nominated.
+     - I set this rule to be if three players are left, since I think its better this way. but this can be easily updated.
 
 
 
