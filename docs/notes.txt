@@ -109,6 +109,7 @@ or maybe policychoices is being added to policy count, fascist or liberal
 roger - mobile was first president
 round one picked sam the next person to be chancellor
 vote was passed - fascist policy enacted
+investigate policy was active - roger investigated jeremy
 sam picked christine which is two persons away as chancellor
 vote was failed
 election tracker went to 1
@@ -117,3 +118,8 @@ vote was failed
 election tracker jumped to 2
 then fascist policy was enacted
 and tracker went to 0
+
+
+
+Further stretch goals
+  - add the ability to edit name, maybe a modal
