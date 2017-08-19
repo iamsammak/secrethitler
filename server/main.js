@@ -314,56 +314,55 @@ Meteor.methods({
 
     // add executive action here
       let party = room.players.length;
-      // if (update.fascist == 1 || update.fascist == 2) {
-      //   // if (party >= 9 || (party >= 7 && update.fascist == 2)) {
-      //   if (party >= 3) { // replace this line with the above line when done testing
-      //     console.log("investigate loyalty");
-      //     update.executiveaction = "active";
-      //     update.investigate = true;
-      //
-      //     let currPresId = room.players[room.currentPresident].playerId;
-      //
-      //     // create an array of players except president
-      //     let suspects = _.filter(room.players, function(player) {
-      //       return player.playerId != currPresId;
-      //     });
-      //
-      //     update.suspects = suspects;
-      //   }
-      // }
-      // if (update.fascist == 3) {
-      //   if (party >= 3) { // change back to 7
-      //     console.log("call special election");
-      //
-      //     // I could make everyone a presidential-candidate (in playercircle)
-      //     update.specialelection = true;
-      //     update.executiveaction = "active";
-      //
-      //
-      //   } else if (party >= 5) { // change back to 5
-      //     console.log("policy peek");
-      //     let peek = room.drawpile.slice(0, 3);
-      //     update.peek = peek;
-      //     update.executiveaction = "active";
-      //   }
-      // }
-      if (update.fascist == 1 || update.fascist == 2 || update.fascist == 3) { // change back to == 4
-        if (party >= 3) { // change back to 5
+      if (update.fascist == 1 || update.fascist == 2) {
+        // if (party >= 9 || (party >= 7 && update.fascist == 2)) {
+        if (party >= 3) { // replace this line with the above line when done testing
+          console.log("investigate loyalty");
+          update.executiveaction = "active";
+          update.investigate = true;
+
+          let currPresId = room.players[room.currentPresident].playerId;
+
+          // create an array of players except president
+          let suspects = _.filter(room.players, function(player) {
+            return player.playerId != currPresId;
+          });
+
+          update.suspects = suspects;
+        }
+      }
+      if (update.fascist == 3) {
+        if (party >= 7) { // change back to 7
+          console.log("call special election");
+
+          update.specialelection = true;
+          update.executiveaction = "active";
+
+
+        } else if (party >= 5) { // change back to 5
+          console.log("policy peek");
+          let peek = room.drawpile.slice(0, 3);
+          update.peek = peek;
+          update.executiveaction = "active";
+        }
+      }
+      if (update.fascist == 4) { // change back to == 4
+        if (party >= 5) { // change back to 5
 
           update.executiveaction = "active";
           update.assassination = true;
           console.log("execution", update);
         }
       }
-      // if (update.fascist == 5) { // change back to update.fascist == 5
-      //   if (party >= 5) { // change back to 5
-      //     console.log("execution and veto unlocked");
-      //
-      //     // veto - not an executive special power so executiveaction still inactive
-      //     update.vetobutton = { president: true, chancellor: true };
-      //     update.vetoresult = { president: "", chancellor: "" };
-      //   }
-      // }
+      if (update.fascist == 5) { // change back to update.fascist == 5
+        if (party >= 5) { // change back to 5
+          console.log("execution and veto unlocked");
+
+          // veto - not an executive special power so executiveaction still inactive
+          update.vetobutton = { president: true, chancellor: true };
+          update.vetoresult = { president: "", chancellor: "" };
+        }
+      }
       // reset the room, move round forward and move president placard
       if (update.executiveaction == "inactive") {
         update.round = room.round + 1;
@@ -684,10 +683,6 @@ Meteor.methods({
       update.reason = "hitler has been assassinated!";
       update.players = room.players;
     }
-
-    // Correct the logic for. If the executive branch vote failed.
-    // That means the presidential candidate and chancellor-candidate are still eligible
-    // if vote fails there should be no update to ruledout
 
     console.log("assassinating", update);
 
