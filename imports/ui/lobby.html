@@ -1,11 +1,12 @@
 <template name="lobby">
-  <p style="width:75%">patience is a virtue...<br />let us remember this as we await the arrival of others</p>
+  <h1>Waiting for players...</h1>
+  <hr class="top-line">
   <p>
     access code: <b>{{ room.accessCode }}</b><br />
     share this <a class="link" href="/{{ room.accessCode }}" target="_blank">link</a>
   </p>
-
   {{ players.length }} player(s) connected
+
   <ul class="playerlist">
     {{# each players }}
     <li>
@@ -14,6 +15,28 @@
     </li>
     {{/ each }}
   </ul>
+
+  <hr class="mid-page-break">
+
+  <p style="width:75%">
+    while waiting for the arrival of others
+  </p>
+
+  <div class="color-key-container">
+    please review the <button class="button-color-key">color key</button><br />
+    <div id="color-key" class="color-key-dropdown">
+      <li><i class="fa fa-circle-o fa-lg key-p" aria-hidden="true"></i><span class="key-p">president</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-ep" aria-hidden="true"></i><span class="key-ep">eligible presidential candidates</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-c" aria-hidden="true"></i><span class="key-c">chancellor</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-ec" aria-hidden="true"></i><span class="key-ec">eligible chancellor candidates</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-et" aria-hidden="true"></i><span class="key-et">execution targets</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-d" aria-hidden="true"></i><span class="key-d">dead</span></li>
+    </div>
+    <!-- click the <i class="fa fa-exclamation-circle orange" aria-hidden="true"></i> for helpful hints -->
+  </div>
+
+  <hr class="mid-page-break">
+
   <p>
     {{# if owner }}
     <button class="start-button" {{ ready players }}>start game</button>

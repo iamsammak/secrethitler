@@ -37,7 +37,7 @@ Template.lobby.helpers({
   ready: function(players) {
 
     let attributes = {};
-    if (players.length < 5) { //TODO change back to players.length < 5
+    if (players.length < 1) { //TODO change back to players.length < 5
       attributes["disabled"] = true;
     } else {
       attributes["disabled"] = false;
@@ -67,5 +67,8 @@ Template.lobby.events({
       Session.set("playerId", null);
       Session.set("view", "startmenu");
     });
-  }
+  },
+  "click .button-color-key": function() {
+    document.getElementById("color-key").classList.toggle("show");
+  },
 });

@@ -37,6 +37,11 @@ hr {
   margin: 2em auto;
 }
 
+
+.mid-page-break {
+  width: 25%;
+}
+
 .top-line {
   // margin: 1em 0 0 0;
 }
@@ -136,26 +141,66 @@ div.footer {
 	}
 }
 
+.button-color-key {
+  padding: 4px 10px;
+}
+
+.color-key-dropdown {
+  display: none;
+  margin-bottom: 1em;
+  width: 75%;
+  text-align: left;
+  li {
+    list-style-type: none;
+  }
+  i {
+    padding-right: 10px;
+  }
+  .key-p {
+    color: #2187FF;
+  }
+  .key-ep {
+    color: lighten(#2187FF, 25%);
+  }
+  .key-c {
+    color: #45906A;
+  }
+  .key-ec {
+    color: lighten(#45906A, 35%);
+  }
+  .key-et {
+    color: lighten(#90201B, 45%);
+  }
+  .key-d {
+    color: #90201B;
+  }
+}
+
+.hints-icon {
+  font-size: 1em;
+  vertical-align: 0;
+}
+
 .hidden-role-container {
   position: relative;
-  // width: 90%;
-  // border-top: 1px solid #ccc;
-  // border-bottom: 1px solid #ccc;
-  // min-height: 14px;
-  // margin-bottom: 2rem;
+  width: 90%;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  min-height: 14px;
+  margin-bottom: 2rem;
 }
 
 .toggle-role {
   position: absolute;
-  top: -25px;
-  right: 10px;
+  top: 1px;
+  right: -5px;
   padding: 2px 10px;
   line-height: 1em;
   height: 23px;
   border: none;
   font-size: 10px;
   text-transform: none;
-  color: #999;
+  color: black;
   &:hover {
     border: none;
   }
@@ -163,6 +208,7 @@ div.footer {
 
 .hidden-role {
   display: none;
+  padding: 5px 0;
   margin: 0;
 }
 
@@ -170,6 +216,8 @@ div.footer {
 	padding: 0 9px;
 	margin: 0;
 }
+
+
 
 .powers-button {
   margin-bottom: 12px;

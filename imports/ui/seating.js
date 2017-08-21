@@ -13,7 +13,11 @@ Template.seating.events({
         console.error(err);
       }
     });
-  }
+  },
+  "click .toggle-role": function() {
+    document.getElementById("hidden-role").classList.toggle("show");
+    console.log("toggle role");
+  },
 });
 
 Template.seating.helpers({

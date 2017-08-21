@@ -1,10 +1,15 @@
 <template name="seating">
-  <h2>you're <b>{{ role }}</b>!</h2>
+  <h1>Before we begin</h1>
 
+  <div class="hidden-role-container">
+    <div class="toggle-role">show/hide</div>
+    <h2 id="hidden-role" class=" hidden-role">you're <b>{{ role }}</b>!</h2>
+  </div>
+
+  <p>sit in a circle. pick someone to start, and hit "ready" in order, <b>clockwise</b>.</p>
   <p>
     <button id="ready-button" {{ isready }}>ready</button>
   </p>
-  <p>sit in a circle. pick someone to start, and hit "ready" in order, <b>clockwise</b>.</p>
 
   {{# if teammates }}
     <p>

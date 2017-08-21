@@ -1,10 +1,11 @@
 <template name="game">
+  <h2>round <b>{{ round }}</b></h2>
+  
   <div class="hidden-role-container">
     <div class="toggle-role">show/hide</div>
     <h2 id="hidden-role" class=" hidden-role show">you're <b>{{ role }}</b>!</h2>
   </div>
-  <hr>
-  <h2>round <b>{{ round }}</b></h2>
+
   {{> flashMessages }}
   {{# if equals room.fascist 5 }}
     <small>veto power unlocked!</small>
@@ -31,6 +32,9 @@
       </tr>
     </table>
     failed elections: {{ room.electiontracker }}
+    <span class="tracker election-cicle-1"></span>
+    <span class="election-cicle-2"></span>
+    <span class="election-cicle-3"></span>
   </p>
 
 <!-- Dead or Alive -->
@@ -292,6 +296,19 @@
         </li>
       {{/ each }}
   </ul>
+
+  <!-- Color Key Dropdown -->
+  <div class="color-key-container">
+    <button class="button-color-key">Color Key</button><br />
+    <div id="color-key" class="color-key-dropdown">
+      <li><i class="fa fa-circle-o fa-lg key-p" aria-hidden="true"></i><span class="key-p">president</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-ep" aria-hidden="true"></i><span class="key-ep">eligible presidential candidates</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-c" aria-hidden="true"></i><span class="key-c">chancellor</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-ec" aria-hidden="true"></i><span class="key-ec">eligible chancellor candidates</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-et" aria-hidden="true"></i><span class="key-et">execution targets</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-d" aria-hidden="true"></i><span class="key-d">dead</span></li>
+    </div>
+  </div>
 
   <!-- Presidential Power dropdown menu -->
   <button class="powers-button">Presidential Powers</button>

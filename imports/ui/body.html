@@ -1,8 +1,8 @@
-<body>
+<!-- <body> -->
   <!-- {{> testing}} -->
   <!-- Because of iron router no need to place main template inside Body -->
   <!-- {{> main}} -->
-</body>
+<!-- </body> -->
 
 <!-- testing template -->
 <template name="testing">
@@ -18,14 +18,17 @@
 <template name="main">
   <div class="main-content">
     {{> Template.dynamic template=currentview }}
-    <br />
     <hr />
     {{> footer }}
     <br />
+    {{> buttonmenu }}
   </div>
 </template>
 
 <template name="startmenu">
+  <h1>Currently under construction</h1>
+  <h1>Welcome to <span class="orange">Secret</span> Hitler</h1>
+  <hr class="top-line">
   <p style="width:75%">The year is 1932. The place is pre-WWII Germany. In <span class="orange">Secret</span> Hitler, players are German politicians attempting to hold a fragile Liberal government together and stem the rising tide of Fascism. Watch out though—there are secret Fascists among you, and one player is the <span class="orange">Secret</span> Hitler.</p>
   <button class="newgame-button">new game</button>
   <button class="joingame-button">join game</button>
