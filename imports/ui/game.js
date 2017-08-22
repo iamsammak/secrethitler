@@ -180,7 +180,20 @@ Template.game.helpers({
     let room = Rooms.findOne(roomId);
     let name = room.dead[0].name;
     return name;
-  }
+  },
+  policycount: function() {
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+
+    let deck = room.drawpile.length;
+    let discard = room.discardpile.length
+    let liberal = room.liberal;
+    let fascist = room.fascist;
+    let policychoices = room.policychoices.length;
+    let peek = room.peek.length;
+    
+    return count = deck + discard + liberal + fascist + policychoices + peek;
+  },
 })
 
 Template.game.events({

@@ -1,6 +1,6 @@
 <template name="game">
   <h2>round <b>{{ round }}</b></h2>
-  
+
   <div class="hidden-role-container">
     <div class="toggle-role">show/hide</div>
     <h2 id="hidden-role" class=" hidden-role show">you're <b>{{ role }}</b>!</h2>
@@ -11,7 +11,7 @@
     <small>veto power unlocked!</small>
   {{/ if }}
   <p>
-    <small>policy count</small>
+    <small>policy count</small>{{ policycount }}
     <br />
     <table class="policy-count">
       <tr>
@@ -31,11 +31,39 @@
         </td>
       </tr>
     </table>
-    failed elections: {{ room.electiontracker }}
-    <span class="tracker election-cicle-1"></span>
-    <span class="election-cicle-2"></span>
-    <span class="election-cicle-3"></span>
+    <div class="game-board">
+      <div class="liberal-board-container">
+        <div class="liberal-board">
+          <div class="tile"></div>
+          <div class="tile"></div>
+          <div class="tile"></div>
+          <div class="tile"></div>
+          <div class="tile"></div>
+        </div>
+      </div>
+      <span class="board-divider">/</span>
+      <div class="facist-board-container">
+        <div class="fascist-board">
+          <div class="tile"></div>
+          <div class="tile"></div>
+          <div class="tile"></div>
+          <div class="tile"></div>
+          <div class="tile"></div>
+          <div class="tile"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="election-tracker-container">
+      <!-- Remember to room the room.electiontracker after testing -->
+      <div>failed elections: {{ room.electiontracker }}</div>
+      <div class="circle election-1">1</div>
+      <div class="circle election-2">2</div>
+      <div class="circle election-3">3</div>
+    </div>
   </p>
+
+  <hr class="mid-page-break">
 
 <!-- Dead or Alive -->
   {{# if dead }}
@@ -319,3 +347,7 @@
     {{/ each }}
   </div>
 </template>
+
+<!-- <hr>
+<button class="end-button">end game</button>
+<button class="leave-button">leave game</button> -->

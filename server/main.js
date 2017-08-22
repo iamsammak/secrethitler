@@ -145,7 +145,6 @@ Meteor.methods({
       update.voted = false;
       update.votes = {};
       update.voteresult = "";
-      // saving by index
       update.currentPresident = Math.floor(Math.random() * room.players.length);
       update.currentChancellor = -1;
       update.ruledout = [];
@@ -227,14 +226,14 @@ Meteor.methods({
           if (drawpile.length < 3) {
             let remaining = drawpile.length;
             for (let i = 0; i < remaining; i++) {
-              policychoices.push(drawpile.splice(0, 1))
+              policychoices = policychoices.concat(drawpile.splice(0, 1))
             }
             drawpile = drawpile.concat(room.discardpile);
             update.discardpile = [];
             _.shuffle(drawpile);
 
             while (policychoices.length < 3) {
-              policychoices.push(drawpile.splice(0, 1));
+              policychoices = policychoices.concat(drawpile.splice(0, 1));
               console.log("insert single", drawpile.splice(0, 1));
             }
           } else {
@@ -298,10 +297,10 @@ Meteor.methods({
     }
 
     let index = room.policychoices.indexOf(card);
-    room.policychoices.splice(index, 1);
+    let discarded = room.policychoices.splice(index, 1);
     let update = {
       policychoices: room.policychoices,
-      discardpile: room.discardpile.concat([card]),
+      discardpile: room.discardpile.concat(discarded),
       executiveaction: "inactive"
     };
     console.log("discard", update);
@@ -312,7 +311,6 @@ Meteor.methods({
         update.liberal = room.liberal + 1;
       } else if (room.policychoices[0] == "fascist") {
         update.fascist = room.fascist + 1;
-      }
 
     // add executive action here
       let party = room.players.length;
@@ -368,8 +366,6 @@ Meteor.methods({
       // reset the room, move round forward and move president placard
       if (update.executiveaction == "inactive") {
         update.round = room.round + 1;
-        update.electiontracker = 0;
-        update.policychoices = [];
         update.voted = false;
         update.votes = {};
         update.voteresult = "";
@@ -415,6 +411,10 @@ Meteor.methods({
         }
       }
     }
+
+    // policy is enacted therefore, reset the following despite executive action or not
+    update.policychoices = [];
+    update.electiontracker = 0;
 
     Rooms.update(player.roomId, { $set: update });
   },

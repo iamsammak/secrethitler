@@ -74,7 +74,7 @@ button {
 }
 
 table {
-  padding-bottom: 1em;
+  // padding-bottom: 1em;
 }
 
 .playerlist {
@@ -217,7 +217,63 @@ div.footer {
 	margin: 0;
 }
 
+.game-board {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+  cursor: default;
+  .board-divider {
+    padding: 0 16px;
+    font-size: 50px;
+    color: #999;
+  }
+  .tile {
+    display: block;
+    width: 1em;
+    height: 2em;
+    border-radius: 5px;
+  }
+}
 
+.liberal-board {
+  display: flex;
+  flex-direction: row;
+  div {
+    margin-left: 3px;
+    border: 1px solid #03AA8C;
+  }
+}
+
+.fascist-board {
+  display: flex;
+  flex-direction: row;
+  div {
+    margin-right: 3px;
+    border: 1px solid #f76b36;
+  }
+}
+
+.election-tracker-container {
+  .fill {
+    background-color: #FFA000;
+  }
+  div {
+    display: inline-block;
+  }
+  div:first-child {
+    padding-right: 4px;
+  }
+  .circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #FFA000;
+    color: #FFA000;
+  }
+  cursor: default;
+}
 
 .powers-button {
   margin-bottom: 12px;
@@ -238,6 +294,14 @@ div.footer {
 // show must be lower in the css file to have presendence
 .show {
   display: block;
+}
+
+.todo {
+  text-decoration: none;
+}
+
+.strikethrough {
+  text-decoration: line-through;
 }
 
 
