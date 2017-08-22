@@ -414,7 +414,7 @@ Meteor.methods({
       // policy is enacted
       // reset tracker and policychoices despite executive action or not
       update.policychoices = [];
-      update.electiontracker = 0;
+      update.electiontracker = 0; //extra precaution since tracker reset already in voting pass
     }
     console.log("discard", update);
     Rooms.update(player.roomId, { $set: update });
@@ -449,7 +449,6 @@ Meteor.methods({
     if (type == "peek") {
       console.log("peek continue");
       update.peek = [];
-      update.policychoices = [];
     } else if (type == "investigate") {
       update.investigate = false;
       update.reveal = false;
@@ -506,7 +505,6 @@ Meteor.methods({
 
     let update = { currentPresident: nextPresident.index };
     update.round = room.round + 1;
-    update.policychoices = [];
     update.voted = false;
     update.votes = {};
     update.voteresult = "";

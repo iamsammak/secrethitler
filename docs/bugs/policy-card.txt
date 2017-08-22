@@ -1,3 +1,5 @@
+FIXED - missing } inside discard method, which fixes the policy choice bug
+
 After policy peek
 No policy cards where returned
 
