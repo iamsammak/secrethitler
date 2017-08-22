@@ -196,14 +196,15 @@ Template.game.helpers({
   },
   movetracker: function(num) {
     if (num === 0) {
-      console.log("tracker at 0");
       document.getElementById("tracker-1").classList.remove("fill");
       document.getElementById("tracker-2").classList.remove("fill");
       document.getElementById("tracker-3").classList.remove("fill");
     } else {
       document.getElementById(`tracker-${num}`).classList.add("fill");
     }
-    return num;
+    // return num; //uncomment for testing
+    // minor change, if I reset election tracker after fail continue
+    // that way players see the election tracker move to 3
   },
 })
 
@@ -214,23 +215,36 @@ Template.game.events({
   },
   "click .yesvote-button": function() {
     let playerId = Session.get("playerId");
-    Meteor.callPromise("vote", {
+    Meteor.call("vote", {
       playerId: playerId,
       vote: true
     });
   },
   "click .novote-button": function() {
     let playerId = Session.get("playerId");
-    Meteor.callPromise("vote", {
+    Meteor.call("vote", {
       playerId: playerId,
       vote: false
     });
   },
   "click .fail-continue-button": function() {
     let playerId = Session.get("playerId");
-    Meteor.call("continue", {
+    Meteor.callPromise("continue", {
       playerId: playerId,
       type: "fail"
+    }).then(function() {
+      let roomId = Session.get("roomId");
+      let room = Rooms.findOne(roomId);
+      if (room.electiontracker === 3) {
+        let update = { electiontracker: 0 }
+        if (room.trackerenact.topcard == "liberal") {
+          update.liberal = room.liberal + 1;
+        } else if (room.trackerenact.topcard == "fascist") {
+          update.fascist = room.fascist + 1;
+        }
+        Rooms.update(roomId, { $set: update });
+        FlashMessages.sendInfo(`${room.trackerenact.message}`);
+      }
     });
   },
   "click .pick-fascist": function() {

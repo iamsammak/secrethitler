@@ -136,7 +136,7 @@ Meteor.methods({
       update.winner = "";
       update.reason = "";
       update.electiontracker = 0;
-      update.trackerfull = "";
+      update.trackerenact = { topcard: "", message: "" };
       update.drawpile = _.shuffle(Utils.drawPolicyDeck());
       update.discardpile = [];
       update.policychoices = [];
@@ -256,15 +256,10 @@ Meteor.methods({
           }
 
           let topCard = drawpile.splice(0, 1)
-          if (topCard == "liberal") {
-            update.liberal = room.liberal + 1;
-          } else if (topCard == "fascist") {
-            update.fascist = room.fascist + 1;
-          }
 
-          update.trackerfull = `a ${topCard} policy has been enacted!`;
-          // FlashMessages.sendWarning(`a ${topCard} policy has been enacted!`);
-          update.electiontracker = 0;
+          update.trackerenact = {
+            topcard: topCard,
+            message: `a ${topCard} policy has been enacted!`};
           update.drawpile = drawpile;
         }
       }
@@ -422,7 +417,6 @@ Meteor.methods({
       // policy is enacted
       // reset tracker and policychoices despite executive action or not
       update.policychoices = [];
-      update.electiontracker = 0; //extra precaution since tracker reset already in voting pass
     }
     console.log("discard", update);
     Rooms.update(player.roomId, { $set: update });
@@ -608,10 +602,12 @@ Meteor.methods({
         update.fascist = room.fascist + 1;
       }
 
-      update.trackerfull = `a ${topCard} policy has been enacted!`;
+      update.trackerenact = {
+        topcard: topCard,
+        message: `a ${topCard} policy has been enacted!`};
       // TODO get this flashmessage to work
       // FlashMessages.sendWarning(`a ${topCard} policy has been enacted!`);
-      update.electiontracker = 0;
+      update.electiontracker = 0; //try updating Rooms $set from game.js
       update.drawpile = drawpile;
     }
 
@@ -656,10 +652,12 @@ Meteor.methods({
         update.fascist = room.fascist + 1;
       }
 
-      update.trackerfull = `a ${topCard} policy has been enacted!`;
+      update.trackerenact = {
+        topcard: topCard,
+        message: `a ${topCard} policy has been enacted!`};
       // TODO get this flashmessage to work
       // FlashMessages.sendWarning(`a ${topCard} policy has been enacted!`);
-      update.electiontracker = 0;
+      update.electiontracker = 0; //same as prez veto, move to promise in game.js
       update.drawpile = drawpile;
     }
 
