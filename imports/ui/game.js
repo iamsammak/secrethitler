@@ -191,7 +191,7 @@ Template.game.helpers({
     let fascist = room.fascist;
     let policychoices = room.policychoices.length;
     let peek = room.peek.length;
-    
+
     return count = deck + discard + liberal + fascist + policychoices + peek;
   },
 })
@@ -206,6 +206,10 @@ Template.game.events({
     Meteor.call("vote", {
       playerId: playerId,
       vote: true
+    }, function(error, result) {
+      if (result == true) {
+        console.log("promise");
+      }
     });
   },
   "click .fail-continue-button": function() {

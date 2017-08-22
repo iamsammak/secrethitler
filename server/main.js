@@ -198,6 +198,7 @@ Meteor.methods({
     }
   },
   "vote" ({ playerId, vote }) {
+    let promise = false;
     let player = Players.findOne(playerId);
     let room = Rooms.findOne(player.roomId);
     let update = { votes: room.votes };
@@ -211,6 +212,7 @@ Meteor.methods({
       }).true > (room.alive / 2) ? "pass" : "fail";
 
       if (update.voteresult == "pass") {
+        promise = true;
         update.electiontracker = 0;
         let drawpile = room.drawpile; //already shuffled
         console.log("drawpile", drawpile);
@@ -279,6 +281,7 @@ Meteor.methods({
     Rooms.update(player.roomId, {
       $set: update
     });
+    return promise;
   },
   "discard" ({ playerId, card }) {
     let player = Players.findOne(playerId);
@@ -362,53 +365,53 @@ Meteor.methods({
             update.vetoresult = { president: "", chancellor: "" };
           }
         }
-        // reset the room, move round forward and move president placard
-        if (update.executiveaction == "inactive") {
-          update.round = room.round + 1;
-          update.voted = false;
-          update.votes = {};
-          update.voteresult = "";
+      }
+      // reset the room, move round forward and move president placard
+      if (update.executiveaction == "inactive") {
+        update.round = room.round + 1;
+        update.voted = false;
+        update.votes = {};
+        update.voteresult = "";
+        update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+        update.currentChancellor = -1
+
+        if (room.alive <= 3) {
+          update.ruledout = [
+            room.players[room.currentChancellor].playerId ];
+        } else {
+          update.ruledout = [
+            room.players[room.currentPresident].playerId,
+            room.players[room.currentChancellor].playerId ];
+        }
+        // skip the dead while passing President placard
+        if (room.deadindex.length != 0) {
           update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
-          update.currentChancellor = -1
-
-          if (room.alive <= 3) {
-            update.ruledout = [
-              room.players[room.currentChancellor].playerId ];
-          } else {
-            update.ruledout = [
-              room.players[room.currentPresident].playerId,
-              room.players[room.currentChancellor].playerId ];
-          }
-          // skip the dead while passing President placard
-          if (room.deadindex.length != 0) {
-            update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
-            while (_.contains(room.deadindex, update.currentPresident)) {
-              console.log(update.currentPresident);
-              update.currentPresident = (update.currentPresident + 1) % _.size(room.players);
-            }
+          while (_.contains(room.deadindex, update.currentPresident)) {
+            console.log(update.currentPresident);
+            update.currentPresident = (update.currentPresident + 1) % _.size(room.players);
           }
         }
-        // reset president rotation to prior special election
-        if (room.resetspecialelection.length != 0) {
-          console.log("inside reset special election, discard");
-          update.currentPresident = (room.resetspecialelection[0] + 1) % _.size(room.players);
-          update.resetspecialelection = [];
-        }
+      }
+      // reset president rotation to prior special election
+      if (room.resetspecialelection.length != 0) {
+        console.log("inside reset special election, discard");
+        update.currentPresident = (room.resetspecialelection[0] + 1) % _.size(room.players);
+        update.resetspecialelection = [];
+      }
 
-        // end of game
-        if (update.liberal == 5 || update.fascist == 6) {
-          update.state = "gameover";
-          if (update.liberal == 5) {
-            update.winner = "liberals";
-            update.reason = "liberals have passed 5 policies!";
-          } else if (update.fascist == 6) {
-            update.winner = "fascists";
-            update.reason = "fascists have passed 6 policies!";
-          }
-          update.players = room.players;
-          for (let i = 0; i < room.players.length; i += 1) {
-            update.players[i].side = Players.findOne(room.players[i].playerId).role;
-          }
+      // end of game
+      if (update.liberal == 5 || update.fascist == 6) {
+        update.state = "gameover";
+        if (update.liberal == 5) {
+          update.winner = "liberals";
+          update.reason = "liberals have passed 5 policies!";
+        } else if (update.fascist == 6) {
+          update.winner = "fascists";
+          update.reason = "fascists have passed 6 policies!";
+        }
+        update.players = room.players;
+        for (let i = 0; i < room.players.length; i += 1) {
+          update.players[i].side = Players.findOne(room.players[i].playerId).role;
         }
       }
       // policy is enacted
