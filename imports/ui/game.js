@@ -196,6 +196,7 @@ Template.game.helpers({
   },
   movetracker: function(num) {
     if (num === 0) {
+      console.log("tracker at 0");
       document.getElementById("tracker-1").classList.remove("fill");
       document.getElementById("tracker-2").classList.remove("fill");
       document.getElementById("tracker-3").classList.remove("fill");
