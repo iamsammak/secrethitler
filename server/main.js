@@ -198,7 +198,6 @@ Meteor.methods({
     }
   },
   "vote" ({ playerId, vote }) {
-    let promise = false;
     let player = Players.findOne(playerId);
     let room = Rooms.findOne(player.roomId);
     let update = { votes: room.votes };
@@ -212,7 +211,6 @@ Meteor.methods({
       }).true > (room.alive / 2) ? "pass" : "fail";
 
       if (update.voteresult == "pass") {
-        promise = true;
         update.electiontracker = 0;
         let drawpile = room.drawpile; //already shuffled
         console.log("drawpile", drawpile);
@@ -281,7 +279,14 @@ Meteor.methods({
     Rooms.update(player.roomId, {
       $set: update
     });
-    return promise;
+
+    if (_.size(update.votes) == room.alive) {
+      console.log("vote", update);
+      return {
+        voteresult: update.voteresult,
+        electiontracker: update.electiontracker
+      };
+    }
   },
   "discard" ({ playerId, card }) {
     let player = Players.findOne(playerId);

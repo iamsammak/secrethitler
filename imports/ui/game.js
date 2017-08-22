@@ -194,6 +194,16 @@ Template.game.helpers({
 
     return count = deck + discard + liberal + fascist + policychoices + peek;
   },
+  movetracker: function(num) {
+    if (num === 0) {
+      document.getElementById("tracker-1").classList.remove("fill");
+      document.getElementById("tracker-2").classList.remove("fill");
+      document.getElementById("tracker-3").classList.remove("fill");
+    } else {
+      document.getElementById(`tracker-${num}`).classList.add("fill");
+    }
+    return num;
+  },
 })
 
 Template.game.events({
@@ -203,13 +213,16 @@ Template.game.events({
   },
   "click .yesvote-button": function() {
     let playerId = Session.get("playerId");
-    Meteor.call("vote", {
+    Meteor.callPromise("vote", {
       playerId: playerId,
       vote: true
-    }, function(error, result) {
-      if (result == true) {
-        console.log("promise");
-      }
+    });
+  },
+  "click .novote-button": function() {
+    let playerId = Session.get("playerId");
+    Meteor.callPromise("vote", {
+      playerId: playerId,
+      vote: false
     });
   },
   "click .fail-continue-button": function() {
@@ -217,13 +230,6 @@ Template.game.events({
     Meteor.call("continue", {
       playerId: playerId,
       type: "fail"
-    });
-  },
-  "click .novote-button": function() {
-    let playerId = Session.get("playerId");
-    Meteor.call("vote", {
-      playerId: playerId,
-      vote: false
     });
   },
   "click .pick-fascist": function() {

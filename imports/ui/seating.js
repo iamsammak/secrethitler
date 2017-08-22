@@ -15,7 +15,7 @@ Template.seating.events({
     });
   },
   "click .toggle-role": function() {
-    document.getElementById("hidden-role").classList.toggle("show");
+    document.getElementById("hidden-info").classList.toggle("show");
     console.log("toggle role");
   },
 });

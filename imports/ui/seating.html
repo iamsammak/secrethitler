@@ -3,29 +3,31 @@
 
   <div class="hidden-role-container">
     <div class="toggle-role">show/hide</div>
-    <h2 id="hidden-role" class=" hidden-role">you're <b>{{ role }}</b>!</h2>
+    <div id="hidden-info" class="hidden-info">
+      <h2 class=" hidden-role">you're <b>{{ role }}</b>!</h2>
+
+      {{# if teammates }}
+      <p>
+        these are your fellow fascists:
+        <ul class="playerlist">
+          {{# each teammates }}
+          <li class="{{# if equals playerId player._id }}current{{/ if }}">
+            {{ name }}
+            {{# if hitler }}
+            (hitler)
+            {{/ if }}
+          </li>
+          {{/ each }}
+        </ul>
+      </p>
+      {{/ if }}
+    </div>
   </div>
 
-  <p>sit in a circle. pick someone to start, and hit "ready" in order, <b>clockwise</b>.</p>
+  <p>check your role and when you're ready to be seated press "seat me"</p>
   <p>
-    <button id="ready-button" {{ isready }}>ready</button>
+    <button id="ready-button" {{ isready }}>seat me</button>
   </p>
-
-  {{# if teammates }}
-    <p>
-      these are your fellow fascists:
-      <ul class="playerlist">
-        {{# each teammates }}
-        <li class="{{# if equals playerId player._id }}current{{/ if }}">
-          {{ name }}
-          {{# if hitler }}
-            (hitler)
-          {{/ if }}
-        </li>
-        {{/ each }}
-      </ul>
-    </p>
-  {{/ if }}
 
   <ul class="circle-container-{{ players.length }}">
     {{# each players }}

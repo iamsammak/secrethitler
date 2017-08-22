@@ -22,7 +22,6 @@ Tracker.autorun(function roomstate() {
   if (!Session.get("view")) {
     Session.set("view", "startmenu");
   };
-  console.log("hello inside Tracker");
 
   let roomId = Session.get("roomId");
   let playerId = Session.get("playerId");
@@ -37,7 +36,6 @@ Tracker.autorun(function roomstate() {
   // testing
   console.log("room", room);
   window.room = room
-  console.log("player", player);
 
   if (!room || !player) {
     Session.set("roomId", null);

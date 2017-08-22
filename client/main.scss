@@ -207,9 +207,13 @@ div.footer {
 }
 
 .hidden-role {
-  display: none;
+  display: block;
   padding: 5px 0;
   margin: 0;
+}
+
+.hidden-info {
+  display: none;
 }
 
 .policy-count td {
