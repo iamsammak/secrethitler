@@ -140,33 +140,44 @@ Meteor.methods({
       update.state = "game";
       update.winner = "";
       update.reason = "";
+      update.round = 1;
+      update.started = new Date().getTime();
+      // election tracker params
       update.electiontracker = 0;
       update.trackerenact = { topcard: "", message: "" };
+      // policy - 17 count
       update.drawpile = _.shuffle(Utils.drawPolicyDeck());
       update.discardpile = [];
       update.policychoices = [];
-      update.round = 1;
-      update.started = new Date().getTime();
+      // policy count
+      update.liberal = 0;
+      update.fascist = 0;
+      // voting params
       update.voted = false;
       update.votes = {};
       update.voteresult = "";
+      // executive branch placard params
       update.currentPresident = Math.floor(Math.random() * room.players.length);
       update.currentChancellor = -1;
       update.ruledout = [];
-      update.liberal = 0;
-      update.fascist = 0;
+      // executive presidential powers
       update.executiveaction = "inactive";
+      // peek params
       update.peek = [];
+      // investigation params
       update.investigate = false;
       update.suspects = [];
       update.reveal = false;
       update.suspected = [];
+      // special election params
       update.specialelection = false;
       update.resetspecialelection = [];
+      // veto params
       update.vetobutton = { president: false, chancellor: false };
       update.askchancellor = false;
       update.askpresident = false;
       update.vetoresult = { president: "", chancellor: "" };
+      // execution params
       update.alive = room.players.length;
       update.dead = [];
       update.deathtags = [];

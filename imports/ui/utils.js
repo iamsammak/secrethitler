@@ -11,22 +11,18 @@ export const PRESIDENTIALPOWERS = {
 
 // logic that resets election tracker
 export function enactFromTracker() {
-  let roomId = Session.get("roomId");
-  let room = Rooms.findOne(roomId);
-  if (room.electiontracker === 3) {
-    let update = { electiontracker: 0 }
-    if (room.trackerenact.topcard == "liberal") {
-      update.liberal = room.liberal + 1;
-    } else if (room.trackerenact.topcard == "fascist") {
-      update.fascist = room.fascist + 1;
-    }
-    Rooms.update(roomId, { $set: update });
-    // FlashMessages.sendInfo(`${room.trackerenact.message}`);
-    // flash message only sends to the first instance who pressed continue
-    // i want it to flash to everyone and then reset the tracker
-    // I can keep track of how many people pressed continue
-  }
-  if (room.trackerenact.message != "") {
-    FlashMessages.sendInfo(`${room.trackerenact.message}`);
-  }
+  // let roomId = Session.get("roomId");
+  // let room = Rooms.findOne(roomId);
+  // if (room.electiontracker === 3) {
+  //   let update = { electiontracker: 0 }
+  //   if (room.trackerenact.topcard == "liberal") {
+  //     update.liberal = room.liberal + 1;
+  //   } else if (room.trackerenact.topcard == "fascist") {
+  //     update.fascist = room.fascist + 1;
+  //   }
+  //   Rooms.update(roomId, { $set: update });
+  // }
+  // if (room.trackerenact.message != "") {
+  //   FlashMessages.sendInfo(`${room.trackerenact.message}`);
+  // }
 };

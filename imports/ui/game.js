@@ -234,9 +234,9 @@ Template.game.events({
   },
   "click .fail-continue-button": function() {
     let playerId = Session.get("playerId");
-    Meteor.callPromise("votecontinue", {
+    Meteor.call("votecontinue", {
       playerId: playerId
-    }).then(enactFromTracker());
+    });
   },
   "click .pick-fascist": function() {
     let playerId = Session.get("playerId");
@@ -328,17 +328,17 @@ Template.game.events({
   },
   "click .president-veto-continue": function() {
     let roomId = Session.get("roomId");
-    Meteor.callPromise("president-veto-continue", {
+    Meteor.call("president-veto-continue", {
       roomId: roomId
-    }).then(enactFromTracker());
+    });
     console.log("president veto approved!");
   },
   "click .chancellor-veto-continue": function() {
     let roomId = Session.get("roomId");
     console.log("chancellor veto approved!");
-    Meteor.callPromise("chancellor-veto-continue", {
+    Meteor.call("chancellor-veto-continue", {
       roomId: roomId
-    }).then(enactFromTracker());
+    });
   },
   "click .execution-continue-button": function() {
     let playerId = Session.get("playerId");
