@@ -59,7 +59,7 @@ Meteor.methods({
             policychoices = policychoices.concat(drawpile.splice(0, remaining));
             drawpile = drawpile.concat(room.discardpile);
             update.discardpile = [];
-            _.shuffle(drawpile)
+            _.shuffle(drawpile);
 
             policychoices = policychoices.concat(drawpile.splice(0, fillToThree));
 
@@ -73,6 +73,9 @@ Meteor.methods({
 
       // voting was a fail
       } else {
+        // reset trackerenact.message so flashmessage doesn't go off
+        update.trackerenact = { topcard: "", message: "" };
+        
         update.electiontracker = room.electiontracker + 1;
 
         // enact top policy if election tracker is at 3
@@ -91,6 +94,7 @@ Meteor.methods({
             topcard: topCard,
             message: `a ${topCard} policy has been enacted!`
           };
+          // election tracker is reset client side "utils.js" via promise
         }
       }
     }
@@ -126,6 +130,7 @@ Meteor.methods({
     update.votes = rooms.votes
     delete update.votes[playerId]
 
+    // room resetting - after a vote failed
     if (_.size(update.votes) == 0) {
       update.round = room.round + 1;
       update.voted = false;

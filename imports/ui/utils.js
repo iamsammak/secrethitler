@@ -9,6 +9,7 @@ export const PRESIDENTIALPOWERS = {
   6: { id: 6, name: "Veto Power", description: "When the fifth Fascist Policy is enacted, the Executive Branch gains the power to discard all three Policy tiles if both President and Chancellor agrees. Each use of Veto will advance the Election Tracker by one." }
 };
 
+// logic that resets election tracker
 export function enactFromTracker() {
   let roomId = Session.get("roomId");
   let room = Rooms.findOne(roomId);
@@ -20,8 +21,12 @@ export function enactFromTracker() {
       update.fascist = room.fascist + 1;
     }
     Rooms.update(roomId, { $set: update });
-    FlashMessages.sendInfo(`${room.trackerenact.message}`);
+    // FlashMessages.sendInfo(`${room.trackerenact.message}`);
     // flash message only sends to the first instance who pressed continue
     // i want it to flash to everyone and then reset the tracker
+    // I can keep track of how many people pressed continue
+  }
+  if (room.trackerenact.message != "") {
+    FlashMessages.sendInfo(`${room.trackerenact.message}`);
   }
 };

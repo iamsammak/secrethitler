@@ -346,8 +346,11 @@
       <p style="width:85%" class="power-description show" id="power-description-{{ id }}">{{ description }}</p>
     {{/ each }}
   </div>
-</template>
 
-<!-- <hr>
-<button class="end-button">end game</button>
-<button class="leave-button">leave game</button> -->
+  <hr>
+  <p>
+    {{# if owner }}
+    <button class="endgame-button">end game</button>
+    {{/ if }}
+  </p>
+</template>

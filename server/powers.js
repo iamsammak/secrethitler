@@ -65,4 +65,64 @@ Meteor.methods({
 
     Rooms.update(roomId, { $set: update });
   },
+  "powercontinue" ({ playerId, type }) {
+    let player = Players.findOne(playerId);
+    if (!player) {
+      return;
+    }
+    if (room.players[room.currentPresident].playerId != playerId) {
+      return;
+    }
+
+    let room = Rooms.findOne(player.roomId);
+    let update = {};
+
+    // Room resetting - after president viewed peek, investigated, or executed a player
+    if (type == "peek") {
+      console.log("peek continue");
+      update.peek = [];
+    } else if (type == "investigate") {
+      console.log("investigate continue");
+      update.investigate = false;
+      update.reveal = false;
+      update.suspects = [];
+      update.suspected = [];
+    } else if (type == "execution") {
+      update.assassination = false;
+      update.playerdied = false;
+    }
+
+    update.executiveaction = "inactive";
+    update.round = room.round + 1;
+    update.voted = false;
+    update.votes = {};
+    update.voteresult = "";
+    update.currentChancellor = -1;
+
+    if (room.alive <= 3) {
+      update.ruledout = [
+        room.players[room.currentChancellor].playerId ];
+    } else {
+      update.ruledout = [
+        room.players[room.currentPresident].playerId,
+        room.players[room.currentChancellor].playerId ];
+    }
+
+    if (room.resetspecialelection.length != 0) {
+      update.currentPresident = (room.resetspecialelection[0] + 1) % _.size(room.players);
+      update.resetspecialelection = [];
+    } else {
+      if (room.deadindex.length != 0) {
+        update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+        while (_.contains(room.deadindex, update.currentPresident)) {
+          console.log(update.currentPresident);
+          update.currentPresident = (update.currentPresident + 1) % _.size(room.players);
+        }
+      } else {
+        update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
+      }
+    }
+
+    Rooms.update(player.roomId, { $set: update });
+  },
 });

@@ -18,6 +18,13 @@ Template.game.helpers({
     let room = Rooms.findOne(roomId);
     return room;
   },
+  owner: function() {
+    let playerId = Session.get("playerId");
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+
+    return playerId === room.owner;
+  },
   players: function() {
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
@@ -284,7 +291,7 @@ Template.game.events({
   "click .peek-continue-button": function() {
     let playerId = Session.get("playerId");
     console.log("click peek continue");
-    Meteor.call("continue", { playerId: playerId, type: "peek" });
+    Meteor.call("powercontinue", { playerId: playerId, type: "peek" });
   },
   "click .suspect": function() {
     let suspectId = $(event.target).data("suspectid");
@@ -294,7 +301,7 @@ Template.game.events({
   "click .investigate-continue-button": function() {
     let playerId = Session.get("playerId");
     console.log("click investigate continue");
-    Meteor.call("continue", { playerId: playerId, type: "investigate" });
+    Meteor.call("powercontinue", { playerId: playerId, type: "investigate" });
   },
   "click .veto-button": function() {
     let playerId = Session.get("playerId");
@@ -338,4 +345,9 @@ Template.game.events({
     console.log("Someone assassinated. But the Game continues");
     Meteor.call("continue", { playerId: playerId, type: "execution" });
   },
-})
+  "click .endgame-button": function() {
+    console.log("Ending current game, returning to lobby");
+    let roomId = Session.get("roomId");
+    Meteor.call("playagain", { roomId: roomId });
+  },
+});

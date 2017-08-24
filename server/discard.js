@@ -87,7 +87,7 @@ Meteor.methods({
           // need to check if round moves forward since execution turns on executive action
         }
       }
-      // rest the room and move round forward and move presidential placard
+      // Room resetting - vote passed, policy enacted
       if (update.executiveaction == "inactive") {
         update.round = room.round + 1;
         update.voted = false;
