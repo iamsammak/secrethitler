@@ -1,3 +1,5 @@
+import { Rooms, Players } from '../api/collections.js';
+
 export const PRESIDENTIALPOWERS = {
   1: { id: 1, name: "Policy Peek", description: "President examines the top three cards. Policy order doesn't change."},
   2: { id: 2, name: "Execution", description: "President must kill a player."},
@@ -7,11 +9,19 @@ export const PRESIDENTIALPOWERS = {
   6: { id: 6, name: "Veto Power", description: "When the fifth Fascist Policy is enacted, the Executive Branch gains the power to discard all three Policy tiles if both President and Chancellor agrees. Each use of Veto will advance the Election Tracker by one." }
 };
 
-export function moveTracker(num) {
-  document.getElementById(`tracker-${num}`).classList.toggle("fill");
-  if (num === 0) {
-    document.getElementById("tracker-1").classList.remove("fill");
-    document.getElementById("tracker-2").classList.remove("fill");
-    document.getElementById("tracker-3").classList.remove("fill");
+export function enactFromTracker() {
+  let roomId = Session.get("roomId");
+  let room = Rooms.findOne(roomId);
+  if (room.electiontracker === 3) {
+    let update = { electiontracker: 0 }
+    if (room.trackerenact.topcard == "liberal") {
+      update.liberal = room.liberal + 1;
+    } else if (room.trackerenact.topcard == "fascist") {
+      update.fascist = room.fascist + 1;
+    }
+    Rooms.update(roomId, { $set: update });
+    FlashMessages.sendInfo(`${room.trackerenact.message}`);
+    // flash message only sends to the first instance who pressed continue
+    // i want it to flash to everyone and then reset the tracker
   }
 };
