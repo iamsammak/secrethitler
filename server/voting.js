@@ -127,7 +127,7 @@ Meteor.methods({
     }
 
     // TODO testing veto
-    if (room.fascist >= 1) { //TODO change back == 5
+    if (room.fascist >= 5) { //TODO change back == 5
       update.vetobutton = { president: true, chancellor: true };
     } else {
       update.vetobutton = { president: false, chancellor: false };

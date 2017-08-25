@@ -78,8 +78,8 @@ Meteor.methods({
           }
         }
         // veto power (to test, remember to update 'voting' line 104)
-        if (update.fascist >= 1) { // change back to == 5
-          if (party >= 2) { // change back to 5
+        if (update.fascist >= 5) { // change back to == 5
+          if (party >= 5) { // change back to 5
             console.log("veto power unlocked");
             update.vetobutton = { president: true, chancellor: true };
             update.vetoresult = { president: "", chancellor: "" };
