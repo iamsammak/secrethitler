@@ -138,7 +138,9 @@ Template.game.helpers({
     let room = Rooms.findOne(roomId);
     let numOfPlayers = room.players.length;
 
-    if (numOfPlayers <= 6) {
+    if (numOfPlayers == 3) {
+      return FASCISTICONS[3];
+    } else if (numOfPlayers <= 6) {
       return FASCISTICONS[5];
     } else if (numOfPlayers <= 8) {
       return FASCISTICONS[7];

@@ -40,7 +40,7 @@ Meteor.methods({
         let party = room.players.length;
         // investigate loyalty
         if (update.fascist == 1 || update.fascist == 2) {
-          if(party >= 9 || (party >= 7 && update.fascist == 2)) {
+          if(party >= 9 || (party >= 7 && update.fascist == 2) || (party == 3 && update.fascist == 2)) {
             // if (party >= 3) { // replace this line with the above line when done testing
             console.log("investigate loyalty");
             update.executiveaction = "active";
@@ -62,7 +62,7 @@ Meteor.methods({
             console.log("call special election");
             update.executiveaction = "active";
             update.specialelection = true;
-          } else if (party >= 5) { // change back to 5
+          } else if (party >= 5 || party == 3) { // change back to 5
             console.log("policy peek");
             let peek = room.drawpile.slice(0, 3);
             update.peek = peek;
@@ -71,7 +71,7 @@ Meteor.methods({
         }
         // execution
         if (update.fascist == 4 || update.fascist == 5) { // change back to 4 || 5
-          if (party >= 5) { //change back to 5
+          if (party >= 5 || party == 3) { //change back to 5
             console.log("execution");
             update.executiveaction = "active";
             update.assassination = true;
@@ -79,7 +79,7 @@ Meteor.methods({
         }
         // veto power (to test, remember to update 'voting' line 104)
         if (update.fascist >= 5) { // change back to == 5
-          if (party >= 5) { // change back to 5
+          if (party >= 5 || party == 3) { // change back to 5
             console.log("veto power unlocked");
             update.vetobutton = { president: true, chancellor: true };
             update.vetoresult = { president: "", chancellor: "" };

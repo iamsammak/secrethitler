@@ -168,11 +168,6 @@ console.log("vote continue, votes", update.votes);
           room.players[room.currentChancellor].playerId ];
       }
 
-      // why was this here, commenting out for now
-      // if (type == "fail") {
-      //   update.ruledout = room.ruledout;
-      // }
-
       if (room.resetspecialelection.length != 0) {
         update.currentPresident = (room.resetspecialelection[0] + 1) % _.size(room.players);
         update.resetspecialelection = [];

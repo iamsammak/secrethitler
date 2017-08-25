@@ -40,6 +40,14 @@ export const PRESIDENTIALPOWERS = {
 };
 
 export const FASCISTICONS = {
+  3: [
+    { id: 1, title: "", class: "" },
+    { id: 2, title: "investigate loyalty", class: "fa fa-user-secret" },
+    { id: 3, title: "policy peek", class: "fa fa-low-vision" },
+    { id: 4, title: "execution", class: "fa fa-bomb" },
+    { id: 5, title: "final execution", class: "fa fa-rocket" },
+    { id: 6, title: "", class: "" },
+  ],
   5: [
     { id: 1, title: "", class: "" },
     { id: 2, title: "", class: "" },
