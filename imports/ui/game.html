@@ -3,7 +3,9 @@
 
   <div class="hidden-role-container">
     <div class="toggle-role">show/hide</div>
-    <h2 id="hidden-role" class="hidden-role show">you're <b>{{ role }}</b>!</h2>
+    <div id="hidden-role" class="hidden-info show">
+      <h2 class="hidden-role">you're <b>{{ role }}</b>!</h2>
+    </div>
   </div>
 
   {{# if flashmessage }}
