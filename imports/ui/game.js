@@ -349,6 +349,9 @@ Template.game.events({
   "click .button-color-key": function() {
     document.getElementById("color-key").classList.toggle("show");
   },
+  "click .btn-win-condition": function() {
+    document.getElementById("win-condition").classList.toggle("show");
+  },
   "click .powers-button": function() {
     document.getElementById("dropdown-menu").classList.toggle("show");
   },

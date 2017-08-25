@@ -72,4 +72,7 @@ Template.lobby.events({
   "click .button-color-key": function() {
     document.getElementById("color-key").classList.toggle("show");
   },
+  "click .btn-win-condition": function() {
+    document.getElementById("win-condition").classList.toggle("show");
+  },
 });

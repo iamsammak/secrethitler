@@ -1,4 +1,13 @@
-/* CSS declarations go here */
+$orange: #FFA000;
+$president-color:  #1B6DB2;
+$president-candidate-color: lighten(#1B6DB2, 25%);
+$chancellor-candidate-color: lighten(#797F06, 20%);
+$chancellor-color: #797F06;
+$dead-candidate-color: lighten(#BF3630, 30%);
+$dead-color: #BF3630;
+$liberal-color: #03AA8C;
+$fascist-color: #f76b36;
+
 * {
   font-family: "Quicksand", sans-serif;
   font-weight: 300;
@@ -14,14 +23,14 @@ body {
 
 .orange {
   &:hover {
-    color: #FFA000;
+    color: $orange;
   }
 }
 
 .link {
   color: #999999;
   &:hover {
-    color: #FFA000;
+    color: $orange;
   }
 }
 
@@ -64,7 +73,7 @@ button {
     cursor: default;
   }
   &:hover {
-    border: 1px solid #FFA000;
+    border: 1px solid $orange;
   }
   .close {
     background-color: red;
@@ -72,10 +81,6 @@ button {
     color: #fff;
     padding: 5px 10px;
   }
-}
-
-table {
-  // padding-bottom: 1em;
 }
 
 .playerlist {
@@ -98,7 +103,7 @@ table {
     float: right;
     cursor: default;
     &:hover {
-      color: #FFA000;
+      color: $orange;
     }
   }
 }
@@ -110,7 +115,7 @@ input[type=text] {
 	border: 1px solid #999;
 	outline: none;
   &:focus {
-    border: 1px solid #FFA000;
+    border: 1px solid $orange;
   }
 }
 
@@ -118,6 +123,7 @@ div.footer {
   font-size: 0.75em;
 }
 
+// Button styles
 .start-button {
   padding: 10px 28px;
   &:disabled {
@@ -142,46 +148,7 @@ div.footer {
 	}
 }
 
-.button-color-key {
-  padding: 4px 10px;
-}
-
-.color-key-dropdown {
-  display: none;
-  margin-bottom: 1em;
-  width: 75%;
-  text-align: left;
-  li {
-    list-style-type: none;
-  }
-  i {
-    padding-right: 10px;
-  }
-  .key-p {
-    color: #1B6DB2;
-  }
-  .key-ep {
-    color: lighten(#1B6DB2, 25%);
-  }
-  .key-c {
-    color: #797F06;
-  }
-  .key-ec {
-    color: lighten(#797F06, 20%);
-  }
-  .key-et {
-    color: lighten(#BF3630, 30%);
-  }
-  .key-d {
-    color: #BF3630;
-  }
-}
-
-.hints-icon {
-  font-size: 1em;
-  vertical-align: 0;
-}
-
+// Show/Hide - hidden role styles
 .hidden-role-container {
   position: relative;
   width: 90%;
@@ -216,6 +183,7 @@ div.footer {
   display: none;
 }
 
+// Game Board styles
 .policy-count td {
 	padding: 0 9px;
 	margin: 0;
@@ -262,10 +230,10 @@ div.footer {
   flex-direction: row;
   div {
     margin-left: 3px;
-    border: 1px solid #03AA8C;
+    border: 1px solid $liberal-color;
   }
   .fill {
-    background-color: #03AA8C;
+    background-color: $liberal-color;
   }
 }
 
@@ -274,21 +242,22 @@ div.footer {
   flex-direction: row;
   div {
     margin-right: 3px;
-    border: 1px solid #f76b36;
+    border: 1px solid $fascist-color;
   }
   .fill {
-    background-color: #f76b36;
+    background-color: $fascist-color;
   }
   i {
     font-size: 0.6em;
     vertical-align: -35%;
-    color: #f76b36;
+    color: $fascist-color;
   }
 }
 
+// Election Tracker
 .election-tracker-container {
   .fill {
-    background-color: #FFA000;
+    background-color: $orange;
   }
   div {
     display: inline-block;
@@ -300,12 +269,13 @@ div.footer {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    border: 1px solid #FFA000;
-    color: #FFA000;
+    border: 1px solid $orange;
+    color: $orange;
   }
   cursor: default;
 }
 
+// Ballot - reveal
 .vote-reveal-container {
   position: relative;
   width: 90%;
@@ -330,13 +300,59 @@ div.footer {
   display: none;
 }
 
+// Helpful Hints
+.hint-title {
+  margin-bottom: 1em;
+  span:hover {
+    color: $orange;
+  }
+}
+// Color Key
+.button-color-key {
+  // padding: 4px 10px;
+}
+
+.color-key-dropdown {
+  display: none;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  width: 75%;
+  text-align: left;
+  li {
+    list-style-type: none;
+  }
+  i {
+    padding-right: 10px;
+  }
+  .key-p {
+    color: $president-color;
+  }
+  .key-ep {
+    color: $president-candidate-color;
+  }
+  .key-c {
+    color: $chancellor-color;
+  }
+  .key-ec {
+    color: $chancellor-candidate-color;
+  }
+  .key-et {
+    color: $dead-candidate-color;
+  }
+  .key-d {
+    color: $dead-color;
+  }
+}
+
+// Presidential Powers Info
 .powers-button {
-  margin-bottom: 12px;
+  // margin-bottom: 12px;
 }
 
 .presidential-powers {
   list-style-type: none;
   display: none;
+  margin-top: 12px;
 }
 
 .power-name {
@@ -349,6 +365,35 @@ div.footer {
 .power-description {
   display: none;
 }
+
+.win-condition-container {
+  width: 90%;
+}
+
+.win-condition-dropdown {
+  display: none;
+  div {
+    text-align: left;
+    list-style-type: none;
+  }
+  h3 {
+    margin-left: 5%;
+    margin-bottom: 0.5em;
+  }
+  li {
+    margin-left: 10%;
+    &::before {
+      content: ">";
+      color: $orange;
+      padding-right: 10px;
+    }
+  }
+  .or {
+    margin-left: 25%;
+    color: $orange;
+  }
+}
+
 // show must be lower in the css file to have presendence
 .show {
   display: block;
@@ -358,15 +403,16 @@ div.footer {
   color: #00B50E;
 }
 
-.todo {
-  text-decoration: none;
-}
+// For testing todo notes
+// .todo {
+//   text-decoration: none;
+// }
+//
+// .strikethrough {
+//   text-decoration: line-through;
+// }
 
-.strikethrough {
-  text-decoration: line-through;
-}
-
-
+// Table seating
 // https://css-tricks.com/snippets/sass/placing-items-circle/
 @mixin on-circle($item-count, $circle-size, $item-size) {
 	position: relative;
@@ -415,7 +461,7 @@ div.footer {
 			cursor: pointer;
 
 			&.president {
-				border-color: #1B6DB2;
+				border-color: $president-color;
 			}
       &.president-candidate {
         border-color: lighten(#1B6DB2, 25%);
