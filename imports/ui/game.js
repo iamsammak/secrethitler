@@ -1,7 +1,8 @@
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 import { Rooms, Players } from '../api/collections.js';
-import { PRESIDENTIALPOWERS, enactFromTracker } from './utils.js';
+import { PRESIDENTIALPOWERS, FASCISTICONS } from './utils.js';
 
 import './game.html';
 
@@ -127,9 +128,22 @@ Template.game.helpers({
     if (numOfPlayers < 5) {
       return [ PRESIDENTIALPOWERS[1], PRESIDENTIALPOWERS[2], PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[5], PRESIDENTIALPOWERS[6] ];
     } else if (numOfPlayers < 7) { // 5 and 6
-      return [ PRESIDENTIALPOWERS[1], PRESIDENTIALPOWERS[2], PRESIDENTIALPOWERS[6] ];
+      return [ PRESIDENTIALPOWERS[2], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[5], PRESIDENTIALPOWERS[6] ];
     } else { // 7, 8, 9 and 10
-      return [ PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[2], PRESIDENTIALPOWERS[6] ];
+      return [ PRESIDENTIALPOWERS[1], PRESIDENTIALPOWERS[3], PRESIDENTIALPOWERS[4], PRESIDENTIALPOWERS[5], PRESIDENTIALPOWERS[6] ];
+    }
+  },
+  powericons: function() {
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    let numOfPlayers = room.players.length;
+
+    if (numOfPlayers <= 6) {
+      return FASCISTICONS[5];
+    } else if (numOfPlayers <= 8) {
+      return FASCISTICONS[7];
+    } else if (numOfPlayers <= 10) {
+      return FASCISTICONS[9];
     }
   },
   executiveaction: function() {
@@ -210,6 +224,59 @@ Template.game.helpers({
       document.getElementById(`tracker-${num}`).classList.add("fill");
     }
     // return num; //uncomment for testing
+  },
+  moveliberal: function(num) {
+    if (num === 0) {
+      document.getElementById("liberal-1").classList.remove("fill");
+      document.getElementById("liberal-2").classList.remove("fill");
+      document.getElementById("liberal-3").classList.remove("fill");
+      document.getElementById("liberal-4").classList.remove("fill");
+      document.getElementById("liberal-5").classList.remove("fill");
+    } else {
+      document.getElementById(`liberal-${num}`).classList.add("fill");
+    }
+  },
+  movefascist: function(num) {
+    if (num === 0) {
+      document.getElementById("fascist-1").classList.remove("fill");
+      document.getElementById("fascist-2").classList.remove("fill");
+      document.getElementById("fascist-3").classList.remove("fill");
+      document.getElementById("fascist-4").classList.remove("fill");
+      document.getElementById("fascist-5").classList.remove("fill");
+      document.getElementById("fascist-6").classList.remove("fill");
+    } else {
+      document.getElementById(`fascist-${num}`).classList.add("fill");
+    }
+  },
+  flashmessage: function() {
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    // Meteor.setTimeout(function() {
+    //   console.log("inside timeout");
+    //   Rooms.update(roomId, {$set: {loudspeaker: false}});
+    // }, 5000);
+    return room.loudspeaker == true;
+  },
+  ballot: function() {
+    let currentPlayerId = Session.get("playerId")
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    let votes = room.votes;
+    let ballot = [];
+
+    for (playerId in votes) {
+      let player = Players.findOne(playerId);
+      let vote = votes[playerId] ? "pass" : "fail";
+      let playerVote = {
+        name: player.name,
+        vote: vote,
+        current: player._id == currentPlayerId
+      };
+      ballot.push(playerVote);
+    }
+    console.log("ballot: ", ballot);
+
+    return ballot;
   },
 })
 
@@ -349,5 +416,9 @@ Template.game.events({
     console.log("Ending current game, returning to lobby");
     let roomId = Session.get("roomId");
     Meteor.call("playagain", { roomId: roomId });
+  },
+  "click .toggle-reveal-vote": function() {
+    document.getElementById("reveal-votelist").classList.toggle("show");
+    console.log("toggle reveal vote list");
   },
 });

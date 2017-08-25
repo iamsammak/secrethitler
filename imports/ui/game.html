@@ -1,17 +1,20 @@
 <template name="game">
-  <h2>round <b>{{ round }}</b></h2>
+  <h2>round <b class="orange">{{ round }}</b></h2>
 
   <div class="hidden-role-container">
     <div class="toggle-role">show/hide</div>
-    <h2 id="hidden-role" class=" hidden-role show">you're <b>{{ role }}</b>!</h2>
+    <h2 id="hidden-role" class="hidden-role show">you're <b>{{ role }}</b>!</h2>
   </div>
 
-  {{> flashMessages }}
+  {{# if flashmessage }}
+    <span class="enact-message">{{ room.trackerenact.message }}</span>
+  {{/ if }}
+
   {{# if equals room.fascist 5 }}
     <small>veto power unlocked!</small>
   {{/ if }}
   <p>
-    <small>Testing remember to remove {{ policycount }}</small>
+    <!-- <small>Testing remember to remove {{ policycount }}</small>
     <small>policy count</small>
     <br />
     <table class="policy-count">
@@ -31,27 +34,32 @@
           <small>fascist</small>
         </td>
       </tr>
-    </table>
+    </table> -->
+    <div class="track-titles">
+      <h3>Liberal</h3>
+      <h3>Fascist</h3>
+    </div>
     <div class="game-board">
       <div class="liberal-board-container">
         <div class="liberal-board">
-          <div class="tile"></div>
-          <div class="tile"></div>
-          <div class="tile"></div>
-          <div class="tile"></div>
-          <div class="tile"></div>
+          <div class="tile" id="liberal-1"></div>
+          <div class="tile" id="liberal-2"></div>
+          <div class="tile" id="liberal-3"></div>
+          <div class="tile" id="liberal-4"></div>
+          <div class="tile" id="liberal-5"></div>
         </div>
+        {{ moveliberal room.liberal }}
       </div>
       <span class="board-divider">/</span>
       <div class="facist-board-container">
         <div class="fascist-board">
-          <div class="tile"></div>
-          <div class="tile"></div>
-          <div class="tile"></div>
-          <div class="tile"></div>
-          <div class="tile"></div>
-          <div class="tile"></div>
+          {{# each powericons }}
+            <div class="tile" id="fascist-{{ id }}">
+              <i class="{{ class }}" title="{{ title }}" aria-hidden="true"></i>
+            </div>
+          {{/ each }}
         </div>
+        {{ movefascist room.fascist }}
       </div>
     </div>
 
@@ -68,7 +76,7 @@
 <!-- Dead or Alive -->
   {{# if dead }}
     <p>
-      <b style="color: #90201B;">you are dead.</b><br />
+      <b style="color: #BF3630;">you are dead.</b><br />
       <span>Dead men tell no tales. Shh...</span>
     </p>
   {{/ if }}
@@ -76,10 +84,10 @@
 <!-- chancellor-candidate picking view -->
   {{# if president }}
     <p>
-      <b style="color: #2187FF;">you are the president!</b><br />
+      <b style="color: #1B6DB2;">you are the president!</b><br />
     </p>
     {{# if picking }}
-    <span style="color: #1B9078;">choose your chancellor:</span>
+    <span style="color: #797F06;">choose your chancellor:</span>
     {{/ if }}
   {{ else }}
     {{# if picking }}
@@ -89,7 +97,7 @@
 
   {{# if chancellor }}
     <p>
-      <b style="color: #1B9078;">you are the chancellor!</b><br />
+      <b style="color: #797F06;">you are the chancellor!</b><br />
     </p>
   {{/ if }}
 
@@ -106,10 +114,21 @@
   {{/ if }}
 
   {{# if votefailed }}
-    <p>
-      the vote failed...<br />
-      waiting on {{ votecount }} {{ peopleOrperson votecount }}
-    </p>
+    <div class="vote-reveal-container">
+      <p>
+        the vote failed...<br />
+        waiting on {{ votecount }} {{ peopleOrperson votecount }}
+      </p>
+      <div class="toggle-reveal-vote">show/hide</div>
+      <ul id="reveal-votelist" class="playerlist votelist">
+        {{# each ballot }}
+          <li class="{{# if current }}current{{/ if }}">
+            {{ name }}
+            ({{ vote }})
+          </li>
+        {{/ each }}
+      </ul>
+    </div>
     {{# unless dead }}
       {{# unless haventvoted }}
         <p><button class="fail-continue-button">continue</button></p>
@@ -120,7 +139,18 @@
 <!-- Policy picking view / what everyone sees -->
   {{# if votepassed }}
     {{# if equals room.policychoices.length 3 }}
-      <p>the vote passed!</p>
+      <div class="vote-reveal-container">
+        <p>the vote passed!</p>
+        <div class="toggle-reveal-vote">show/hide</div>
+        <ul id="reveal-votelist" class="playerlist votelist">
+          {{# each ballot }}
+            <li class="{{# if current }}current{{/ if }}">
+              {{ name }}
+              ({{ vote }})
+            </li>
+          {{/ each }}
+        </ul>
+      </div>
     {{/ if }}
     <!-- president view -->
     {{# if president }}
@@ -140,7 +170,7 @@
             {{# if vetofailed 2 }}
               <p>Chancellor did not approve on Veto</p>
             {{/ if }}
-            <p>choose a policy to discard</p>
+            <p>choose a policy to <strong>discard</strong></p>
             <p>
               {{# each policy in room.policychoices }}
               <button class="pick-{{ policy }}">{{ policy }}</button>
@@ -191,7 +221,7 @@
               {{# if vetofailed 1 }}
                 <p>President did not approve with Veto</p>
               {{/ if }}
-              <p>choose a policy to discard</p>
+              <p>choose a policy to <strong>discard</strong></p>
               <p>
                 {{# each policy in room.policychoices }}
                 <button class="pick-{{ policy }}">{{ policy }}</button>
@@ -342,7 +372,9 @@
   <button class="powers-button">Presidential Powers</button>
   <div class="presidential-powers" id="dropdown-menu">
     {{# each powers }}
-      <li class ="power-name" data-powerid={{ id }}>{{ name }}</li>
+      <li class ="power-name" data-powerid={{ id }}>
+        <i class="{{ icon }}" aria-hidden="true"></i>{{ name }}
+      </li>
       <p style="width:85%" class="power-description show" id="power-description-{{ id }}">{{ description }}</p>
     {{/ each }}
   </div>

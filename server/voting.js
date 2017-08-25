@@ -20,8 +20,12 @@ Meteor.methods({
     } else if (_.contains(room.deadindex, player._id)) {
       return;
     } else {
+      // switch off flash message logic here
       Rooms.update(player.roomId, {
-        $set: { currentChancellor: player.index }
+        $set: {
+          currentChancellor: player.index,
+          loudspeaker: false
+        }
       });
     }
   },
@@ -118,7 +122,6 @@ Meteor.methods({
             topcard: topCard,
             message: `a ${topCard} policy has been enacted!`
           };
-          // election tracker is reset client side "utils.js" via promise
         }
       }
     }
@@ -193,7 +196,8 @@ console.log("vote continue, votes", update.votes);
         } else if (room.trackerenact.topcard == "fascist") {
           update.fascist = room.fascist + 1;
         }
-        // flash message - trigger session timeout here
+        // flash message - I still might just cut this out
+        update.loudspeaker = true;
       }
     }
     console.log("vote continue", update);

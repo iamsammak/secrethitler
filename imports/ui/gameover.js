@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Rooms, Players } from '../api/collections.js';
 
@@ -12,7 +13,14 @@ Template.gameover.helpers({
   players: function() {
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
-    return room.players;
+
+    return Players.find({ roomId: roomId }).fetch().map(
+      function(player) {
+        console.log(player);
+        // set player.current to be player._id if player._id is equal to playerId
+        player.current = player._id == playerId;
+        return player;
+      });
   },
 });
 

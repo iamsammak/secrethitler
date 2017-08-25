@@ -142,6 +142,8 @@ Meteor.methods({
       update.reason = "";
       update.round = 1;
       update.started = new Date().getTime();
+      // testflash
+      update.loudspeaker = false;
       // election tracker params
       update.electiontracker = 0;
       update.trackerenact = { topcard: "", message: "" };
