@@ -70,11 +70,12 @@ Meteor.methods({
     if (!player) {
       return;
     }
+    
+    let room = Rooms.findOne(player.roomId);
     if (room.players[room.currentPresident].playerId != playerId) {
       return;
     }
 
-    let room = Rooms.findOne(player.roomId);
     let update = {};
 
     // Room resetting - after president viewed peek, investigated, or executed a player

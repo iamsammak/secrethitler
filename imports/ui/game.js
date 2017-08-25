@@ -412,7 +412,7 @@ Template.game.events({
   "click .execution-continue-button": function() {
     let playerId = Session.get("playerId");
     console.log("Someone assassinated. But the Game continues");
-    Meteor.call("continue", { playerId: playerId, type: "execution" });
+    Meteor.call("powercontinue", { playerId: playerId, type: "execution" });
   },
   "click .endgame-button": function() {
     console.log("Ending current game, returning to lobby");
