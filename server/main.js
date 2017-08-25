@@ -114,6 +114,8 @@ Meteor.methods({
     });
   },
   "ready" ({ playerId }) {
+    // probably need to write reset room logic first.
+    // to prepare for multiple games/restarts
     let player = Players.findOne(playerId);
     let room = Rooms.findOne(player.roomId);
     if (room.players.filter(function(player) {
