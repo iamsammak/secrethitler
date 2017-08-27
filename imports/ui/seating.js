@@ -1,4 +1,4 @@
-import { Meteor } from 'meteor/meteor';
+// import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 import { Rooms, Players } from '../api/collections.js';
@@ -7,8 +7,11 @@ import './seating.html';
 
 Template.seating.events({
   "click #ready-button": function() {
+    console.log("clicked seat me");
+    let currentPlayerId = Session.get("playerId");
+    console.log("currentPlayerId", currentPlayerId);
     Meteor.call("ready", {
-      playerId: playerId
+      playerId: currentPlayerId
     }, (err) => {
       if (err) {
         console.error(err);

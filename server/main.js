@@ -54,9 +54,7 @@ Meteor.methods({
     Players.remove({ _id: `${playerId}`});
   },
   "playagain" ({ roomId }) {
-    Rooms.update(roomId, {
-      $set: { state: "lobby"}
-    });
+    Rooms.update(roomId, { $set: { state: "lobby"} });
   },
   "joingame" ({ name, roomId }) {
     let room = Rooms.findOne(roomId);
@@ -118,10 +116,13 @@ Meteor.methods({
     // to prepare for multiple games/restarts
     let player = Players.findOne(playerId);
     let room = Rooms.findOne(player.roomId);
+
+    // if the player is already in the room, then return
     if (room.players.filter(function(player) {
       return player.playerId == playerId;
     }).length > 0) {
       return;
+      console.log("player already in the room, I think");
     }
 
     // to track position later
@@ -133,6 +134,7 @@ Meteor.methods({
       name: player.name,
       role: player.role
     });
+
     // to be $set later into Rooms collection
     let update = {
       players: room.players

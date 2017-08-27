@@ -198,10 +198,10 @@ div.footer {
     margin: 1em 0;
   }
   h3:nth-child(even) {
-    right: 15%;
+    right: 16%;
   }
   h3:nth-child(odd) {
-    left: 17%;
+    left: 16%;
   }
 }
 
@@ -402,6 +402,18 @@ div.footer {
 
 .enact-message {
   color: #00B50E;
+}
+
+.veto-unlocked {
+  i {
+    color: $fascist-color;
+    padding-right: 6px;
+  }
+  span {
+    color: $president-color;
+  }
+  font-size: 16px;
+  color: $chancellor-color;
 }
 
 // For testing todo notes
