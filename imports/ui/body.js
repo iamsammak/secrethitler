@@ -10,7 +10,7 @@ import './body.html';
 import './newgame.js';
 import './joingame.js';
 import './lobby.js';
-import './seating.js';
+import './table.js';
 import './game.js';
 import './gameover.js';
 
@@ -46,7 +46,7 @@ Tracker.autorun(function roomstate() {
 
   Session.set("view", {
     "lobby": "lobby",
-    "seating": "seating",
+    "table": "table",
     "game": "game",
     "gameover": "gameover"
   }[room.state] || null);
@@ -88,9 +88,9 @@ Template.buttonmenu.events({
     Session.set("view", "lobby");
     console.log("view changed to lobby");
   },
-  "click .seating-button": function() {
-    Session.set("view", "seating");
-    console.log("view changed to seating");
+  "click .table-button": function() {
+    Session.set("view", "table");
+    console.log("view changed to table");
   },
   "click .game-button": function() {
     Session.set("view", "game");

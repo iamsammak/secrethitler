@@ -3,9 +3,9 @@ import { Template } from 'meteor/templating';
 
 import { Rooms, Players } from '../api/collections.js';
 
-import './seating.html';
+import './table.html';
 
-Template.seating.events({
+Template.table.events({
   "click #ready-button": function() {
     console.log("clicked seat me");
     let currentPlayerId = Session.get("playerId");
@@ -24,7 +24,7 @@ Template.seating.events({
   },
 });
 
-Template.seating.helpers({
+Template.table.helpers({
   equals: function(a, b) {
     return a == b;
   },

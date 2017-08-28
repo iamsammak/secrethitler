@@ -68,6 +68,7 @@ Meteor.methods({
     }
     if (Players.find({ roomId: roomId, name: name}).count() > 0) {
       return;
+      // write logic for returning players
     }
     let playerId = Players.insert({
       roomId: roomId,
@@ -103,7 +104,7 @@ Meteor.methods({
     console.log("liberals", liberals);
     Rooms.update(roomId, {
       $set: {
-        state: "seating",
+        state: "table",
         players: [],
         fascist: fascists,
         liberal: liberals,
