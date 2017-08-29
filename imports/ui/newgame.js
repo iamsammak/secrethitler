@@ -17,9 +17,13 @@ Template.newgame.events({
     if (!name) {
       return false;
     }
+    let codename = event.target.codename.value;
+    if (!codename) {
+      return false;
+    }
 
     console.log(`Hello ${name}, welcome to the Game`);
-    Meteor.call("newgame", {name: name}, (err, res) => {
+    Meteor.call("newgame", { name: name, codename: codename }, (err, res) => {
       if (err) {
         console.error(err);
       }

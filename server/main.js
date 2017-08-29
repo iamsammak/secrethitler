@@ -21,9 +21,10 @@ Meteor.publish("players", function(roomId) {
 });
 
 Meteor.methods({
-  "newgame"({name}) {
+  "newgame"({ name, codename }) {
     let accessCode = Random.hexString(6);
     name = name.trim();
+    codename = codename.trim();
     console.log(name);
 
     while (Rooms.find({accessCode:accessCode}).count() > 0) {
@@ -40,7 +41,8 @@ Meteor.methods({
 
     let playerId = Players.insert({
       roomId: roomId,
-      name: name
+      name: name,
+      codename: codename
     });
 
     Rooms.update(roomId, {
@@ -56,23 +58,71 @@ Meteor.methods({
   "playagain" ({ roomId }) {
     Rooms.update(roomId, { $set: { state: "lobby"} });
   },
-  "joingame" ({ name, roomId }) {
+  "joingame" ({ name, codename, roomId }) {
     let room = Rooms.findOne(roomId);
     name = name.trim();
     if (!room) {
       return;
     }
-    if (room.state !== "lobby") {
-      console.log("main.js server line 63");
-      return;
+    // if (room.state !== "lobby") {
+    //   console.log("main.js server line 63");
+    //   return;
+    // }
+    // if (Players.find({ roomId: roomId, name: name }).count() > 0) {
+    //   return;
+    // }
+    // write logic for returning players
+    // things that need to happen
+    // find old player Id
+    let oldPlayer = Players.findOne({roomId:roomId, name: name});
+
+    if (oldPlayer != undefined) {
+      // copy all player data attached to old playerId
+      // create a new playerID and copy over old player data
+      if (oldPlayer.codename === codename) {
+        let newPlayerId = Players.insert({
+          roomId: roomId,
+          name: name,
+          codename: codename,
+          role: oldPlayer.role,
+          index: oldPlayer.index
+        });
+        // if the game has already started...
+        // need to update all the game info params that point to the oldPlayerId
+        let oldRoom = Rooms.findOne(roomId);
+        let update = {};
+        // owner, players, votes
+        if (oldRoom.owner == oldPlayer._id) {
+          update.owner = newPlayerId;
+        }
+
+        let players = oldRoom.players;
+        players.forEach(function(player) {
+          if (player.playerId == oldPlayer._id) {
+            player.playerId = newPlayerId;
+          }
+        });
+        update.players = players;
+
+        let votes = oldRoom.votes;
+        votes[newPlayerId] = votes[oldPlayer._id]
+        delete votes[oldPlayer._id]
+        update.votes = votes;
+
+        Rooms.update(roomId, {$set: update});
+
+        // bugs
+        // need to "fill" the game boards and election trackers
+        return [roomId, newPlayerId];
+      } else {
+        return;
+      }
     }
-    if (Players.find({ roomId: roomId, name: name}).count() > 0) {
-      return;
-      // write logic for returning players
-    }
+    // normal join game - player insertion
     let playerId = Players.insert({
       roomId: roomId,
-      name: name
+      name: name,
+      codename: codename
     });
     return [roomId, playerId];
   },

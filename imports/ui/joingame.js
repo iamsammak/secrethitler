@@ -17,6 +17,10 @@ Template.joingame.events({
     if (!name) {
       return false;
     }
+    let codename = event.target.codename.value;
+    if (!codename) {
+      return false;
+    }
 
     accessCode = accessCode.trim().toLowerCase();
 
@@ -25,15 +29,16 @@ Template.joingame.events({
       if (!room) {
         return FlashMessages.sendError("Invalid access code. Watchout for autocorrect.");
       }
-      if (room.state !== "lobby") {
-        return FlashMessages.sendError("Game has already started...try next game.");
-      }
+      // if (room.state !== "lobby") {
+      //   return FlashMessages.sendError("Game has already started...try next game.");
+      // }
       if (Players.find({ roomId: room._id, name: name }).count() > 0) {
-        return FlashMessages.sendError("Someone already chose that name. Might I suggest Sebastian");
+        // return FlashMessages.sendError("Someone already chose that name. Might I suggest Sebastian");
+        console.log("Someone already chose that name, testing reentry");
       }
 
       Meteor.subscribe("players", room._id);
-      Meteor.call("joingame", { name: name, roomId: room._id }, (err, res) => {
+      Meteor.call("joingame", { name: name, codename: codename, roomId: room._id }, (err, res) => {
         if (err) {
           console.error(err);
         }
