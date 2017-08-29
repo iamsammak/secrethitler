@@ -1,5 +1,12 @@
 <template name="game">
-  <h2>round <b class="orange">{{ round }}</b></h2>
+  <div class="title-card">
+    <h2 id="round" class="round show">
+      round <b class="orange">{{ round }}</b>
+    </h2>
+    <h2 id ="access-code" class="access-code">
+      access code: <b>{{ room.accessCode }}</b>
+    </h2>
+  </div>
 
   <div class="hidden-role-container">
     <div class="toggle-role">show/hide</div>

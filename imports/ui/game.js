@@ -6,6 +6,25 @@ import { PRESIDENTIALPOWERS, FASCISTICONS } from './utils.js';
 
 import './game.html';
 
+Template.game.onRendered(function() {
+  // update fills for election tracker, game board
+  let roomId = Session.get("roomId");
+  let room = Rooms.findOne(roomId);
+
+  for (let i = 1; i <= room.liberal; i++) {
+    document.getElementById(`liberal-${i}`).classList.add("fill");
+  }
+  for (let j = 1; j <= room.fascist; j++) {
+    document.getElementById(`fascist-${j}`).classList.add("fill");
+  }
+  for (let k = 1; k <= room.electiontracker; k++) {
+    document.getElementById(`tracker-${k}`).classList.add("fill");
+  }
+});
+
+Template.game.onCreated(function() {
+});
+
 Template.game.helpers({
   equals: function(a, b) {
     return a == b;
@@ -283,6 +302,10 @@ Template.game.helpers({
 })
 
 Template.game.events({
+  "click .title-card": function() {
+    document.getElementById("round").classList.toggle("show");
+    document.getElementById("access-code").classList.toggle("show");
+  },
   "click .toggle-role": function() {
     document.getElementById("hidden-role").classList.toggle("show");
     console.log("toggle role");

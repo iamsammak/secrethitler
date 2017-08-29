@@ -64,13 +64,6 @@ Meteor.methods({
     if (!room) {
       return;
     }
-    // if (room.state !== "lobby") {
-    //   console.log("main.js server line 63");
-    //   return;
-    // }
-    // if (Players.find({ roomId: roomId, name: name }).count() > 0) {
-    //   return;
-    // }
     // write logic for returning players
     // things that need to happen
     // find old player Id
@@ -89,31 +82,33 @@ Meteor.methods({
         });
         // if the game has already started...
         // need to update all the game info params that point to the oldPlayerId
-        let oldRoom = Rooms.findOne(roomId);
         let update = {};
         // owner, players, votes
-        if (oldRoom.owner == oldPlayer._id) {
+        if (room.owner == oldPlayer._id) {
           update.owner = newPlayerId;
         }
 
-        let players = oldRoom.players;
+        let players = room.players;
         players.forEach(function(player) {
-          if (player.playerId == oldPlayer._id) {
+          if (player.playerId === oldPlayer._id) {
             player.playerId = newPlayerId;
           }
         });
         update.players = players;
 
-        let votes = oldRoom.votes;
+        let votes = room.votes;
         votes[newPlayerId] = votes[oldPlayer._id]
         delete votes[oldPlayer._id]
         update.votes = votes;
 
         Rooms.update(roomId, {$set: update});
 
+        // remove old player from room
+        Players.remove({ _id: `${oldPlayer._id}`});
+
         // bugs
         // need to "fill" the game boards and election trackers
-        return [roomId, newPlayerId];
+        return [roomId, newPlayerId, room.state];
       } else {
         return;
       }
@@ -124,7 +119,7 @@ Meteor.methods({
       name: name,
       codename: codename
     });
-    return [roomId, playerId];
+    return [roomId, playerId, "lobby"];
   },
   "startgame" ({ roomId }) {
     let players = Players.find({ roomId: roomId }).fetch();

@@ -148,6 +148,11 @@ div.footer {
 	}
 }
 
+// Round and Access Code top of game view
+.round, .access-code {
+  display: none;
+}
+
 // Show/Hide - hidden role styles
 .hidden-role-container {
   position: relative;
