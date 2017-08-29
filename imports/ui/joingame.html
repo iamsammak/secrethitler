@@ -1,13 +1,13 @@
 <template name="joingame">
   <h1>Welcome to <span class="orange">Secret</span> Hitler</h1>
   <hr class="top-line">
-  <p style="width:75%">Waiting for the access code</p>
+  <p style="width:75%">Remember your codename for re-entrance</p>
   <form id="joingame-form">
     {{> flashMessages }}
     <p>
       <input type="text" autocomplete="off" name="accesscode" maxlength="6" placeholder="access code" /><br />
       <input type="text" name="name" autocomplete="off" placeholder="What's your name?">
-      <input type="text" name="codename" autocomplete="off" placeholder="Codename.">
+      <input type="text" name="codename" autocomplete="off" placeholder="codename">
       <!-- <i class="fa fa-question-circle-o codename-icon" aria-hidden="true"></i> -->
     </p>
     <div>

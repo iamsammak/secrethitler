@@ -113,6 +113,7 @@ input[type=text] {
 	margin: 5px;
 	padding: 10px 18px;
 	border: 1px solid #999;
+  border-radius: 4px;
 	outline: none;
   &:focus {
     border: 1px solid $orange;

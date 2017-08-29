@@ -29,17 +29,21 @@ Template.joingame.events({
       if (!room) {
         return FlashMessages.sendError("Invalid access code. Watchout for autocorrect.");
       }
-      // let playerExist = Players.findOne({ roomId: room._id, name: name });
-      // debugger
-      // if ((room.state !== "lobby") && (playerExist == undefined)) {
-      //   return FlashMessages.sendError("Game has already started...try next game.");
-      // }
-      // if (Players.find({roomId: room._id, name: name}).count() > 0) {
-      //
-      // }
+      // temp solution
+      debugger
+      if (room.state !== "lobby") {
+        let players = room.players;
+        let names = players.map((player) => {return player.name});
+        if (!names.includes(name)) {
+          return FlashMessages.sendError("Game has already started.");
+        }
+      }
+      if ((room.state == "lobby") && (Players.find({roomId: room._id, name: name}).count() > 0)) {
+        return FlashMessages.sendError("Someone already chose that name");
+      }
       // if (playerExist != undefined) {
       //   if (playerExist.codename != codename) {
-      //     return FlashMessages.sendError("Someone already chose that name or you've entered the wrong codename");
+      //     debugger
       //   }
       // }
 
