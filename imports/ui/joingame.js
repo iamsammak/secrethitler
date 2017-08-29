@@ -30,7 +30,6 @@ Template.joingame.events({
         return FlashMessages.sendError("Invalid access code. Watchout for autocorrect.");
       }
       // temp solution
-      debugger
       if (room.state !== "lobby") {
         let players = room.players;
         let names = players.map((player) => {return player.name});
@@ -43,7 +42,6 @@ Template.joingame.events({
       }
       // if (playerExist != undefined) {
       //   if (playerExist.codename != codename) {
-      //     debugger
       //   }
       // }
 
