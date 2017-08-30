@@ -83,11 +83,11 @@ Meteor.methods({
         // if the game has already started...
         // need to update all the game info params that point to the oldPlayerId
         let update = {};
-        // owner, players, votes
+        // owner, players, votes, dead
         if (room.owner == oldPlayer._id) {
           update.owner = newPlayerId;
         }
-
+        // players
         let players = room.players;
         players.forEach(function(player) {
           if (player.playerId === oldPlayer._id) {
@@ -95,11 +95,31 @@ Meteor.methods({
           }
         });
         update.players = players;
-
+        // votes
+        // only update votes if the oldPlayer has a vote inside room.votes
         let votes = room.votes;
-        votes[newPlayerId] = votes[oldPlayer._id]
-        delete votes[oldPlayer._id]
-        update.votes = votes;
+        if (votes[oldPlayer._id] != undefined) {
+          votes[newPlayerId] = votes[oldPlayer._id]
+          delete votes[oldPlayer._id]
+          update.votes = votes;
+        }
+        // if reentering player was dead
+        if (room.deathtags.includes(oldPlayer._id)) {
+          // // TODO test when I get home
+          // let dead = room.dead;
+          // let deathtags = room.deathtags;
+          // dead.forEach(function(player) {
+          //   if (player.playerId === oldPlayer._id) {
+          //     player.playerId = newPlayerId;
+          //   }
+          // });
+          // let oldTagIdx = deathtags.indexOf(oldPlayer._id);
+          // deathtags.splice(oldTagIdx, 1);
+          // deathtags.push(newPlayerId);
+          //
+          // update.dead = dead;
+          // update.deathtags = deathtags;
+        }
 
         Rooms.update(roomId, {$set: update});
 

@@ -165,6 +165,7 @@ div.footer {
 }
 
 .toggle-role {
+  cursor: pointer;
   position: absolute;
   top: 1px;
   right: -5px;
@@ -187,6 +188,16 @@ div.footer {
 
 .hidden-info {
   display: none;
+}
+
+.breakdown-container {
+  display: flex;;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 8px;
+  div {
+    // background-color: #eee;
+  }
 }
 
 // Game Board styles
@@ -282,6 +293,14 @@ div.footer {
 }
 
 // Ballot - reveal
+.voting-annoucement {
+  position: relative;
+  width: 90%;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  padding: 11px 0;
+}
+
 .vote-reveal-container {
   position: relative;
   width: 90%;

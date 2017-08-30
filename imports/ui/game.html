@@ -100,7 +100,7 @@
     {{/ if }}
   {{ else }}
     {{# if picking }}
-      <p>waiting for the president...</p>
+      <p>waiting for the president to nominate a chancellor...</p>
     {{/ if }}
   {{/ if }}
 
@@ -111,8 +111,12 @@
   {{/ if }}
 
   {{# if voting }}
+  <div class="voting-annoucement">
+    <b style="color: #1B6DB2;">{{ presidentname }}</b> has nominated<br/>
+    <b style="color: #797F06;">{{ chancellorname }}</b> as chancellor
+  </div>
     <p>
-      voting...waiting for {{ votesleft }} {{ peopleOrperson votesleft }}<br />
+      waiting for {{ votesleft }} {{ peopleOrperson votesleft }} to vote<br />
       {{# unless dead }}
         {{# if haventvoted }}
           <button class="yesvote-button">yes</button>
@@ -196,7 +200,7 @@
             <button class="yes-veto" data-veto="president">yes</button>
             <button class="no-veto" data-veto="president">no</button>
           {{ else }}
-            <p>waiting for the chancellor...</p>
+            <p>waiting for the chancellor to discard a policy...</p>
           {{/ if }}
         {{/ unless }}
       {{/ if }}
@@ -245,7 +249,7 @@
           {{# if room.askchancellor }}
             <p>president has veto'd, waiting for chancellor's approval...</p>
           {{ else }}
-            <p>waiting for the president...</p>
+            <p>waiting for the president to discard a policy...</p>
           {{/ if }}
         {{ else }}
         <!-- if executive power is live and president is deciding on how to use power -->
@@ -253,7 +257,7 @@
             {{# if room.askpresident }}
               <p>chancellor has veto'd, waiting for president's approval...</p>
             {{ else }}
-              <p>waiting for the chancellor...</p>
+              <p>waiting for the chancellor to discard a policy...</p>
             {{/ if }}
           {{/ unless }}
         {{/ if }}

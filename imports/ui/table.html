@@ -2,10 +2,14 @@
   <h1>Before we begin</h1>
 
   <div class="hidden-role-container">
-    <div class="toggle-role">show/hide</div>
+    <div class="toggle-role">show/hide role</div>
     <div id="hidden-info" class="hidden-info">
       <h2 class="hidden-role">you're <b>{{ role }}</b>!</h2>
-
+      <div class="breakdown-container">
+        <div>{{ rolecards.num }} players :</div>
+        <div>{{ rolecards.liberal }} liberal</div>
+        <div>{{ rolecards.fascist }} fascist + {{ rolecards.hitler }} Hitler</div>
+      </div>
       {{# if teammates }}
       <p>
         these are your fellow fascists:

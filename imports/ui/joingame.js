@@ -33,6 +33,7 @@ Template.joingame.events({
       if (room.state !== "lobby") {
         let players = room.players;
         let names = players.map((player) => {return player.name});
+        //this works as long as someone doesn't log out during seating
         if (!names.includes(name)) {
           return FlashMessages.sendError("Game has already started.");
         }

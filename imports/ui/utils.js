@@ -74,6 +74,19 @@ export const FASCISTICONS = {
   ],
 };
 
+export const ROLECARDS = {
+  // count, liberal, fascist, hitler
+    2: {num: 2, liberal: 1, fascist: 0, hitler: 1},
+    3: {num: 3, liberal: 2, fascist: 0, hitler: 1},
+    4: {num: 4, liberal: 3, fascist: 0, hitler: 1},
+    5: {num: 5, liberal: 3, fascist: 1, hitler: 1},
+    6: {num: 6, liberal: 4, fascist: 1, hitler: 1},
+    7: {num: 7, liberal: 4, fascist: 2, hitler: 1},
+    8: {num: 8, liberal: 5, fascist: 2, hitler: 1},
+    9: {num: 9, liberal: 5, fascist: 3, hitler: 1},
+    10: {num: 10, liberal: 6, fascist: 3, hitler: 1}
+};
+
 // logic that resets election tracker
 export function enactFromTracker() {
   let roomId = Session.get("roomId");

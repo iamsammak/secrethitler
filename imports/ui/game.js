@@ -61,6 +61,12 @@ Template.game.helpers({
     let room = Rooms.findOne(roomId);
     return room.players[room.currentPresident].playerId == playerId;
   },
+  presidentname: function() {
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    let name = room.players[room.currentPresident].name;
+    return name;
+  },
   chancellor: function() {
     let playerId = Session.get("playerId");
     let roomId = Session.get("roomId");
@@ -70,6 +76,12 @@ Template.game.helpers({
       // return;
     }
     return room.players[room.currentChancellor].playerId == playerId;
+  },
+  chancellorname: function() {
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    let name = room.players[room.currentChancellor].name;
+    return name;
   },
   picking: function() {
     let roomId = Session.get("roomId");

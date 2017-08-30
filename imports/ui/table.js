@@ -2,6 +2,7 @@
 import { Template } from 'meteor/templating';
 
 import { Rooms, Players } from '../api/collections.js';
+import { ROLECARDS } from './utils.js';
 
 import './table.html';
 
@@ -69,5 +70,11 @@ Template.table.helpers({
     } else {
       return room.fascist;
     }
+  },
+  rolecards: function() {
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    let numOfPlayers = Players.find({ roomId: roomId }).fetch().length;
+    return ROLECARDS[numOfPlayers];
   },
 });
