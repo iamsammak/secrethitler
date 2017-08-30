@@ -105,20 +105,19 @@ Meteor.methods({
         }
         // if reentering player was dead
         if (room.deathtags.includes(oldPlayer._id)) {
-          // // TODO test when I get home
-          // let dead = room.dead;
-          // let deathtags = room.deathtags;
-          // dead.forEach(function(player) {
-          //   if (player.playerId === oldPlayer._id) {
-          //     player.playerId = newPlayerId;
-          //   }
-          // });
-          // let oldTagIdx = deathtags.indexOf(oldPlayer._id);
-          // deathtags.splice(oldTagIdx, 1);
-          // deathtags.push(newPlayerId);
-          //
-          // update.dead = dead;
-          // update.deathtags = deathtags;
+          let dead = room.dead;
+          let deathtags = room.deathtags;
+          dead.forEach(function(player) {
+            if (player.playerId === oldPlayer._id) {
+              player.playerId = newPlayerId;
+            }
+          });
+          let oldTagIdx = deathtags.indexOf(oldPlayer._id);
+          deathtags.splice(oldTagIdx, 1);
+          deathtags.push(newPlayerId);
+
+          update.dead = dead;
+          update.deathtags = deathtags;
         }
 
         Rooms.update(roomId, {$set: update});
