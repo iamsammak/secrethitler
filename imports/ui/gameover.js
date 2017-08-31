@@ -13,6 +13,7 @@ Template.gameover.helpers({
   players: function() {
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
+    let playerId = Session.get("playerId");
 
     return Players.find({ roomId: roomId }).fetch().map(
       function(player) {
