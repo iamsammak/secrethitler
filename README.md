@@ -1,6 +1,8 @@
-# Ubiquitous Secret Hilter
+# Secret Hilter
 
-Live [link](http://www.secrethitler.party)
+http://www.secrethitler.party
+
+Secret Hitler for mobile devices
 
 ### Disclaimer
 
@@ -8,9 +10,9 @@ Building this so my friends and I can play this awesome board game even if we do
 
 The game and rules are not mine. All taken from the actual board game "Secret Hilter"
 
-Secret Hilter was created by Mike Boxleiter, TOmmy Maranges, Max Temkin, and Mac Schubert
+Secret Hilter was created by Mike Boxleiter, Tommy Maranges, Max Temkin, and Mac Schubert
 
-[Official Rulles](http://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf)
+[Official Rules](http://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf)
 
 ## Overview
 
