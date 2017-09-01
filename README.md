@@ -12,6 +12,8 @@ The game and rules are not mine. All taken from the actual board game "Secret Hi
 
 Secret Hilter was created by Mike Boxleiter, Tommy Maranges, Max Temkin, and Mac Schubert
 
+I built this web app, Secret Hitler as a Meteor.js learning project. Uses MongoDB and Handlebars
+
 [Official Rules](http://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf)
 
 ## Overview

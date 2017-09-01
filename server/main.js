@@ -6,6 +6,8 @@ import { Rooms, Players } from '../imports/api/collections.js';
 
 Meteor.startup(() => {
   // code to run on server at startup
+  // add clean up game and players logic
+  // install mrt: cron-tick and use cron to schedule game and player removal after set time duration
 });
 
 Meteor.publish("rooms", function(code) {
