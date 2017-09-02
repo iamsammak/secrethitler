@@ -27,3 +27,4 @@ iron:router
 underscore
 deanius:promise
 mrt:cron-tick
+momentjs:moment
