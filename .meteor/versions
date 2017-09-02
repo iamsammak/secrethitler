@@ -61,6 +61,7 @@ modules-runtime@0.8.0
 mongo@1.1.19
 mongo-id@1.0.6
 mongo-livedata@1.0.12
+mrt:cron-tick@0.0.4
 mrt:flash-messages@1.0.1
 npm-mongo@2.2.24
 observe-sequence@1.0.16

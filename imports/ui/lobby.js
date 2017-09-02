@@ -5,6 +5,14 @@ import { Rooms, Players } from '../api/collections.js';
 
 import './lobby.html';
 
+Template.lobby.onRendered(function() {
+  // change url on entrance
+  let roomId = Session.get("roomId");
+  let room = Rooms.findOne(roomId);
+  let accessCode = room.accessCode;
+  Session.set("accessCode", accessCode);
+});
+
 Template.lobby.helpers({
   players: function() {
     let playerId = Session.get("playerId");

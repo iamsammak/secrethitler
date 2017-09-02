@@ -18,7 +18,7 @@ import './gameover.js';
 import './dynamic-test.js';
 import './hello-info.js';
 
-Tracker.autorun(function roomstate() {
+Tracker.autorun(function roomState() {
   if (!Session.get("view")) {
     Session.set("view", "startmenu");
   };
@@ -53,6 +53,31 @@ Tracker.autorun(function roomstate() {
   // after room.state is defined for the first time. aka new game server side
   // you cant used button menu to navigate away. you stuck
 });
+
+// update url to room's url
+function hasHistoryAPI() {
+  return !!(window.history && window.history.pushState);
+};
+
+if (hasHistoryAPI()) {
+  function urlState() {
+    debugger
+    let accessCode = null;
+    let roomId = Session.get("roomId");
+    let room = Rooms.findOne(roomId);
+    if (room) {
+      accessCode = room.accessCode;
+    } else {
+      accessCode = Session.get("accessCode");
+    }
+    let currentURL = '/';
+    if (accessCode) {
+      currentURL += accessCode + '/';
+    }
+    window.history.pushState(null, null, currentURL);
+  }
+  Tracker.autorun(urlState);
+}
 
 Template.main.helpers({
   currentview: function() {
