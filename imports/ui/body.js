@@ -97,6 +97,7 @@ Template.startmenu.events({
 
 Template.buttonmenu.events({
   "click .newgame-button": function() {
+    document.getElementById('test-btn').disabled = true;
     Session.set("view", "newgame");
     console.log("trying to start a new game");
   },
@@ -113,6 +114,7 @@ Template.buttonmenu.events({
     console.log("view changed to lobby");
   },
   "click .table-button": function() {
+    document.getElementById('test-btn').disabled = false;
     Session.set("view", "table");
     console.log("view changed to table");
   },

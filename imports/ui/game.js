@@ -324,7 +324,6 @@ Template.game.events({
   },
   "click .yesvote-button": function() {
     let playerId = Session.get("playerId");
-    document.getElementById('btn-fail-continue').setAttribute("disabled", false);
     Meteor.call("vote", {
       playerId: playerId,
       vote: true
@@ -332,16 +331,14 @@ Template.game.events({
   },
   "click .novote-button": function() {
     let playerId = Session.get("playerId");
-    document.getElementById('btn-fail-continue').setAttribute("disabled", false);
     Meteor.call("vote", {
       playerId: playerId,
       vote: false
     });
   },
   "click .fail-continue-button": function() {
-    //TODO test this disable button
-    document.getElementById('btn-fail-continue').setAttribute("disabled", true);
-    // also need to put the logic to undisable this button so it wouldn't be disabled next time this is rendered
+    document.getElementById('btn-fail-continue').disabled = true;
+    // it looks like you don't need to undisable the button
     let playerId = Session.get("playerId");
     Meteor.call("votecontinue", {
       playerId: playerId
