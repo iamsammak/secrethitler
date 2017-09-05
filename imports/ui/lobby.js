@@ -6,7 +6,7 @@ import { Rooms, Players } from '../api/collections.js';
 import './lobby.html';
 
 Template.lobby.onRendered(function() {
-  // change url on entrance
+  // change url on entrance TODO this doesn't work yet
   let roomId = Session.get("roomId");
   let room = Rooms.findOne(roomId);
   let accessCode = room.accessCode;
@@ -14,6 +14,9 @@ Template.lobby.onRendered(function() {
 });
 
 Template.lobby.helpers({
+  cantRemoveOwner: function(a) {
+    return a != room.owner;
+  },
   players: function() {
     let playerId = Session.get("playerId");
     let roomId = Session.get("roomId");
@@ -21,11 +24,10 @@ Template.lobby.helpers({
     if (!room) {
       return null;
     }
-
     return Players.find({ roomId: roomId }).fetch().map(
       function(player) {
         console.log(player);
-        // set player.current to be player._id if player._id is equal to playerId
+        // Explanation: set player.current to be player._id if player._id is equal to playerId
         player.current = player._id == playerId;
         return player;
       });

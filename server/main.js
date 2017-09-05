@@ -60,13 +60,13 @@ Meteor.methods({
   "playagain" ({ roomId }) {
     Rooms.update(roomId, { $set: { state: "lobby"} });
   },
-  "joingame" ({ name, codename, roomId }) {
+  "joingame" ({ name, codename, roomId, view }) {
     let room = Rooms.findOne(roomId);
     name = name.trim();
     if (!room) {
       return;
     }
-    // write logic for returning players
+    // write logic for returning players after game has started
     // things that need to happen
     // find old player Id
     let oldPlayer = Players.findOne({roomId:roomId, name: name});
@@ -82,44 +82,47 @@ Meteor.methods({
           role: oldPlayer.role,
           index: oldPlayer.index
         });
-        // if the game has already started...
         // need to update all the game info params that point to the oldPlayerId
         let update = {};
-        // owner, players, votes, dead
+        // owner
         if (room.owner == oldPlayer._id) {
           update.owner = newPlayerId;
         }
-        // players
+        // if the game has already started...
+        // Only reupdate these if the game has already started
         let players = room.players;
-        players.forEach(function(player) {
-          if (player.playerId === oldPlayer._id) {
-            player.playerId = newPlayerId;
-          }
-        });
-        update.players = players;
-        // votes
-        // only update votes if the oldPlayer has a vote inside room.votes
-        let votes = room.votes;
-        if (votes[oldPlayer._id] != undefined) {
-          votes[newPlayerId] = votes[oldPlayer._id]
-          delete votes[oldPlayer._id]
-          update.votes = votes;
-        }
-        // if reentering player was dead
-        if (room.deathtags.includes(oldPlayer._id)) {
-          let dead = room.dead;
-          let deathtags = room.deathtags;
-          dead.forEach(function(player) {
+        if (players != undefined) {
+          // players
+          players.forEach(function(player) {
             if (player.playerId === oldPlayer._id) {
               player.playerId = newPlayerId;
             }
           });
-          let oldTagIdx = deathtags.indexOf(oldPlayer._id);
-          deathtags.splice(oldTagIdx, 1);
-          deathtags.push(newPlayerId);
+          update.players = players;
+          // votes
+          // only update votes if the oldPlayer has a vote inside room.votes
+          let votes = room.votes;
+          if (votes[oldPlayer._id] != undefined) {
+            votes[newPlayerId] = votes[oldPlayer._id]
+            delete votes[oldPlayer._id]
+            update.votes = votes;
+          }
+          // if reentering player was dead
+          if (room.deathtags.includes(oldPlayer._id)) {
+            let dead = room.dead;
+            let deathtags = room.deathtags;
+            dead.forEach(function(player) {
+              if (player.playerId === oldPlayer._id) {
+                player.playerId = newPlayerId;
+              }
+            });
+            let oldTagIdx = deathtags.indexOf(oldPlayer._id);
+            deathtags.splice(oldTagIdx, 1);
+            deathtags.push(newPlayerId);
 
-          update.dead = dead;
-          update.deathtags = deathtags;
+            update.dead = dead;
+            update.deathtags = deathtags;
+          }
         }
 
         Rooms.update(roomId, {$set: update});
@@ -168,6 +171,7 @@ Meteor.methods({
     });
     console.log("fascists:", fascists);
     console.log("liberals", liberals);
+    // I need to do something about add players to the room as the room.state changes from lobby to table
     Rooms.update(roomId, {
       $set: {
         state: "table",

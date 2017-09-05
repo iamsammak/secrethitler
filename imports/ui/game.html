@@ -178,7 +178,7 @@
       <!-- when president is policy picking -->
           {{# if vetopassed 2 }}
             <p>chancellor approved of the veto</p>
-            <button class="president-veto-continue">continue</button>
+            <button id="btn-pvc" class="president-veto-continue">continue</button>
           {{ else }}
             {{# if vetofailed 2 }}
               <p>Chancellor did not approve on Veto</p>
@@ -229,7 +229,7 @@
           {{ else }}
             {{# if vetopassed 1 }}
               <p>President approved. Policies will be discarded.</p>
-              <button class="chancellor-veto-continue">continue</button>
+              <button id="btn-cvc" class="chancellor-veto-continue">continue</button>
             {{ else }}
               {{# if vetofailed 1 }}
                 <p>President did not approve with Veto</p>
@@ -296,7 +296,7 @@
               <li>{{ suspect.name }}({{ partymembership suspect }})</li>
             {{/ each }}
           </ul>
-        <p><button class="investigate-continue-button">continue</button></p>
+        <p><button id="btn-investigate-continue" class="investigate-continue-button">continue</button></p>
       {{/ if }}
     <!-- End of Investigate Loyalty -->
 
@@ -308,7 +308,7 @@
             <button>{{ policy }}</button>
           {{/ each }}
         </p>
-        <p><button class="peek-continue-button">continue</button></p>
+        <p><button id="btn-peek-continue" class="peek-continue-button">continue</button></p>
       {{/ if }}
     <!-- End of policy peek -->
 
@@ -344,7 +344,7 @@
     {{# if room.playerdied }}
       {{# if president }}
         <p>You've chosen to execute {{ gravestonename }}</p>
-        <p><button class="execution-continue-button">continue</button></p>
+        <p><button id="btn-execution-continue" class="execution-continue-button">continue</button></p>
       {{ else }}
         {{# if newlydeceased }}
         <p>You died. Sorry.</p>

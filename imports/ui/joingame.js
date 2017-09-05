@@ -30,14 +30,26 @@ Template.joingame.events({
         return FlashMessages.sendError("Invalid access code. Watchout for autocorrect.");
       }
       // temp solution
-      if (room.state !== "lobby") {
+      // need to fix seating/table view reentrance
+      // people can current sneak in during seating...
+      // I need to do something about add players to the room as the room.state changes from lobby to table
+      if (room.state == "table") {
         let players = room.players;
         let names = players.map((player) => {return player.name});
-        //this works as long as someone doesn't log out during seating
+        //this ONLY works as long as someone doesn't log out during seating (before they press "seat me")
         if (!names.includes(name)) {
           return FlashMessages.sendError("Game has already started.");
         }
       }
+      // In Game view - reentrance of an active player
+      if (room.state == "game") {
+        let players = room.players;
+        let names = players.map((player) => {return player.name});
+        if (!names.includes(name)) {
+          return FlashMessages.sendError("Game has already started.");
+        }
+      }
+      // In the Lobby - filter out people picking the same name
       if ((room.state == "lobby") && (Players.find({roomId: room._id, name: name}).count() > 0)) {
         return FlashMessages.sendError("Someone already chose that name");
       }
@@ -47,9 +59,14 @@ Template.joingame.events({
       // }
 
       Meteor.subscribe("players", room._id);
-      Meteor.call("joingame", { name: name, codename: codename, roomId: room._id }, (err, res) => {
+      Meteor.call("joingame", {
+                                name: name,
+                                codename: codename,
+                                roomId: room._id,
+                                view: room.state
+                              }, (err, res) => {
         if (err) {
-          console.error(err);
+          console.log(err);
         }
         [roomId, playerId, view] = res;
         Session.set("roomId", roomId);

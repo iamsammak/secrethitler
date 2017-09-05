@@ -61,6 +61,7 @@ function hasHistoryAPI() {
 
 if (hasHistoryAPI()) {
   function urlState() {
+    // debugger
     let accessCode = null;
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);

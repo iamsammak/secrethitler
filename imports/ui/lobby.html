@@ -11,7 +11,9 @@
     {{# each players }}
     <li>
       {{ name }}
-      <a class="remove-button" data-playerid="{{ _id }}">&times;</a>
+      {{# if cantRemoveOwner _id }}
+        <a class="remove-button" data-playerid="{{ _id }}">&times;</a>
+      {{/ if }}
     </li>
     {{/ each }}
   </ul>

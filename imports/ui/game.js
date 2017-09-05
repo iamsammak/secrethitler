@@ -73,7 +73,7 @@ Template.game.helpers({
     let room = Rooms.findOne(roomId);
     if (room.currentChancellor == -1) {
       console.log("president choosing next chancellor");
-      // return;
+      return; //null check
     }
     return room.players[room.currentChancellor].playerId == playerId;
   },
@@ -249,6 +249,10 @@ Template.game.helpers({
     return count = deck + discard + liberal + fascist + policychoices + peek;
   },
   movetracker: function(num) {
+    // null check
+    if (document.getElementById("tracker-1") == null) {
+      return;
+    }
     if (num === 0) {
       document.getElementById("tracker-1").classList.remove("fill");
       document.getElementById("tracker-2").classList.remove("fill");
@@ -259,6 +263,10 @@ Template.game.helpers({
     // return num; //uncomment for testing
   },
   moveliberal: function(num) {
+    // null check
+    if (document.getElementById("liberal-1") == null) {
+      return;
+    }
     if (num === 0) {
       document.getElementById("liberal-1").classList.remove("fill");
       document.getElementById("liberal-2").classList.remove("fill");
@@ -270,6 +278,10 @@ Template.game.helpers({
     }
   },
   movefascist: function(num) {
+    // null check
+    if (document.getElementById("fascist-1") == null) {
+      return;
+    }
     if (num === 0) {
       document.getElementById("fascist-1").classList.remove("fill");
       document.getElementById("fascist-2").classList.remove("fill");
@@ -398,6 +410,7 @@ Template.game.events({
     document.getElementById(`power-description-${powerId}`).classList.toggle("show");
   },
   "click .peek-continue-button": function() {
+    document.getElementById('btn-peek-continue').disabled = true;
     let playerId = Session.get("playerId");
     console.log("click peek continue");
     Meteor.call("powercontinue", { playerId: playerId, type: "peek" });
@@ -408,6 +421,7 @@ Template.game.events({
     Meteor.call("investigate", { suspectId: suspectId });
   },
   "click .investigate-continue-button": function() {
+    document.getElementById('btn-investigate-continue').disabled = true;
     let playerId = Session.get("playerId");
     console.log("click investigate continue");
     Meteor.call("powercontinue", { playerId: playerId, type: "investigate" });
@@ -436,6 +450,7 @@ Template.game.events({
     });
   },
   "click .president-veto-continue": function() {
+    document.getElementById('btn-pvc').disabled = true;
     let roomId = Session.get("roomId");
     Meteor.call("president-veto-continue", {
       roomId: roomId
@@ -443,6 +458,7 @@ Template.game.events({
     console.log("president veto approved!");
   },
   "click .chancellor-veto-continue": function() {
+    document.getElementById('btn-cvc').disabled = true;
     let roomId = Session.get("roomId");
     console.log("chancellor veto approved!");
     Meteor.call("chancellor-veto-continue", {
@@ -450,6 +466,7 @@ Template.game.events({
     });
   },
   "click .execution-continue-button": function() {
+    document.getElementById('btn-execution-continue').disabled = true;
     let playerId = Session.get("playerId");
     console.log("Someone assassinated. But the Game continues");
     Meteor.call("powercontinue", { playerId: playerId, type: "execution" });
