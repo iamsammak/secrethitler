@@ -34,15 +34,16 @@ Template.joingame.events({
       // people can current sneak in during seating...
       // I need to do something about add players to the room as the room.state changes from lobby to table
       if (room.state == "table") {
-        let players = room.players;
-        let names = players.map((player) => {return player.name});
-        //this ONLY works as long as someone doesn't log out during seating (before they press "seat me")
+        debugger
+
+        let seats = room.tableSeats;
+        let names = seats.map((player) => {return player.name});
         if (!names.includes(name)) {
           return FlashMessages.sendError("Game has already started.");
         }
       }
       // In Game view - reentrance of an active player
-      if (room.state == "game") {
+      if (room.state == "game" || room.state == "gameover") {
         let players = room.players;
         let names = players.map((player) => {return player.name});
         if (!names.includes(name)) {
@@ -51,12 +52,13 @@ Template.joingame.events({
       }
       // In the Lobby - filter out people picking the same name
       if ((room.state == "lobby") && (Players.find({roomId: room._id, name: name}).count() > 0)) {
-        return FlashMessages.sendError("Someone already chose that name");
+        // need to fix this to allow people in if they have the right codename
+        let playerCheck = Players.findOne({roomId: room._id, name: name});
+        debugger
+        if (playerCheck.codename != codename) {
+          return FlashMessages.sendError("Someone already chose that name");
+        }
       }
-      // if (playerExist != undefined) {
-      //   if (playerExist.codename != codename) {
-      //   }
-      // }
 
       Meteor.subscribe("players", room._id);
       Meteor.call("joingame", {

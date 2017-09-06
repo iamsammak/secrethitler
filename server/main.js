@@ -38,7 +38,8 @@ Meteor.methods({
     let roomId = Rooms.insert({
       accessCode: accessCode,
       started: new Date().getTime(),
-      state: "lobby"
+      state: "lobby",
+      tableSeats: []
     });
 
     let playerId = Players.insert({
@@ -67,14 +68,14 @@ Meteor.methods({
       return;
     }
     // write logic for returning players after game has started
-    // things that need to happen
     // find old player Id
     let oldPlayer = Players.findOne({roomId:roomId, name: name});
 
     if (oldPlayer != undefined) {
-      // copy all player data attached to old playerId
-      // create a new playerID and copy over old player data
+      // divide this based on what the current game.state is
       if (oldPlayer.codename === codename) {
+        // copy all player data attached to old playerId
+        // create a new playerID and copy over old player data
         let newPlayerId = Players.insert({
           roomId: roomId,
           name: name,
@@ -82,24 +83,59 @@ Meteor.methods({
           role: oldPlayer.role,
           index: oldPlayer.index
         });
+        console.log("newPlayerId", newPlayerId);
         // need to update all the game info params that point to the oldPlayerId
         let update = {};
-        // owner
+        // change owner
         if (room.owner == oldPlayer._id) {
           update.owner = newPlayerId;
         }
-        // if the game has already started...
-        // Only reupdate these if the game has already started
+
         let players = room.players;
         if (players != undefined) {
-          // players
+          // change id in players
           players.forEach(function(player) {
             if (player.playerId === oldPlayer._id) {
               player.playerId = newPlayerId;
             }
           });
           update.players = players;
-          // votes
+        }
+        let tableSeats = room.tableSeats;
+        if (tableSeats != undefined) {
+          // change id in tableSeats
+          tableSeats.forEach(function(player) {
+            if (player.playerId === oldPlayer._id) {
+              player.playerId = newPlayerId;
+            }
+          });
+          update.tableSeats = tableSeats;
+        }
+        let teamliberals = room.teamliberals;
+        if (teamliberals != undefined) {
+          // change id in players
+          teamliberals.forEach(function(player) {
+            if (player.playerId === oldPlayer._id) {
+              player.playerId = newPlayerId;
+            }
+          });
+          update.teamliberals = teamliberals;
+        }
+        let teamfascists = room.teamfascists;
+        if (teamfascists != undefined) {
+          // change id in players
+          teamfascists.forEach(function(player) {
+            if (player.playerId === oldPlayer._id) {
+              player.playerId = newPlayerId;
+            }
+          });
+          update.teamfascists = teamfascists;
+        }
+
+        if (view == "game" || view == "gameover") {
+          // Only reupdate these if the game has already started
+
+          // change id in votes
           // only update votes if the oldPlayer has a vote inside room.votes
           let votes = room.votes;
           if (votes[oldPlayer._id] != undefined) {
@@ -128,16 +164,18 @@ Meteor.methods({
         Rooms.update(roomId, {$set: update});
 
         // remove old player from room
+        console.log("removing", oldPlayer._id);
         Players.remove({ _id: `${oldPlayer._id}`});
 
-        // bugs
-        // need to "fill" the game boards and election trackers
         return [roomId, newPlayerId, room.state];
       } else {
+        console.log("wrong password, there is someone already logged in with the same name");
         return;
       }
-    }
-    // normal join game - player insertion
+
+    } // end of oldPlayer != undefined
+
+    // normal join game - new player insertion
     let playerId = Players.insert({
       roomId: roomId,
       name: name,
@@ -146,45 +184,55 @@ Meteor.methods({
     return [roomId, playerId, "lobby"];
   },
   "startgame" ({ roomId }) {
+    let room = Rooms.findOne(roomId);
     let players = Players.find({ roomId: roomId }).fetch();
-    let fascists = [];
-    let liberals = [];
+    let teamfascists = [];
+    let teamliberals = [];
     let roles = _.shuffle(Utils.drawRoleCards(players.length));
     console.log(roles);
+
     players.forEach(function(player, idx) {
+      // I want to add players into the room.players
+
       Players.update(player._id, {
         $set: { role: roles[idx] }
       });
 
       if (roles[idx] == "fascist" || roles[idx] == "hitler") {
-        fascists.push({
+        teamfascists.push({
           name: player.name,
           playerId: player._id,
           hitler: roles[idx] == "hitler"
         });
       } else {
-        liberals.push({
+        teamliberals.push({
           name: player.name,
           playerId: player._id
         });
       }
+
+      // insert into room
+      room.tableSeats.push({
+        playerId: player._id,
+        name: player.name,
+        role: roles[idx]
+      });
     });
-    console.log("fascists:", fascists);
-    console.log("liberals", liberals);
+    console.log("teamfascists:", teamfascists);
+    console.log("teamliberals", teamliberals);
     // I need to do something about add players to the room as the room.state changes from lobby to table
     Rooms.update(roomId, {
       $set: {
         state: "table",
+        tableSeats: room.tableSeats,
         players: [],
-        fascist: fascists,
-        liberal: liberals,
+        teamfascists: teamfascists,
+        teamliberals: teamliberals,
         size: players.length
       }
     });
   },
   "ready" ({ playerId }) {
-    // probably need to write reset room logic first.
-    // to prepare for multiple games/restarts
     let player = Players.findOne(playerId);
     let room = Rooms.findOne(player.roomId);
 
