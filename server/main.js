@@ -22,6 +22,26 @@ Meteor.publish("players", function(roomId) {
   });
 });
 
+function cleanUpDatabase() {
+  // remove old rooms and players
+  let cutOffTime = moment().subtract(8, 'hours').toDate().getTime();
+
+  let numRoomsRemoved = Rooms.remove({
+    createdAt: {$lt: cutOffTime}
+  });
+
+  let numPlayersRemoved = Players.remove({
+    createdAt: {$lt: cutOffTime}
+  });
+
+  console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
+  console.log("cleanUpDatabase rooms:", numRoomsRemoved);
+  console.log("cleanUpDatabase players:", numPlayersRemoved);
+}
+
+let MyCron = new Cron(60000);
+MyCron.addJob(5, cleanUpDatabase);
+
 Meteor.methods({
   "newgame"({ name, codename }) {
     let accessCode = Random.hexString(6);
@@ -37,7 +57,7 @@ Meteor.methods({
 
     let roomId = Rooms.insert({
       accessCode: accessCode,
-      started: new Date().getTime(),
+      createdAt: new Date().getTime(),
       state: "lobby",
       tableSeats: []
     });
@@ -45,7 +65,8 @@ Meteor.methods({
     let playerId = Players.insert({
       roomId: roomId,
       name: name,
-      codename: codename
+      codename: codename,
+      createdAt: new Date().getTime()
     });
 
     Rooms.update(roomId, {
@@ -80,6 +101,7 @@ Meteor.methods({
           roomId: roomId,
           name: name,
           codename: codename,
+          createdAt: new Date().getTime(),
           role: oldPlayer.role,
           index: oldPlayer.index
         });
@@ -179,7 +201,8 @@ Meteor.methods({
     let playerId = Players.insert({
       roomId: roomId,
       name: name,
-      codename: codename
+      codename: codename,
+      createdAt: new Date().getTime()
     });
     return [roomId, playerId, "lobby"];
   },
