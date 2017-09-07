@@ -61,7 +61,7 @@ Meteor.methods({
       update.players = room.players;
     }
 
-    console.log("assassinating", update);
+    // console.log("assassinating", update);
 
     Rooms.update(roomId, { $set: update });
   },
@@ -70,7 +70,7 @@ Meteor.methods({
     if (!player) {
       return;
     }
-    
+
     let room = Rooms.findOne(player.roomId);
     if (room.players[room.currentPresident].playerId != playerId) {
       return;
@@ -80,10 +80,10 @@ Meteor.methods({
 
     // Room resetting - after president viewed peek, investigated, or executed a player
     if (type == "peek") {
-      console.log("peek continue");
+      // console.log("peek continue");
       update.peek = [];
     } else if (type == "investigate") {
-      console.log("investigate continue");
+      // console.log("investigate continue");
       update.investigate = false;
       update.reveal = false;
       update.suspects = [];
@@ -116,7 +116,7 @@ Meteor.methods({
       if (room.deadindex.length != 0) {
         update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
         while (_.contains(room.deadindex, update.currentPresident)) {
-          console.log(update.currentPresident);
+          // console.log(update.currentPresident);
           update.currentPresident = (update.currentPresident + 1) % _.size(room.players);
         }
       } else {

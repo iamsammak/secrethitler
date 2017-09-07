@@ -72,7 +72,7 @@ Template.game.helpers({
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
     if (room.currentChancellor == -1) {
-      console.log("president choosing next chancellor");
+      // console.log("president choosing next chancellor");
       return; //null check
     }
     return room.players[room.currentChancellor].playerId == playerId;
@@ -297,7 +297,7 @@ Template.game.helpers({
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
     // Meteor.setTimeout(function() {
-    //   console.log("inside timeout");
+      // console.log("inside timeout");
     //   Rooms.update(roomId, {$set: {loudspeaker: false}});
     // }, 5000);
     return room.loudspeaker == true;
@@ -319,7 +319,7 @@ Template.game.helpers({
       };
       ballot.push(playerVote);
     }
-    console.log("ballot: ", ballot);
+    // console.log("ballot: ", ballot);
 
     return ballot;
   },
@@ -332,7 +332,7 @@ Template.game.events({
   },
   "click .toggle-role": function() {
     document.getElementById("hidden-role").classList.toggle("show");
-    console.log("toggle role");
+    // console.log("toggle role");
   },
   "click .yesvote-button": function() {
     let playerId = Session.get("playerId");
@@ -406,24 +406,24 @@ Template.game.events({
   },
   "click .power-name": function() {
     let powerId = $(event.target).data("powerid");
-    console.log(`click ${powerId}`);
+    // console.log(`click ${powerId}`);
     document.getElementById(`power-description-${powerId}`).classList.toggle("show");
   },
   "click .peek-continue-button": function() {
     document.getElementById('btn-peek-continue').disabled = true;
     let playerId = Session.get("playerId");
-    console.log("click peek continue");
+    // console.log("click peek continue");
     Meteor.call("powercontinue", { playerId: playerId, type: "peek" });
   },
   "click .suspect": function() {
     let suspectId = $(event.target).data("suspectid");
-    console.log(`suspect ${suspectId}`);
+    // console.log(`suspect ${suspectId}`);
     Meteor.call("investigate", { suspectId: suspectId });
   },
   "click .investigate-continue-button": function() {
     document.getElementById('btn-investigate-continue').disabled = true;
     let playerId = Session.get("playerId");
-    console.log("click investigate continue");
+    // console.log("click investigate continue");
     Meteor.call("powercontinue", { playerId: playerId, type: "investigate" });
   },
   "click .veto-button": function() {
@@ -455,12 +455,12 @@ Template.game.events({
     Meteor.call("president-veto-continue", {
       roomId: roomId
     });
-    console.log("president veto approved!");
+    // console.log("president veto approved!");
   },
   "click .chancellor-veto-continue": function() {
     document.getElementById('btn-cvc').disabled = true;
     let roomId = Session.get("roomId");
-    console.log("chancellor veto approved!");
+    // console.log("chancellor veto approved!");
     Meteor.call("chancellor-veto-continue", {
       roomId: roomId
     });
@@ -468,16 +468,16 @@ Template.game.events({
   "click .execution-continue-button": function() {
     document.getElementById('btn-execution-continue').disabled = true;
     let playerId = Session.get("playerId");
-    console.log("Someone assassinated. But the Game continues");
+    // console.log("Someone assassinated. But the Game continues");
     Meteor.call("powercontinue", { playerId: playerId, type: "execution" });
   },
   "click .endgame-button": function() {
-    console.log("Ending current game, returning to lobby");
+    // console.log("Ending current game, returning to lobby");
     let roomId = Session.get("roomId");
     Meteor.call("playagain", { roomId: roomId });
   },
   "click .toggle-reveal-vote": function() {
     document.getElementById("reveal-votelist").classList.toggle("show");
-    console.log("toggle reveal vote list");
+    // console.log("toggle reveal vote list");
   },
 });

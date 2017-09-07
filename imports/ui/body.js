@@ -27,14 +27,14 @@ Tracker.autorun(function roomState() {
   let playerId = Session.get("playerId");
 
   if (!roomId || !playerId) {
-    console.log("no roomId or playerId...returning now");
+    // console.log("no roomId or playerId...returning now");
     return;
   };
 
   let room = Rooms.findOne(roomId);
   let player = Players.findOne(playerId);
   // testing
-  console.log("room", room);
+  // console.log("room", room);
   window.room = room
 
   if (!room || !player) {
@@ -62,6 +62,7 @@ function hasHistoryAPI() {
 if (hasHistoryAPI()) {
   function urlState() {
     // debugger
+    // still need to check if this works, on re-entrance and navigating to new room
     let accessCode = null;
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
@@ -88,11 +89,11 @@ Template.main.helpers({
 Template.startmenu.events({
   "click .newgame-button": function() {
     Session.set("view", "newgame");
-    console.log("new game");
+    // console.log("new game");
   },
   "click .joingame-button": function() {
     Session.set("view", "joingame");
-    console.log("join game");
+    // console.log("join game");
   },
 })
 

@@ -4,7 +4,7 @@ Router.configure({
 
 Router.route("/", function() {
   this.render("main");
-  console.log("Hello from router");
+  // console.log("Hello from router");
   Session.set("view", "startmenu");
   // this is to replicate setting the view on main template creation
 });

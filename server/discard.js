@@ -13,7 +13,7 @@ Meteor.methods({
       return;
     }
     if (!(card == "liberal" || card == "fascist")) {
-      console.log("where did you find this card?");
+      // console.log("where did you find this card?");
       return;
     }
     if ((room.policychoices.length == 3 && room.players[room.currentPresident].playerId !== playerId) || (room.policychoices.length == 2 && room.players[room.currentChancellor].playerId != playerId)) {
@@ -22,7 +22,7 @@ Meteor.methods({
 
     let index = room.policychoices.indexOf(card);
     let discardPolicy = room.policychoices.splice(index, 1);
-    console.log("discarded", discardPolicy);
+    // console.log("discarded", discardPolicy);
     let update = {
       policychoices: room.policychoices,
       discardpile: room.discardpile.concat(discardPolicy),
@@ -30,7 +30,7 @@ Meteor.methods({
     };
 
     if (room.policychoices.length == 1) {
-      console.log("enacting chosen card", room.policychoices);
+      // console.log("enacting chosen card", room.policychoices);
       if (room.policychoices[0] == "liberal") {
         update.liberal = room.liberal + 1;
       } else if (room.policychoices[0] == "fascist") {
@@ -42,7 +42,7 @@ Meteor.methods({
         if (update.fascist == 1 || update.fascist == 2) {
           if(party >= 9 || (party >= 7 && update.fascist == 2) || (party == 3 && update.fascist == 2)) {
             // if (party >= 3) { // replace this line with the above line when done testing
-            console.log("investigate loyalty");
+            // console.log("investigate loyalty");
             update.executiveaction = "active";
             update.investigate = true;
 
@@ -59,11 +59,11 @@ Meteor.methods({
         // call special election and policy peek
         if (update.fascist == 3) {
           if (party >= 7) { // change back to 7
-            console.log("call special election");
+            // console.log("call special election");
             update.executiveaction = "active";
             update.specialelection = true;
           } else if (party >= 5 || party == 3) { // change back to 5
-            console.log("policy peek");
+            // console.log("policy peek");
             let peek = room.drawpile.slice(0, 3);
             update.peek = peek;
             update.executiveaction = "active";
@@ -72,7 +72,7 @@ Meteor.methods({
         // execution
         if (update.fascist == 4 || update.fascist == 5) { // change back to 4 || 5
           if (party >= 5 || party == 3) { //change back to 5
-            console.log("execution");
+            // console.log("execution");
             update.executiveaction = "active";
             update.assassination = true;
           }
@@ -80,7 +80,7 @@ Meteor.methods({
         // veto power (to test, remember to update 'voting' line 104)
         if (update.fascist >= 5) { // change back to == 5
           if (party >= 5 || party == 3) { // change back to 5
-            console.log("veto power unlocked");
+            // console.log("veto power unlocked");
             update.vetobutton = { president: true, chancellor: true };
             update.vetoresult = { president: "", chancellor: "" };
           }
@@ -109,7 +109,7 @@ Meteor.methods({
         if (room.deadindex.length != 0) {
           update.currentPresident = (room.currentPresident + 1) % _.size(room.players);
           while (_.contains(room.deadindex, update.currentPresident)) {
-            console.log(update.currentPresident);
+            // console.log(update.currentPresident);
             update.currentPresident = (update.currentPresident + 1) % _.size(room.players);
           }
         }
@@ -117,7 +117,7 @@ Meteor.methods({
 
       // rest president rotation to prior clockwise, after special election occured
       if (room.resetspecialelection.length != 0) {
-        console.log("inside reset special election, discard");
+        // console.log("inside reset special election, discard");
         update.currentPresident = (room.resetspecialelection[0] + 1) % _.size(room.players);
         update.resetspecialelection = [];
       }
@@ -140,7 +140,7 @@ Meteor.methods({
       // policy is enacted so reset policychoices
       update.policychoices = [];
     }
-    console.log("end of discard", update);
+    // console.log("end of discard", update);
     Rooms.update(player.roomId, { $set: update });
   },
 

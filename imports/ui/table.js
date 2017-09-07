@@ -8,9 +8,9 @@ import './table.html';
 
 Template.table.events({
   "click #ready-button": function() {
-    console.log("clicked seat me");
+    // console.log("clicked seat me");
     let currentPlayerId = Session.get("playerId");
-    console.log("currentPlayerId", currentPlayerId);
+    // console.log("currentPlayerId", currentPlayerId);
     Meteor.call("ready", {
       playerId: currentPlayerId
     }, (err) => {
@@ -21,7 +21,7 @@ Template.table.events({
   },
   "click .toggle-role": function() {
     document.getElementById("hidden-info").classList.toggle("show");
-    console.log("toggle role");
+    // console.log("toggle role");
   },
 });
 
@@ -56,7 +56,7 @@ Template.table.helpers({
   players: function() {
     let roomId = Session.get("roomId");
     let room = Rooms.findOne(roomId);
-    console.log("current in the room", room.players);
+    // console.log("current in the room", room.players);
     return room.players;
   },
   teammates: function() {

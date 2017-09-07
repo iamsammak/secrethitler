@@ -26,7 +26,7 @@ Template.lobby.helpers({
     }
     return Players.find({ roomId: roomId }).fetch().map(
       function(player) {
-        console.log(player);
+        // console.log(player);
         // Explanation: set player.current to be player._id if player._id is equal to playerId
         player.current = player._id == playerId;
         return player;
@@ -59,7 +59,7 @@ Template.lobby.helpers({
 
 Template.lobby.events({
   "click .remove-button": function(event) {
-    console.log("click remove");
+    // console.log("click remove");
 
     let playerId = $(event.currentTarget).data("playerid");
     Meteor.call("leavegame", { playerId: playerId });

@@ -48,12 +48,12 @@ Meteor.methods({
     let accessCode = Random.hexString(6);
     name = name.trim();
     codename = codename.trim();
-    console.log(name);
+    // console.log(name);
 
     while (Rooms.find({accessCode:accessCode}).count() > 0) {
-      console.log(accessCode);
+      // console.log(accessCode);
       accessCode = Random.hexString(6);
-      console.log(accessCode);
+      // console.log(accessCode);
     }
 
     let roomId = Rooms.insert({
@@ -77,7 +77,7 @@ Meteor.methods({
     return [roomId, playerId, accessCode];
   },
   "leavegame" ({ playerId }) {
-    console.log("removing", playerId);
+    // console.log("removing", playerId);
     Players.remove({ _id: `${playerId}`});
   },
   "playagain" ({ roomId }) {
@@ -106,7 +106,7 @@ Meteor.methods({
           role: oldPlayer.role,
           index: oldPlayer.index
         });
-        console.log("newPlayerId", newPlayerId);
+        // console.log("newPlayerId", newPlayerId);
         // need to update all the game info params that point to the oldPlayerId
         let update = {};
         // change owner
@@ -187,12 +187,12 @@ Meteor.methods({
         Rooms.update(roomId, {$set: update});
 
         // remove old player from room
-        console.log("removing", oldPlayer._id);
+        // console.log("removing", oldPlayer._id);
         Players.remove({ _id: `${oldPlayer._id}`});
 
         return [roomId, newPlayerId, room.state];
       } else {
-        console.log("wrong password, there is someone already logged in with the same name");
+        // console.log("wrong password, there is someone already logged in with the same name");
         return;
       }
 
@@ -213,7 +213,7 @@ Meteor.methods({
     let teamfascists = [];
     let teamliberals = [];
     let roles = _.shuffle(Utils.drawRoleCards(players.length));
-    console.log(roles);
+    // console.log(roles);
 
     players.forEach(function(player, idx) {
       // I want to add players into the room.players
@@ -242,8 +242,8 @@ Meteor.methods({
         role: roles[idx]
       });
     });
-    console.log("teamfascists:", teamfascists);
-    console.log("teamliberals", teamliberals);
+    // console.log("teamfascists:", teamfascists);
+    // console.log("teamliberals", teamliberals);
     // I need to do something about add players to the room as the room.state changes from lobby to table
     Rooms.update(roomId, {
       $set: {
@@ -265,7 +265,7 @@ Meteor.methods({
       return player.playerId == playerId;
     }).length > 0) {
       return;
-      console.log("player already in the room, I think");
+      // console.log("player already in the room, I think");
     }
 
     // to track position later

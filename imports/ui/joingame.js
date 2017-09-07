@@ -29,13 +29,10 @@ Template.joingame.events({
       if (!room) {
         return FlashMessages.sendError("Invalid access code. Watchout for autocorrect.");
       }
-      // temp solution
-      // need to fix seating/table view reentrance
-      // people can current sneak in during seating...
-      // I need to do something about add players to the room as the room.state changes from lobby to table
-      if (room.state == "table") {
-        debugger
 
+      // In table view - if inputted name is inside room.tableSeats, first checkpoint passed
+      // second checkpoint to see if codename is corrected is server side code
+      if (room.state == "table") {
         let seats = room.tableSeats;
         let names = seats.map((player) => {return player.name});
         if (!names.includes(name)) {
@@ -54,7 +51,7 @@ Template.joingame.events({
       if ((room.state == "lobby") && (Players.find({roomId: room._id, name: name}).count() > 0)) {
         // need to fix this to allow people in if they have the right codename
         let playerCheck = Players.findOne({roomId: room._id, name: name});
-        debugger
+
         if (playerCheck.codename != codename) {
           return FlashMessages.sendError("Someone already chose that name");
         }
@@ -84,7 +81,7 @@ Template.joingame.events({
 Template.joingame.rendered = function() {
   let accessCode = Session.get("accessCode");
   if (accessCode) {
-    console.log("join game rendered. Access Code: ", accessCode);
+    // console.log("join game rendered. Access Code: ", accessCode);
     $("input[name=accesscode]").val(accessCode);
   }
 };

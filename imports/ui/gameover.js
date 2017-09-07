@@ -17,7 +17,7 @@ Template.gameover.helpers({
 
     return Players.find({ roomId: roomId }).fetch().map(
       function(player) {
-        console.log(player);
+        // console.log(player);
         // set player.current to be player._id if player._id is equal to playerId
         player.current = player._id == playerId;
         return player;
@@ -27,7 +27,7 @@ Template.gameover.helpers({
 
 Template.gameover.events({
   "click .play-again-button": function() {
-    console.log("So you wanna play again?");
+    // console.log("So you wanna play again?");
     let roomId = Session.get("roomId");
     Meteor.call("playagain", { roomId: roomId });
   },

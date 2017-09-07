@@ -21,7 +21,7 @@ Meteor.methods({
     // toggle off the official's veto button
     update.vetobutton[official] = false;
 
-    console.log(`veto suggested by ${official}` , update);
+    // console.log(`veto suggested by ${official}` , update);
     Rooms.update(player.roomId, { $set: update });
   },
   "veto-vote" ({ playerId, official, vote }) {
@@ -40,8 +40,8 @@ Meteor.methods({
     update.askpresident = false;
     update.askchancellor = false;
 
-    console.log(`${official} has been ${update.vetoresult[official]}`);
-    console.log("veto-vote", update);
+    // console.log(`${official} has been ${update.vetoresult[official]}`);
+    // console.log("veto-vote", update);
     Rooms.update(player.roomId, { $set: update });
   },
   "president-veto-continue" ({ roomId }) {
@@ -51,23 +51,23 @@ Meteor.methods({
     // veto approved, so discard 3 current policies and draw 3 new ones
     let discardpile = room.discardpile.concat(room.policychoices);
     let policychoices = [];
-      console.log(`drawpile:`, drawpile);
+      // console.log(`drawpile:`, drawpile);
     if (drawpile.length < 3) {
       let remaining = drawpile.length;
       let fillToThree = 3 - remaining;
 
       policychoices = policychoices.concat(drawpile.splice(0, remaining));
-        console.log(`splice to remaining`, policychoices);
+        // console.log(`splice to remaining`, policychoices);
       drawpile = drawpile.concat(discardpile);
-        console.log("concat discard into drawpile", drawpile);
+        // console.log("concat discard into drawpile", drawpile);
       discardpile = [];
       _.shuffle(drawpile);
 
       policychoices = policychoices.concat(drawpile.splice(0, fillToThree));
-        console.log(`policychoices after fillToThree`, policychoices);
+        // console.log(`policychoices after fillToThree`, policychoices);
     } else if (drawpile.length >= 3){
       policychoices = drawpile.splice(0, 3);
-        console.log("draw three from the deck", policychoices);
+        // console.log("draw three from the deck", policychoices);
     }
     // reset new deck, discard and policychoices
     update.drawpile = drawpile;
@@ -80,11 +80,11 @@ Meteor.methods({
 
     // check if election tracker is at 3, if so then enact top policy
     if (update.electiontracker === 3) {
-        console.log("tracker at 3. drawpile:", drawpile);
+        // console.log("tracker at 3. drawpile:", drawpile);
       if (drawpile.length == 0) {
         drawpile = drawpile.concat(update.discardpile);
         update.discardpile = [];
-          console.log("tracker at 3. concat discard into drawpile", drawpile);
+          // console.log("tracker at 3. concat discard into drawpile", drawpile);
       }
 
       let topCard = drawpile.splice(0, 1);
@@ -102,7 +102,7 @@ Meteor.methods({
         update.fascist = room.fascist + 1;
       }
     }
-    console.log("president veto approved");
+    // console.log("president veto approved");
     Rooms.update(roomId, { $set: update });
   },
   "chancellor-veto-continue" ({ roomId }) {
@@ -135,12 +135,12 @@ Meteor.methods({
 
     if (update.electiontracker == 3) {
       let drawpile = room.drawpile;
-        console.log("tracker at 3. drawpile:", drawpile);
+        // console.log("tracker at 3. drawpile:", drawpile);
 
       if (drawpile.length === 0) {
         drawpile = drawpile.concat(update.discardpile);
         update.discardpile = [];
-          console.log("tracker at 3. concat discard into drawpile", drawpile);
+          // console.log("tracker at 3. concat discard into drawpile", drawpile);
       }
 
       let topCard = drawpile.splice(0, 1)
@@ -156,9 +156,9 @@ Meteor.methods({
         update.fascist = room.fascist + 1;
       }
     }
-    console.log("chancellor veto approved");
-    console.log("policychoices about to be concat to discard", room.policychoices);
-    console.log("new discardpile", update.discardpile);
+    // console.log("chancellor veto approved");
+    // console.log("policychoices about to be concat to discard", room.policychoices);
+    // console.log("new discardpile", update.discardpile);
     Rooms.update(roomId, { $set: update });
   },
 });
