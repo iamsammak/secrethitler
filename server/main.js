@@ -34,9 +34,10 @@ function cleanUpDatabase() {
     createdAt: {$lt: cutOffTime}
   });
 
-  console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
-  console.log("cleanUpDatabase rooms:", numRoomsRemoved);
-  console.log("cleanUpDatabase players:", numPlayersRemoved);
+  // During testing
+  // console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
+  // console.log("cleaning - num of rooms removed:", numRoomsRemoved);
+  // console.log("cleaning - num of players removed:", numPlayersRemoved);
 }
 
 let MyCron = new Cron(60000);
