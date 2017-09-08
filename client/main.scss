@@ -75,12 +75,13 @@ button {
   &:hover {
     border: 1px solid $orange;
   }
-  .close {
-    background-color: red;
-    border: none;
-    color: #fff;
-    padding: 5px 10px;
-  }
+}
+
+.close {
+  background-color: red;
+  border: none;
+  color: #fff;
+  padding: 5px 10px;
 }
 
 .playerlist {
@@ -122,6 +123,7 @@ input[type=text] {
 
 div.footer {
   font-size: 0.75em;
+  margin-bottom: 2em;
 }
 
 // Button styles

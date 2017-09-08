@@ -40,6 +40,7 @@ function cleanUpDatabase() {
   // console.log("cleaning - num of players removed:", numPlayersRemoved);
 }
 
+// Cron Job to remove old rooms and players
 let MyCron = new Cron(60000);
 MyCron.addJob(5, cleanUpDatabase);
 
