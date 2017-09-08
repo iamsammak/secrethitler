@@ -68,7 +68,7 @@ Template.table.helpers({
     } else if (player.role == "hitler" && (room.size >= 7 && room.size <= 10)) {
       return false;
     } else {
-      return room.fascist;
+      return room.teamfascists;
     }
   },
   rolecards: function() {

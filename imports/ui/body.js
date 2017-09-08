@@ -34,7 +34,7 @@ Tracker.autorun(function roomState() {
   let room = Rooms.findOne(roomId);
   let player = Players.findOne(playerId);
   // testing
-  // console.log("room", room);
+  console.log("room", room);
   window.room = room
 
   if (!room || !player) {
