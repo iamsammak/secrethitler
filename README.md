@@ -20,7 +20,7 @@ I built this web app, Secret Hitler as a Meteor.js learning project. Uses MongoD
 
 Lobby View / Seating View / Mobile View
 
-<img src="./docs/images/lobby_view.png" width="375px" height="800px"/> <img src="./docs/images/seating_view.png" width="375px" height="800px"/> <img src="./docs/images/game_view2.png" width="375px" height="800px"/>
+<img src="./docs/images/lobby_view.png" width="375px/> <img src="./docs/images/seating_view.png" width="375px"/> <img src="./docs/images/game_view2.png" width="375px"/>
 
 ## Technology
 
