@@ -16,16 +16,16 @@ I built this web app, Secret Hitler as a Meteor.js learning project. Uses MongoD
 
 [Official Rules](http://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf)
 
-## Screenshots
+## Screenshots for Mobile view
 
-Lobby view
-![lobby-view](./docs/images/lobby_view.png)
+Lobby View
+<img src="./docs/images/lobby_view.png" width="375px" height="667px"/>
 
-Seating view
-![seating-view](./docs/images/seating_view.png)
+Seating View
+<img src="./docs/images/seating_view.png" width="375px" height="667px"/>
 
-Game view
-![game-view](./docs/images/game_view2.png)
+Game View
+<img src="./docs/images/game_view2.png" width="375px" height="667px"/>
 
 ## Technology
 
