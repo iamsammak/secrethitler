@@ -2,7 +2,7 @@
 
 http://www.secrethitler.party
 
-Secret Hitler for mobile devices
+Secret Hitler for mobile devices.
 
 ### Disclaimer
 
@@ -16,6 +16,49 @@ I built this web app, Secret Hitler as a Meteor.js learning project. Uses MongoD
 
 [Official Rules](http://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf)
 
-## Experience while building the app
+## Screenshots
 
-### Biggest Bugs
+Lobby view
+![lobby-view](./docs/images/lobby_view.png)
+
+Seating view
+![seating-view](./docs/images/seating_view.png)
+
+Game view
+![game-view](./docs/images/game_view2.png)
+
+## Technology
+
+  - MeteorJS
+  - Handlebars
+  - MongoDB
+  - app deployed on Heroku
+
+### Cron used to clean up Database (remove inactive Rooms and Players)
+```js
+  function cleanUpDatabase() {
+    // remove old rooms and players
+    let cutOffTime = moment().subtract(8, 'hours').toDate().getTime();
+
+    let numRoomsRemoved = Rooms.remove({
+      createdAt: {$lt: cutOffTime}
+    });
+
+    let numPlayersRemoved = Players.remove({
+      createdAt: {$lt: cutOffTime}
+    });
+
+    // During testing
+    // console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
+    // console.log("cleaning - num of rooms removed:", numRoomsRemoved);
+    // console.log("cleaning - num of players removed:", numPlayersRemoved);
+  }
+
+  // Cron Job to remove old rooms and players
+  let MyCron = new Cron(60000);
+  MyCron.addJob(5, cleanUpDatabase);
+```
+
+<!-- ## Experience while building the app
+
+### Biggest Bugs -->
