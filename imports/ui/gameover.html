@@ -1,8 +1,8 @@
 <template name="gameover">
   <h2>game over!</h2>
   <p>
-    winning team: <b>{{ room.winner }}</b><br />
-    reason: {{ room.reason }}
+    {{ room.reason }}<br />
+    <b>{{ room.winner }}</b> win
   </p>
   <ul class="playerlist">
     {{# each players }}
