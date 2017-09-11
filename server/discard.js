@@ -64,7 +64,15 @@ Meteor.methods({
             update.specialelection = true;
           } else if (party >= 5 || party == 3) { // change back to 5
             // console.log("policy peek");
-            let peek = room.drawpile.slice(0, 3);
+            let drawpile = room.drawpile;
+            let peek = drawpile.slice(0, 3);
+            if (peek.length < 3) {
+              let discardpile = _.shuffle(update.discardpile);
+              update.discardpile = [];
+              drawpile = room.drawpile.concat(discardpile);
+              update.drawpile = drawpile;
+              peek = drawpile.slice(0, 3);
+            }
             update.peek = peek;
             update.executiveaction = "active";
           }
