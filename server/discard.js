@@ -66,6 +66,7 @@ Meteor.methods({
             // console.log("policy peek");
             let drawpile = room.drawpile;
             let peek = drawpile.slice(0, 3);
+            // if drawpile is less than 3. shuffle discardpile into drawpile then peek
             if (peek.length < 3) {
               let discardpile = _.shuffle(update.discardpile);
               update.discardpile = [];

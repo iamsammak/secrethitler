@@ -18,9 +18,10 @@ I built this web app, Secret Hitler as a Meteor.js learning project. Uses MongoD
 
 ## Screenshots for Mobile view
 
-Lobby View / Seating View / Mobile View
+Lobby View / Seating View / Game View
 
 <img src="./docs/images/lobby_view.png" width="375px"/> <img src="./docs/images/seating_view.png" width="375px"/> <img src="./docs/images/game_view2.png" width="375px"/> <img src="./docs/images/game_view3.png" width="375px"/>
+
 ## Technology
 
   - MeteorJS
@@ -41,11 +42,6 @@ Lobby View / Seating View / Mobile View
     let numPlayersRemoved = Players.remove({
       createdAt: {$lt: cutOffTime}
     });
-
-    // During testing
-    // console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
-    // console.log("cleaning - num of rooms removed:", numRoomsRemoved);
-    // console.log("cleaning - num of players removed:", numPlayersRemoved);
   }
 
   // Cron Job to remove old rooms and players
