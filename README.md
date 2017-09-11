@@ -18,14 +18,9 @@ I built this web app, Secret Hitler as a Meteor.js learning project. Uses MongoD
 
 ## Screenshots for Mobile view
 
-Lobby View
-<img src="./docs/images/lobby_view.png" width="375px" height="667px"/>
+Lobby View / Seating View / Mobile View
 
-Seating View
-<img src="./docs/images/seating_view.png" width="375px" height="667px"/>
-
-Game View
-<img src="./docs/images/game_view2.png" width="375px" height="667px"/>
+<img src="./docs/images/lobby_view.png" width="375px" height="667px"/> <img src="./docs/images/seating_view.png" width="375px" height="667px"/> <img src="./docs/images/game_view2.png" width="375px" height="667px"/>
 
 ## Technology
 
