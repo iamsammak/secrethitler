@@ -224,6 +224,34 @@ div.footer {
   }
 }
 
+.policydeck {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0.5em;
+  .draw {
+    margin-left: 0.5em;
+  }
+  .discard {
+    margin-right: 0.5em;
+  }
+  .pile {
+    display: block;
+    width: 2em;
+    height: 1em;
+    text-align: center;
+    line-height: 15px;
+    border-radius: 5px;
+    border: 1px solid #999;
+  }
+  span {
+    color: #999;
+    font-size: 20px;
+    padding: 0 16px;
+  }
+}
+
 .game-board {
   display: flex;
   flex-direction: row;

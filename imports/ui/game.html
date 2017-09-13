@@ -15,35 +15,10 @@
     </div>
   </div>
 
-  {{# if flashmessage }}
-    <span class="enact-message">{{ room.trackerenact.message }}</span>
-  {{/ if }}
-
-  {{# if equals room.fascist 5 }}
-    <small class="veto-unlocked"><i class="fa fa-gavel" aria-hidden="true"></i><span>veto power</span> unlocked!</small>
-  {{/ if }}
   <p>
     <!-- <small>Testing remember to remove {{ policycount }}</small>
     <small>policy count</small>
-    <br />
-    <table class="policy-count">
-      <tr>
-        <td>
-          <span style="font-size:2.0em;">{{ room.liberal }}</span>/5
-        </td>
-        <td>
-          <span style="font-size:2.0em;">{{ room.fascist }}</span>/6
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <small>liberal</small>
-        </td>
-        <td>
-          <small>fascist</small>
-        </td>
-      </tr>
-    </table> -->
+    <br /> -->
     <div class="track-titles">
       <h3>Liberal</h3>
       <h3>Fascist</h3>
@@ -80,7 +55,24 @@
     </div>
   </p>
 
+  <div class="policydeck">
+    <small>draw</small>
+    <div class="draw pile"><small>{{room.drawpile.length}}</small></div>
+    <span>/</span>
+    <div class="discard pile"><small>{{room.discardpile.length}}</small></div>
+    <small>discard</small>
+  </div>
+
+
   <hr class="mid-page-break">
+
+  {{# if flashmessage }}
+    <span class="enact-message">{{ room.trackerenact.message }}</span>
+  {{/ if }}
+    <br/>
+  {{# if equals room.fascist 5 }}
+    <small class="veto-unlocked"><i class="fa fa-gavel" aria-hidden="true"></i><span>veto power</span> unlocked!</small>
+  {{/ if }}
 
 <!-- Dead or Alive -->
   {{# if dead }}

@@ -159,16 +159,6 @@ Meteor.methods({
       update.voteresult = "";
       update.currentChancellor = -1;
 
-      // a vote fail - should not update ruled out
-      // if (room.alive <= 3) {
-      //   update.ruledout = [
-      //     room.players[room.currentChancellor].playerId ];
-      // } else {
-      //   update.ruledout = [
-      //     room.players[room.currentPresident].playerId,
-      //     room.players[room.currentChancellor].playerId ];
-      // }
-
       if (room.resetspecialelection.length != 0) {
         update.currentPresident = (room.resetspecialelection[0] + 1) % _.size(room.players);
         update.resetspecialelection = [];
