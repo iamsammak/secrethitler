@@ -56,11 +56,11 @@
   </p>
 
   <div class="policydeck">
-    <small>draw</small>
+    <small>draw pile</small>
     <div class="draw pile"><small>{{room.drawpile.length}}</small></div>
     <span>/</span>
     <div class="discard pile"><small>{{room.discardpile.length}}</small></div>
-    <small>discard</small>
+    <small>discard pile</small>
   </div>
 
 
@@ -71,7 +71,9 @@
   {{/ if }}
 
   {{# if equals room.fascist 5 }}
-    <small class="veto-unlocked"><i class="fa fa-gavel" aria-hidden="true"></i><span>veto power</span> unlocked!</small>
+    <p>
+      <small class="veto-unlocked"><i class="fa fa-gavel" aria-hidden="true"></i><span>veto power</span> unlocked!</small>
+    </p>
   {{/ if }}
 
 <!-- Dead or Alive -->
