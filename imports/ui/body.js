@@ -150,15 +150,15 @@ Template.loadroom.events({
 
     let currentRoomId = Session.get("roomId");
     let testPlayers = [
-      ["101", "Jovian"],
-      ["102", "Estaban"],
-      ["103", "Sebastian"],
-      ["104", "Yoda"]
+      ["101", "Jovian", "sushi"],
+      ["102", "Estaban", "sushi"],
+      ["103", "Sebastian", "sushi"],
+      ["104", "Yoda", "sushi"]
     ];
     testPlayers.forEach(function(player) {
       Players.upsert(
         { _id: player[0]},
-        { name: player[1], roomId: currentRoomId }
+        { name: player[1], roomId: currentRoomId, codename: player[2] }
       );
     });
   },
