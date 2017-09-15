@@ -8,6 +8,10 @@ Meteor.startup(() => {
   // code to run on server at startup
   // add clean up game and players logic
   // install mrt: cron-tick and use cron to schedule game and player removal after set time duration
+  let http = require("http");
+  setInterval(function() {
+      http.get("http://secrethitler-ubiquitousfriends.herokuapp.com");
+  }, 300000); // every 5 minutes (300000)
 });
 
 Meteor.publish("rooms", function(code) {
