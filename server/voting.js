@@ -54,7 +54,7 @@ Meteor.methods({
       if (update.voteresult === "pass") {
         update.electiontracker = 0;
         if (room.policychoices != 0) {
-          // console.log("WHY IS THERE SOMETHING IN HERE", room.policychoices);
+          console.log("WHY IS THERE SOMETHING IN HERE", room.policychoices);
         }
         let policychoices = room.policychoices; //should be [];
         // console.log("policychoices should be empty", room.policychoices);

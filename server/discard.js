@@ -122,13 +122,14 @@ Meteor.methods({
             update.currentPresident = (update.currentPresident + 1) % _.size(room.players);
           }
         }
-      }
 
-      // rest president rotation to prior clockwise, after special election occured
-      if (room.resetspecialelection.length != 0) {
-        // console.log("inside reset special election, discard");
-        update.currentPresident = (room.resetspecialelection[0] + 1) % _.size(room.players);
-        update.resetspecialelection = [];
+        // reset president rotation to prior clockwise, after special election occured
+        if (room.resetspecialelection.length != 0) {
+          console.log("inside reset special election, discard");
+          debugger
+          update.currentPresident = (room.resetspecialelection[0] + 1) % _.size(room.players);
+          update.resetspecialelection = [];
+        }
       }
 
       // end of game

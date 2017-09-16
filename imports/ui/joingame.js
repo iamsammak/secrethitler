@@ -17,6 +17,9 @@ Template.joingame.events({
     if (!name) {
       return false;
     }
+    if (name.length > 10) {
+      return FlashMessages.sendError("Too many characters. Please enter a shorten name.");
+    }
     let codename = event.target.codename.value;
     if (!codename) {
       return false;

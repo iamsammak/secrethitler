@@ -131,7 +131,7 @@
         {{# each ballot }}
           <li class="{{# if current }}current{{/ if }}">
             {{ name }}
-            ({{ vote }})
+            <span>({{ vote }})</span>
           </li>
         {{/ each }}
       </ul>
@@ -153,7 +153,7 @@
           {{# each ballot }}
             <li class="{{# if current }}current{{/ if }}">
               {{ name }}
-              ({{ vote }})
+              <span>({{ vote }})</span>
             </li>
           {{/ each }}
         </ul>
@@ -164,7 +164,7 @@
       {{# if equals room.policychoices.length 3 }}
       <!-- Veto button appears after 5th fascist policy -->
         {{# if presidentvetobutton }}
-          <button class="veto-button" data-veto="president">Veto</button>
+          <button class="veto-button" data-veto="president" style="margin-top: 12px;">Veto</button>
         {{/ if }}
         {{# if room.askchancellor }}
           <p>waiting for chancellor's veto approval...</p>
@@ -285,11 +285,15 @@
         {{/ each }}
       {{/ if  }}
       {{# if room.reveal }}
-          <ul class="playerlist">
-            {{# each suspect in room.suspected }}
-              <li>{{ suspect.name }}({{ partymembership suspect }})</li>
-            {{/ each }}
-          </ul>
+        <p>Investigation Result:</p>
+        <ul class="playerlist">
+          {{# each suspect in room.suspected }}
+            <li>
+              {{ suspect.name }}
+              <span>({{ partymembership suspect }})</span>
+            </li>
+          {{/ each }}
+        </ul>
         <p><button id="btn-investigate-continue" class="investigate-continue-button">continue</button></p>
       {{/ if }}
     <!-- End of Investigate Loyalty -->

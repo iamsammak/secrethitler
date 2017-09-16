@@ -377,7 +377,7 @@ Template.game.events({
     let room = Rooms.findOne(roomId);
 
     if (room.players[room.currentPresident].playerId == currentPlayerId) {
-      if (room.currentChancellor == -1 && !room.specialelection) {
+      if (room.currentChancellor == -1 && !room.specialelection && !room.deathtags.includes(playerId)) {
         Meteor.call("pickchancellor", {
           playerId: playerId
         });

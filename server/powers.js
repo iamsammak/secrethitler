@@ -54,6 +54,9 @@ Meteor.methods({
     update.alive = room.alive - 1;
     update.assassination = false;
 
+    // after special election, if you execute the "would be" next president via clockwise
+    // then it should move on - so logic needs to be added for this case
+
     if (deceased.role == "hitler") {
       update.state = "gameover";
       update.winner = "liberals";
