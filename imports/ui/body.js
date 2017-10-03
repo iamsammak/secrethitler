@@ -14,10 +14,6 @@ import './table.js';
 import './game.js';
 import './gameover.js';
 
-// testing files
-import './dynamic-test.js';
-import './hello-info.js';
-
 Tracker.autorun(function roomState() {
   if (!Session.get("view")) {
     Session.set("view", "startmenu");
