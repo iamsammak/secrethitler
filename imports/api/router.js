@@ -1,5 +1,6 @@
 Router.configure({
     // options go here for templates that are to appear on every route
+  trackPageView: true
 });
 
 Router.route("/", function() {

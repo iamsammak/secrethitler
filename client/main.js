@@ -10,3 +10,7 @@ document.addEventListener("click", function(e) {
     e.target.classList.toggle("strikethrough");
   }
 });
+
+if (Meteor.isClient) {
+  Router.plugin('reywood:iron-router-ga');
+}
