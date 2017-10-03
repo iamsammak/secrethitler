@@ -9,9 +9,4 @@
     "font-awesome": "^4.7.0",
     "meteor-node-stubs": "~0.2.4"
   },
-  "public": {
-    "ga": {
-      "id": "UA-107431262-1"
-    }
-  }
 }
