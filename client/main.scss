@@ -27,6 +27,11 @@ body {
   }
 }
 
+.bold {
+  font-weight: 400;
+  color: $orange;
+}
+
 .link {
   color: #999999;
   &:hover {
