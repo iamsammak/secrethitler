@@ -1,0 +1,424 @@
+<template name="demogame">
+  <div class="title-card">
+    <h2 id="round" class="round show">
+      round <b class="orange">demo</b>
+    </h2>
+    <h2 id ="access-code" class="access-code">
+      access code: <b>{{ room.accessCode }}</b>
+    </h2>
+  </div>
+
+  <div class="hidden-role-container">
+    <div class="toggle-role">show/hide</div>
+    <div id="hidden-role" class="hidden-info show">
+      <h2 class="hidden-role">you're <b>{{ role }}</b>!</h2>
+    </div>
+  </div>
+
+  <p>
+    <!-- <small>Testing remember to remove {{ policycount }}</small>
+    <small>policy count</small>
+    <br /> -->
+    <div class="track-titles">
+      <h3>Liberal</h3>
+      <h3>Fascist</h3>
+    </div>
+    <div class="game-board">
+      <div class="liberal-board-container">
+        <div class="liberal-board">
+          <div class="tile" id="liberal-1"></div>
+          <div class="tile" id="liberal-2"></div>
+          <div class="tile" id="liberal-3"></div>
+          <div class="tile" id="liberal-4"></div>
+          <div class="tile" id="liberal-5"></div>
+        </div>
+        {{ moveliberal room.liberal }}
+      </div>
+      <span class="board-divider">/</span>
+      <div class="fascist-board-container">
+        <div class="fascist-board">
+          {{# each powericons }}
+            <div class="tile" id="fascist-{{ id }}">
+              <i class="{{ class }}" title="{{ title }}" aria-hidden="true"></i>
+            </div>
+          {{/ each }}
+        </div>
+        {{ movefascist room.fascist }}
+      </div>
+    </div>
+
+    <div class="election-tracker-container">
+      <div>failed elections: {{ movetracker room.electiontracker }}</div>
+      <div class="circle" id="tracker-1">1</div>
+      <div class="circle" id="tracker-2">2</div>
+      <div class="circle" id="tracker-3">3</div>
+    </div>
+  </p>
+
+  <div class="policydeck">
+    <small>draw pile</small>
+    <div class="draw pile"><small>{{room.drawpile.length}}</small></div>
+    <span>|</span>
+    <div class="discard pile"><small>{{room.discardpile.length}}</small></div>
+    <small>discard pile</small>
+  </div>
+
+
+  <hr class="mid-page-break">
+
+  {{# if flashmessage }}
+    <span class="enact-message">{{ room.trackerenact.message }}</span><br/>
+  {{/ if }}
+
+  {{# if equals room.fascist 5 }}
+    <p>
+      <small class="veto-unlocked"><i class="fa fa-gavel" aria-hidden="true"></i><span>veto power</span> unlocked!</small>
+    </p>
+  {{/ if }}
+
+<!-- Dead or Alive -->
+  {{# if dead }}
+    <p>
+      <b style="color: #BF3630;">you are dead.</b><br />
+      <span>Dead men tell no tales. Shh...</span>
+    </p>
+  {{/ if }}
+
+<!-- chancellor-candidate picking view -->
+  {{# if president }}
+    <p>
+      <span class="bold">Step 4:</span> Game has begun <b style="color: #1B6DB2;">you are the president!</b><br />
+    </p>
+    {{# if picking }}
+    <span style="color: #797F06;">choose your chancellor:</span>
+    {{/ if }}
+  {{ else }}
+    {{# if picking }}
+      <p>waiting for the president to nominate a chancellor...</p>
+    {{/ if }}
+  {{/ if }}
+
+  {{# if chancellor }}
+    <p>
+      <b style="color: #797F06;">you are the chancellor!</b><br />
+    </p>
+  {{/ if }}
+
+  {{# if voting }}
+  <div class="voting-annoucement">
+    <b style="color: #1B6DB2;">{{ presidentname }}</b> has nominated<br/>
+    <b style="color: #797F06;">{{ chancellorname }}</b> as chancellor
+  </div>
+    <p>
+      waiting for {{ votesleft }} {{ peopleOrperson votesleft }} to vote<br />
+      {{# unless dead }}
+        {{# if haventvoted }}
+          <button class="yesvote-button">yes</button>
+          <button class="novote-button">no</button>
+        {{/ if }}
+      {{/ unless }}
+    </p>
+  {{/ if }}
+
+  {{# if votefailed }}
+    <div class="vote-reveal-container">
+      <p>
+        the vote failed...<br />
+        waiting on {{ votecount }} {{ peopleOrperson votecount }}
+      </p>
+      <div class="toggle-reveal-vote">show/hide</div>
+      <ul id="reveal-votelist" class="playerlist votelist">
+        {{# each ballot }}
+          <li class="{{# if current }}current{{/ if }}">
+            {{ name }}
+            <span>({{ vote }})</span>
+          </li>
+        {{/ each }}
+      </ul>
+    </div>
+    {{# unless dead }}
+      {{# unless haventvoted }}
+        <p><button id="btn-fail-continue" class="fail-continue-button">continue</button></p>
+      {{/ unless }}
+    {{/ unless}}
+  {{/ if }}
+
+<!-- Policy picking view / what everyone sees -->
+  {{# if votepassed }}
+    {{# if equals room.policychoices.length 3 }}
+      <div class="vote-reveal-container">
+        <p>the vote passed!</p>
+        <div class="toggle-reveal-vote">show/hide</div>
+        <ul id="reveal-votelist" class="playerlist votelist">
+          {{# each ballot }}
+            <li class="{{# if current }}current{{/ if }}">
+              {{ name }}
+              <span>({{ vote }})</span>
+            </li>
+          {{/ each }}
+        </ul>
+      </div>
+    {{/ if }}
+    <!-- president view -->
+    {{# if president }}
+      {{# if equals room.policychoices.length 3 }}
+      <!-- Veto button appears after 5th fascist policy -->
+        {{# if presidentvetobutton }}
+          <button class="veto-button" data-veto="president" style="margin-top: 12px;">Veto</button>
+        {{/ if }}
+        {{# if room.askchancellor }}
+          <p>waiting for chancellor's veto approval...</p>
+        {{ else }}
+      <!-- when president is policy picking -->
+          {{# if vetopassed 2 }}
+            <p>chancellor approved of the veto</p>
+            <button id="btn-pvc" class="president-veto-continue">continue</button>
+          {{ else }}
+            {{# if vetofailed 2 }}
+              <p>Chancellor did not approve on Veto</p>
+            {{/ if }}
+            <p>choose a policy to <strong>discard</strong></p>
+            <p>
+              {{# each policy in room.policychoices }}
+              <button class="pick-{{ policy }}">{{ policy }}</button>
+              {{/ each }}
+            </p>
+          {{/ if }}
+        {{/ if }}
+      <!-- when chancellor is picking policy aka policychoices.length = 2 -->
+      {{ else }}
+        {{# unless executiveaction }}
+          {{# if room.askpresident }}
+            <p>Chancellor wants to Veto</p>
+            <p>Do you approve?</p>
+            <button class="yes-veto" data-veto="president">yes</button>
+            <button class="no-veto" data-veto="president">no</button>
+          {{ else }}
+            <p>waiting for the chancellor to discard a policy...</p>
+          {{/ if }}
+        {{/ unless }}
+      {{/ if }}
+  <!-- End president policy picking view -->
+    {{ else }}
+    <!-- chancellor view -->
+      {{# if chancellor }}
+      <!-- during veto power, president seeking approval -->
+        {{# if equals room.policychoices.length 3 }}
+          {{# if room.askchancellor }}
+            <p>President wants to Veto</p>
+            <p>Do you approve?</p>
+            <button class="yes-veto" data-veto="chancellor">yes</button>
+            <button class="no-veto" data-veto="chancellor">no</button>
+          {{ else }}
+            <p>waiting for the president to discard a policy...</p>
+          {{/ if }}
+        {{/ if }}
+      <!-- normal policy discard view -->
+        {{# if equals room.policychoices.length 2 }}
+          {{# if chancellorvetobutton }}
+            <button class="veto-button" data-veto="chancellor">Veto</button>
+          {{/ if }}
+          {{# if room.askpresident }}
+            <p>waiting for president's veto approval...</p>
+          {{ else }}
+            {{# if vetopassed 1 }}
+              <p>President approved. Policies will be discarded.</p>
+              <button id="btn-cvc" class="chancellor-veto-continue">continue</button>
+            {{ else }}
+              {{# if vetofailed 1 }}
+                <p>President did not approve with Veto</p>
+              {{/ if }}
+              <p>choose a policy to <strong>discard</strong></p>
+              <p>
+                {{# each policy in room.policychoices }}
+                <button class="pick-{{ policy }}">{{ policy }}</button>
+                {{/ each }}
+              </p>
+            {{/ if }}
+          {{/ if }}
+        {{/ if }}
+    <!-- everyone else's view -->
+      {{ else }}
+        {{# if equals room.policychoices.length 3 }}
+          {{# if room.askchancellor }}
+            <p>president has veto'd, waiting for chancellor's approval...</p>
+          {{ else }}
+            <p>waiting for the president to discard a policy...</p>
+          {{/ if }}
+        {{ else }}
+        <!-- if executive power is live and president is deciding on how to use power -->
+          {{# unless executiveaction }}
+            {{# if room.askpresident }}
+              <p>chancellor has veto'd, waiting for president's approval...</p>
+            {{ else }}
+              <p>waiting for the chancellor to discard a policy...</p>
+            {{/ if }}
+          {{/ unless }}
+        {{/ if }}
+      {{/ if }}
+    {{/ if }}
+  {{/ if }}
+
+  <!-- Executive Action View -->
+  {{# if executiveaction }}
+    {{# if president }}
+
+    <!-- Execution -->
+    {{# if room.assassination }}
+      <p>Execution. Who do you want to execute?</p>
+    {{/ if }}
+    <!-- End of execution -->
+
+    <!-- Call Special Election -->
+      {{# if room.specialelection }}
+        <p>Special Election. Choose the next President.</p>
+      {{/ if }}
+    <!-- End of Special Election -->
+
+    <!-- Investigate Loyalty -->
+      {{# if room.investigate }}
+        <p>Who do you want to investigate</p>
+        {{# each suspect in room.suspects}}
+          <button class="suspect" data-suspectid="{{ suspect.playerId }}">
+            {{ suspect.name }}
+          </button>
+        {{/ each }}
+      {{/ if  }}
+      {{# if room.reveal }}
+        <p>Investigation Result:</p>
+        <ul class="playerlist">
+          {{# each suspect in room.suspected }}
+            <li>
+              {{ suspect.name }}
+              <span>({{ partymembership suspect }})</span>
+            </li>
+          {{/ each }}
+        </ul>
+        <p><button id="btn-investigate-continue" class="investigate-continue-button">continue</button></p>
+      {{/ if }}
+    <!-- End of Investigate Loyalty -->
+
+    <!-- Policy Peek -->
+      {{# if equals room.peek.length 3 }}
+        <p>Here are the next three Policies</p>
+        <p>
+          {{# each policy in room.peek }}
+            <button>{{ policy }}</button>
+          {{/ each }}
+        </p>
+        <p><button id="btn-peek-continue" class="peek-continue-button">continue</button></p>
+      {{/ if }}
+    <!-- End of policy peek -->
+
+    {{ else }}
+      <!-- everyone else's view while President is using Presidential Power -->
+      {{# if room.assassination }}
+        <p>
+          <b>Execution.</b><br />
+          <span>President choosing who to execute...</span>
+        </p>
+      {{/ if }}
+      {{# if room.specialelection }}
+        <p>
+          <b>Call Special Election.</b><br />
+          <span>President choosing the next President...</span>
+        </p>
+      {{/ if }}
+      {{# if room.investigate }}
+        <p>
+          <b>Investigate Loyalty.</b><br />
+          <span>President is investigating someone's party membership...</span>
+        </p>
+      {{/ if }}
+      {{# if equals room.peek.length 3 }}
+        <p>
+          <b>Policy Peek.</b><br />
+          <span>President is examining the top three policy cards...</span>
+        </p>
+      {{/ if }}
+    {{/ if }}
+
+    <!-- Death Announcement -->
+    {{# if room.playerdied }}
+      {{# if president }}
+        <p>You've chosen to execute {{ gravestonename }}</p>
+        <p><button id="btn-execution-continue" class="execution-continue-button">continue</button></p>
+      {{ else }}
+        {{# if newlydeceased }}
+        <p>You died. Sorry.</p>
+        {{ else }}
+        <p>
+          {{ gravestonename }} has been executed.<br />
+        </p>
+        {{/ if }}
+      {{/ if }}
+    {{/ if }}
+    <!-- End of death announcement -->
+
+  {{/ if }}
+  <!-- End of Executive action view -->
+  {{# if enddemo }}
+    <p>This concludes the demo</p>
+    <p>Go grab some friends, send them the access code and start a new game.<br/>
+      Have fun!</p>
+    <button class="demo-button endgame-button">end demo</button>
+  {{/ if }}
+
+  <ul class="ring circle-container-{{ players.length }}">
+      {{# each players }}
+        <li data-playerid={{ playerId }}>
+          <span class={{ playercircle playerId }}>{{ name }}</span>
+        </li>
+      {{/ each }}
+  </ul>
+
+  <!-- Color Key Dropdown -->
+  <div class="color-key-container">
+    <button class="button-color-key">Color Key</button><br />
+    <div id="color-key" class="color-key-dropdown">
+      <li><i class="fa fa-circle-o fa-lg key-p" aria-hidden="true"></i><span class="key-p">president</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-ep" aria-hidden="true"></i><span class="key-ep">eligible presidential candidates</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-c" aria-hidden="true"></i><span class="key-c">chancellor</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-ec" aria-hidden="true"></i><span class="key-ec">eligible chancellor candidates</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-et" aria-hidden="true"></i><span class="key-et">execution targets</span></li>
+      <li><i class="fa fa-circle-o fa-lg key-d" aria-hidden="true"></i><span class="key-d">dead</span></li>
+    </div>
+  </div>
+
+  <!-- Presidential Power dropdown menu -->
+  <button class="powers-button">Presidential Powers</button>
+  <div class="presidential-powers" id="dropdown-menu">
+    {{# each powers }}
+      <li class ="power-name" data-powerid={{ id }}>
+        <i class="{{ icon }}" aria-hidden="true"></i>{{ name }}
+      </li>
+      <p style="width:85%" class="power-description show" id="power-description-{{ id }}">{{ description }}</p>
+    {{/ each }}
+  </div>
+
+  <!-- Win Condition dropdown -->
+  <div class="win-condition-container">
+    <button class="btn-win-condition">Win Condition</button>
+    <div id="win-condition" class="win-condition-dropdown">
+      <div>
+        <h3><span style="color: #03AA8C;">Liberal</span> Team win if either:</h3>
+        <li>Five Liberal Policies are enacted</li>
+        <span class="or">OR</span>
+        <li>Hitler is assassinated</li>
+      </div>
+      <div>
+        <h3><span style="color: #f76b36;">Fascist</span> Team win if either:</h3>
+        <li>Six Fascist Policies are enacted</li>
+        <span class="or">OR</span>
+        <li>Hitler is elected Chancellor any time after the third Fascist Policy has been enacted</li>
+      </div>
+    </div>
+  </div>
+
+  {{# if owner }}
+  <hr>
+  <p>
+    <button class="endgame-button">end demo</button>
+  </p>
+  {{/ if }}
+</template>

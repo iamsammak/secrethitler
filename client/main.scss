@@ -44,6 +44,11 @@ h1 {
   margin: 25% 0 1.5em 0;
 }
 
+.demoinfo {
+  padding-top: 10px;
+  font-size: 0.7em;
+}
+
 hr {
   width: 90%;
   border: 0;
@@ -80,6 +85,10 @@ button {
   &:hover {
     border: 1px solid $orange;
   }
+}
+
+.demo-button {
+  background-color: $orange;
 }
 
 .close {

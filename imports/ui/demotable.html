@@ -1,0 +1,57 @@
+<template name="demotable">
+  <h1>Demo Table view:<br/>
+    <div class="demoinfo">here you check your hidden role<br/>
+      before "sitting down" at the table</div>
+  </h1>
+
+  <hr class="mid-page-break">
+  <p style="width:75%">
+    <span class="bold">Step 2:</span> let's have our demo friends sit at the table
+  </p>
+  <button id="demo-sit" class="sit-button demo-button">show demo friends their seats</button>
+  <hr class="mid-page-break">
+
+  <div class="hidden-role-container">
+    <div class="toggle-role">show/hide role</div>
+    <div id="hidden-info" class="hidden-info">
+      <h2 class="hidden-role">you're <b>{{ role }}</b>!</h2>
+      <div class="breakdown-container">
+        <div>{{ rolecards.num }} players :</div>
+        <div>{{ rolecards.liberal }} liberal</div>
+        <div>{{ rolecards.fascist }} fascist + {{ rolecards.hitler }} Hitler</div>
+      </div>
+      {{# if teammates }}
+      <p>
+        these are your fellow fascists:
+        <ul class="playerlist">
+          {{# each teammates }}
+          <li class="{{# if equals playerId player._id }}current{{/ if }}">
+            {{ name }}
+            {{# if hitler }}
+            <span>(hitler)</span>
+            {{/ if }}
+          </li>
+          {{/ each }}
+        </ul>
+      </p>
+      {{/ if }}
+    </div>
+  </div>
+
+  <p><span class="bold">Step 3:</span> check your own role and when you're ready to be seated press "seat me"</p>
+  <p>
+    <button id="ready-button" {{ isready players }}>seat me</button>
+  </p>
+
+  <ul class="circle-container-{{ players.length }}">
+    {{# each players }}
+      <li><span>{{ name }}</span></li>
+    {{/ each }}
+  </ul>
+
+  <hr class="mid-page-break">
+
+  <p>
+    <button class="quit-button">exit demo</button>
+  </p>
+</template>

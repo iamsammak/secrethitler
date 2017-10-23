@@ -28,7 +28,7 @@ Meteor.publish("players", function(roomId) {
 
 function cleanUpDatabase() {
   // remove old rooms and players
-  let cutOffTime = moment().subtract(8, 'hours').toDate().getTime();
+  let cutOffTime = moment().subtract(24, 'hours').toDate().getTime();
 
   let numRoomsRemoved = Rooms.remove({
     createdAt: {$lt: cutOffTime}
@@ -49,7 +49,11 @@ let MyCron = new Cron(60000);
 MyCron.addJob(5, cleanUpDatabase);
 
 Meteor.methods({
-  "newgame"({ name, codename }) {
+  "newgame"({ name, codename, demo }) {
+    let lobbyState;
+    demo ? lobbyState = "demolobby" : lobbyState = "lobby"
+    // console.log("lobby state", lobbyState);
+
     let accessCode = Random.hexString(6);
     name = name.trim();
     codename = codename.trim();
@@ -64,7 +68,7 @@ Meteor.methods({
     let roomId = Rooms.insert({
       accessCode: accessCode,
       createdAt: new Date().getTime(),
-      state: "lobby",
+      state: lobbyState,
       tableSeats: []
     });
 
@@ -212,7 +216,11 @@ Meteor.methods({
     });
     return [roomId, playerId, "lobby"];
   },
-  "startgame" ({ roomId }) {
+  "startgame" ({ roomId, demo }) {
+    let tableState;
+    demo ? tableState = "demotable" : tableState = "table"
+    // console.log("table state", tableState);
+
     let room = Rooms.findOne(roomId);
     let players = Players.find({ roomId: roomId }).fetch();
     let teamfascists = [];
@@ -252,7 +260,7 @@ Meteor.methods({
     // I need to do something about add players to the room as the room.state changes from lobby to table
     Rooms.update(roomId, {
       $set: {
-        state: "table",
+        state: tableState,
         tableSeats: room.tableSeats,
         players: [],
         teamfascists: teamfascists,
@@ -261,7 +269,11 @@ Meteor.methods({
       }
     });
   },
-  "ready" ({ playerId }) {
+  "ready" ({ playerId, demo }) {
+    let readyState;
+    demo ? readyState = "demogame" : readyState = "game"
+    // console.log("game state", readyState);
+
     let player = Players.findOne(playerId);
     let room = Rooms.findOne(player.roomId);
 
@@ -289,7 +301,7 @@ Meteor.methods({
     };
     // add to update once everyone is in the room TODO first update
     if (Players.find({ roomId: room._id }).count() == room.players.length) {
-      update.state = "game";
+      update.state = readyState;
       update.winner = "";
       update.reason = "";
       update.round = 1;
@@ -312,6 +324,7 @@ Meteor.methods({
       update.voteresult = "";
       // executive branch placard params
       update.currentPresident = Math.floor(Math.random() * room.players.length);
+      if (demo) { update.currentPresident = 4; }
       update.currentChancellor = -1;
       update.ruledout = [];
       // executive presidential powers
@@ -338,6 +351,8 @@ Meteor.methods({
       update.deadindex = [];
       update.assassination = false;
       update.playerdied = false;
+      // end demo
+      update.enddemo = false;
     }
 
     Players.update(playerId, {
@@ -347,4 +362,12 @@ Meteor.methods({
       $set: update
     });
   },
+  "enddemo" ({ playerId }) {
+    let player = Players.findOne(playerId);
+    let room = Rooms.findOne(player.roomId);
+
+    Rooms.update(player.roomId, {
+      $set: { enddemo: true }
+    });
+  }
 });

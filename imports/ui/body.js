@@ -14,6 +14,12 @@ import './table.js';
 import './game.js';
 import './gameover.js';
 
+// demo
+import './demonew.js';
+import './demolobby.js';
+import './demotable.js';
+import './demogame.js';
+
 Tracker.autorun(function roomState() {
   if (!Session.get("view")) {
     Session.set("view", "startmenu");
@@ -46,7 +52,11 @@ Tracker.autorun(function roomState() {
     "lobby": "lobby",
     "table": "table",
     "game": "game",
-    "gameover": "gameover"
+    "gameover": "gameover",
+    "demonew": "demonew",
+    "demolobby": "demolobby",
+    "demotable": "demotable",
+    "demogame": "demogame"
   }[room.state] || null);
   // after room.state is defined for the first time. aka new game server side
   // you cant used button menu to navigate away. you stuck
@@ -92,6 +102,9 @@ Template.startmenu.events({
   "click .joingame-button": function() {
     Session.set("view", "joingame");
     // console.log("join game");
+  },
+  "click .demo-button": function() {
+    Session.set("view", "demonew");
   },
 })
 
@@ -141,7 +154,8 @@ Template.loadroom.events({
   // rewrite this to send updates to the db to rewrite test players
   // find current roomId, then update test players into current Room
   // populate room
-  "click .loadroom-button": function(event) {
+
+  "click .populate-button": function(event) {
     event.preventDefault();
 
     let currentRoomId = Session.get("roomId");
@@ -157,5 +171,28 @@ Template.loadroom.events({
         { name: player[1], roomId: currentRoomId, codename: player[2] }
       );
     });
+  },
+  "click .sit-button": function(event) {
+    event.preventDefault();
+
+    let currentRoomId = Session.get("roomId");
+
+    let testPlayers = [
+      ["101", "Jovian", "sushi"],
+      ["102", "Estaban", "sushi"],
+      ["103", "Sebastian", "sushi"],
+      ["104", "Yoda", "sushi"]
+    ];
+
+    testPlayers.forEach(function(player) {
+      Meteor.call("ready", {
+        playerId: player[0],
+        demo: false
+      }, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    })
   },
 })

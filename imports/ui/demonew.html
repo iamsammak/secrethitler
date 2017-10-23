@@ -1,0 +1,24 @@
+<template name="demonew">
+  <h1>Welcome to the Demo</h1>
+  <hr class="top-line">
+  <form id="demonew-form">
+    <p style="width:75%">
+      The demo will take you through<br/>
+      three views:<br/>
+      <br/>
+      Lobby<br/>
+      Table<br/>
+      Game<br/>
+    </p>
+    <p>If you want to read the rules, <a class="link" href="http://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf" target="_blank">click here</a></p>
+    {{> flashMessages }}
+    <p>
+      <input type="text" name="name" autocomplete="off" value="demo">
+      <input type="text" name="codename" autocomplete="off" value="demopassword">
+    </p>
+    <div>
+      <button type="submit" class="demo-button">continue demo</button>
+      <button type="button" class="back-button">exit demo</button>
+    </div>
+  </form>
+</template>

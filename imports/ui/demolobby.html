@@ -1,0 +1,77 @@
+<template name="demolobby">
+  <h1>Demo Lobby view:<br/>
+      <div class="demoinfo">here you wait for players to join or leave</div>
+  </h1>
+
+  <hr class="mid-page-break">
+  <p style="width:75%">
+    <span class="bold">Step 1:</span> let's populate some demo friends
+  </p>
+  <button id="demo-populate" class="populate-button demo-button">populate some demo friends</button>
+
+  <hr class="top-line">
+  <p>
+    access code: <b>{{ room.accessCode }}</b><br />
+    share this <a class="link" href="/{{ room.accessCode }}" target="_blank">link</a>
+  </p>
+  {{ players.length }} player(s) connected
+
+  <ul class="playerlist">
+    {{# each players }}
+    <li>
+      {{ name }}
+      {{# if cantRemoveOwner _id }}
+        <a class="remove-button" data-playerid="{{ _id }}">&times;</a>
+      {{/ if }}
+    </li>
+    {{/ each }}
+  </ul>
+
+  <hr class="mid-page-break">
+
+  <p>
+    {{# if owner }}
+    <button class="start-button demo-button" {{ ready players }}>continue demo</button>
+    {{/ if }}
+    <button class="quit-button">exit demo</button>
+  </p>
+
+  <hr class="mid-page-break">
+
+  <div class="helpful-hints-container">
+    <div class="hint-title">
+      click the <span>buttons</span> below for helpful hints
+    </div>
+
+    <div class="color-key-container">
+      <button class="button-color-key">Color Key</button>
+      <div id="color-key" class="color-key-dropdown">
+        <li><i class="fa fa-circle-o fa-lg key-p" aria-hidden="true"></i><span class="key-p">president</span></li>
+        <li><i class="fa fa-circle-o fa-lg key-ep" aria-hidden="true"></i><span class="key-ep">eligible presidential candidates</span></li>
+        <li><i class="fa fa-circle-o fa-lg key-c" aria-hidden="true"></i><span class="key-c">chancellor</span></li>
+        <li><i class="fa fa-circle-o fa-lg key-ec" aria-hidden="true"></i><span class="key-ec">eligible chancellor candidates</span></li>
+        <li><i class="fa fa-circle-o fa-lg key-et" aria-hidden="true"></i><span class="key-et">execution targets</span></li>
+        <li><i class="fa fa-circle-o fa-lg key-d" aria-hidden="true"></i><span class="key-d">dead</span></li>
+      </div>
+    </div>
+
+    <div class="win-condition-container">
+      <button class="btn-win-condition">Win Condition</button>
+      <div id="win-condition" class="win-condition-dropdown">
+        <div>
+          <h3><span style="color: #03AA8C;">Liberal</span> Team win if either:</h3>
+          <li>Five Liberal Policies are enacted</li>
+          <span class="or">OR</span>
+          <li>Hitler is assassinated</li>
+        </div>
+        <div>
+          <h3><span style="color: #f76b36;">Fascist</span> Team win if either:</h3>
+          <li>Six Fascist Policies are enacted</li>
+          <span class="or">OR</span>
+          <li>Hitler is elected Chancellor any time after the third Fascist Policy has been enacted</li>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</template>

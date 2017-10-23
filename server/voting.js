@@ -7,9 +7,12 @@ import { Rooms, Players } from '../imports/api/collections.js';
 Meteor.methods({
   "pickchancellor" ({ playerId }) {
     let player = Players.findOne(playerId);
+    // console.log("test", player);
+    // console.log("inside pickchancellor", player.index);
     if (!player) {
       return;
     }
+
     let room = Rooms.findOne(player.roomId);
     if (room.currentChancellor > -1) {
       return;
